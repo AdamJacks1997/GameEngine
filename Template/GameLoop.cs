@@ -14,7 +14,7 @@ namespace Template
         private static GraphicsDeviceManager Graphics;
         private SpriteBatch _spriteBatch;
         private Textures _textures;
-        private GameStateManager _gameStateManager;
+        private StateManager _stateManager;
         private readonly Dictionary<string, Component> _states = new();
 
         public GameLoop()
@@ -26,12 +26,12 @@ namespace Template
 
         protected override void Initialize()
         {
-            Graphics.PreferredBackBufferWidth = Data.ScreenWidth;
-            Graphics.PreferredBackBufferHeight = Data.ScreenHeight;
+            Graphics.PreferredBackBufferWidth = Constants.ScreenWidth;
+            Graphics.PreferredBackBufferHeight = Constants.ScreenHeight;
             Graphics.ApplyChanges();
 
             _textures = new Textures();
-            _gameStateManager = new GameStateManager();
+            _stateManager = new StateManager();
 
             base.Initialize();
         }
@@ -49,7 +49,7 @@ namespace Template
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            _gameStateManager.Update(gameTime);
+            _stateManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -60,7 +60,7 @@ namespace Template
 
             _spriteBatch.Begin();
 
-            _gameStateManager.Draw(_spriteBatch);
+            _stateManager.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
@@ -77,7 +77,7 @@ namespace Template
             _states.Add("play", playState);
             _states.Add("pause", pauseState);
 
-            _gameStateManager.Init(_states, "menu");
+            _stateManager.Init(_states, "menu");
         }
     }
 }

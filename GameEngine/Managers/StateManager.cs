@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameEngine.Managers
 {
-    public class GameStateManager : Component
+    public class StateManager : Component
     {
         private Dictionary<string, Component> _states = new ();
         private string _activeState = "";
