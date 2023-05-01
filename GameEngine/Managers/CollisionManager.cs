@@ -1,11 +1,10 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace GameEngine.Managers
 {
-    internal class CollisionManager
+    public class CollisionManager
     {
         private static readonly Dictionary<string, Entity> EntityList = new ();
 

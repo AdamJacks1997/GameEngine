@@ -18,12 +18,24 @@ namespace Template.Entities
             Location = new Vector2(100, 100);
 
             _inputHandler = new InputHandler();
+
+            CollisionManager.Add(this, "player");
         }
 
         public override void Update(GameTime gameTime)
         {
             Velocity = new Vector2(0, 0);
             HandleInputs();
+
+            if (CollisionManager.IsPerPixelCollision("player", "collideable"))
+            {
+                RenderBoundingBox = true;
+            }
+            else
+            {
+                RenderBoundingBox = false;
+            }
+
             Move(gameTime);
         }
 
@@ -36,22 +48,22 @@ namespace Template.Entities
         {
             if (_inputHandler.KeyDown(Keys.W))
             {
-                VY -= 10;
+                VY -= 1;
             }
 
             if (_inputHandler.KeyDown(Keys.S))
             {
-                VY += 10;
+                VY += 1;
             }
 
             if (_inputHandler.KeyDown(Keys.A))
             {
-                VX -= 10;
+                VX -= 1;
             }
 
             if (_inputHandler.KeyDown(Keys.D))
             {
-                VX += 10;
+                VX += 1;
             }
         }
     }

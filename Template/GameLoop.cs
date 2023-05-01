@@ -77,7 +77,7 @@ namespace Template
             _states.Add("play", playState);
             _states.Add("pause", pauseState);
 
-            _stateManager.Init(_states, "menu");
+            _stateManager.Init(_states, "play");
         }
     }
 }
