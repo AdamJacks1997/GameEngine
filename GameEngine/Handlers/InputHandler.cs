@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace GameEngine.Managers
+namespace GameEngine.Handlers
 {
     public class InputHandler
     {

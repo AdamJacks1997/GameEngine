@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameEngine", "GameEngine\GameEngine.csproj", "{B8D97B42-FDF1-457F-96C5-08D85FBABEBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{12558FEE-1E17-45B4-95E7-2DA133856182}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template", "Template\Template.csproj", "{12558FEE-1E17-45B4-95E7-2DA133856182}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor.csproj", "{87E43019-F117-4131-8C9D-CB0A2326F36B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{12558FEE-1E17-45B4-95E7-2DA133856182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12558FEE-1E17-45B4-95E7-2DA133856182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12558FEE-1E17-45B4-95E7-2DA133856182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87E43019-F117-4131-8C9D-CB0A2326F36B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E43019-F117-4131-8C9D-CB0A2326F36B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E43019-F117-4131-8C9D-CB0A2326F36B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E43019-F117-4131-8C9D-CB0A2326F36B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

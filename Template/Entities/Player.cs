@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GameEngine.Components;
-using Template.Assets;
-using System;
-using GameEngine.Managers;
+using GameEngine.Handlers;
 using Microsoft.Xna.Framework.Input;
 
 namespace Template.Entities
@@ -14,12 +12,12 @@ namespace Template.Entities
 
         public Player()
         {
-            _currentTexture = Textures.Duck;
+            CurrentTexture = TextureHandler.Get("Duck");
             Location = new Vector2(100, 100);
 
             _inputHandler = new InputHandler();
 
-            CollisionManager.Add(this, "player");
+            CollisionHandler.Add(this, "player");
         }
 
         public override void Update(GameTime gameTime)
@@ -27,7 +25,7 @@ namespace Template.Entities
             Velocity = new Vector2(0, 0);
             HandleInputs();
 
-            if (CollisionManager.IsPerPixelCollision("player", "collideable"))
+            if (CollisionHandler.IsPerPixelCollision("player", "collidable"))
             {
                 RenderBoundingBox = true;
             }

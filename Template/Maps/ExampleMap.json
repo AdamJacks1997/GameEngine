@@ -1,0 +1,18 @@
+﻿[
+  {
+    "X": 0,
+    "Y": 0,
+    "TextureName": "BlueTile"
+  },
+  {
+    "X": 1,
+    "Y": 0,
+    "TextureName": "GreenTile",
+    "CollidableType": "Boundary"
+  },
+  {
+    "X": 2,
+    "Y": 0,
+    "TextureName": "BlueTile"
+  }
+]

@@ -2,45 +2,49 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameEngine.Core;
-using GameEngine.Managers;
+using GameEngine.Handlers;
 using System.Collections.Generic;
 using Template.States;
-using Template.Assets;
+using System.Xml.Linq;
 
 namespace Template
 {
     public class GameLoop : Game
     {
-        private static GraphicsDeviceManager Graphics;
+        private static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Textures _textures;
-        private StateManager _stateManager;
+        private TextureHandler _textureHandler;
+        private StateHandler _stateManager;
+        private TileHandler _tileHandler;
         private readonly Dictionary<string, Component> _states = new();
 
         public GameLoop()
         {
-            Graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
-            Graphics.PreferredBackBufferWidth = Constants.ScreenWidth;
-            Graphics.PreferredBackBufferHeight = Constants.ScreenHeight;
-            Graphics.ApplyChanges();
+            _graphics.PreferredBackBufferWidth = Constants.ScreenWidth;
+            _graphics.PreferredBackBufferHeight = Constants.ScreenHeight;
+            _graphics.ApplyChanges();
 
-            _textures = new Textures();
-            _stateManager = new StateManager();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _textureHandler = new TextureHandler(Content);
+            _tileHandler = new TileHandler();
+            _stateManager = new StateHandler();
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            LoadTextures();
 
-            _textures.LoadContent(Content);
+            _tileHandler.Init("ExampleMap");
+
             InitializeGameStateManager();
         }
 
@@ -57,20 +61,27 @@ namespace Template
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin();
+            
+            //var cameraMatrix = Matrix.CreateTranslation(100, 0, 1)
+            //* Matrix.CreateScale((float)_graphics.PreferredBackBufferWidth / 1920 * 4,
+            //    (float)_graphics.PreferredBackBufferHeight / 1080 * 4, 1);
 
             _stateManager.Draw(_spriteBatch);
 
-            _spriteBatch.End();
-
             base.Draw(gameTime);
+        }
+
+        private void LoadTextures()
+        {
+           _textureHandler.Load("Duck");
+           _textureHandler.Load("BlueTile");
+           _textureHandler.Load("GreenTile");
         }
 
         private void InitializeGameStateManager()
         {
             MenuState menuState = new();
-            PlayState playState = new();
+            PlayState playState = new(_graphics);
             PauseState pauseState = new();
 
             _states.Add("menu", menuState);

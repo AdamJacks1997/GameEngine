@@ -1,21 +1,18 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GameEngine.Components;
-using Template.Assets;
-using System;
-using GameEngine.Managers;
-using Microsoft.Xna.Framework.Input;
+using GameEngine.Handlers;
 
 namespace Template.Entities
 {
-    public class CollideableExample : Entity
+    public class CollidableExample : Entity
     {
-        public CollideableExample()
+        public CollidableExample()
         {
-            _currentTexture = Textures.Duck;
+            CurrentTexture = TextureHandler.Get("Duck");
             Location = new Vector2(250, 100);
 
-            CollisionManager.Add(this, "collideable");
+            CollisionHandler.Add(this, "collidable");
         }
 
         public override void Update(GameTime gameTime)

@@ -2,9 +2,9 @@
 using GameEngine.Core;
 using System.Collections.Generic;
 
-namespace GameEngine.Managers
+namespace GameEngine.Handlers
 {
-    public class CollisionManager
+    public class CollisionHandler
     {
         private static readonly Dictionary<string, Entity> EntityList = new ();
 

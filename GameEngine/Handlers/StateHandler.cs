@@ -3,9 +3,9 @@ using GameEngine.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GameEngine.Managers
+namespace GameEngine.Handlers
 {
-    public class StateManager : Component
+    public class StateHandler : Component
     {
         private Dictionary<string, Component> _states = new ();
         private string _activeState = "";

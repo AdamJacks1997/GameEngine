@@ -8,9 +8,9 @@ namespace GameEngine.Components
 {
     public abstract class Entity : Component
     {
-        public int Width => _currentTexture.Width;
+        public int Width => CurrentTexture.Width;
 
-        public int Height => _currentTexture.Height;
+        public int Height => CurrentTexture.Height;
 
         public Vector2 Location = new (0, 0);
 
@@ -18,11 +18,11 @@ namespace GameEngine.Components
 
         public bool Flip;
 
-        private Rectangle Dimensions => _currentTexture.Bounds;
+        private Rectangle Dimensions => CurrentTexture.Bounds;
 
-        public Rectangle BoundingBox => new((int)X, (int)Y, _currentTexture.Width, _currentTexture.Height);
+        public Rectangle BoundingBox => new((int)X, (int)Y, CurrentTexture.Width, CurrentTexture.Height);
 
-        public Texture2D _currentTexture;
+        public Texture2D CurrentTexture;
 
         public bool RenderBoundingBox { get; set; }
 
@@ -42,20 +42,20 @@ namespace GameEngine.Components
 
         protected void DrawSprite(SpriteBatch spriteBatch)
         {
-            if (_currentTexture == null)
+            if (CurrentTexture == null)
             {
                 return;
             }
 
             SpriteEffects effect = Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            spriteBatch.Draw(_currentTexture, Location,
-                new Rectangle(0, 0, _currentTexture.Width, _currentTexture.Height), Color.White, 0,
+            spriteBatch.Draw(CurrentTexture, Location,
+                new Rectangle(0, 0, CurrentTexture.Width, CurrentTexture.Height), Color.White, 0,
                 new Vector2(0, 0), 1.0f, effect, 0.0f);
 
             if (RenderBoundingBox)
             {
-                spriteBatch.DrawRectangle(BoundingBox, Color.Yellow, 3);
+                spriteBatch.DrawRectangle(BoundingBox, Color.Red, 1);
             }
         }
 
@@ -68,9 +68,9 @@ namespace GameEngine.Components
         {
             // Get Color data of each Texture
             Color[] bitsA = new Color[entity1.Width * entity1.Height];
-            entity1._currentTexture.GetData(bitsA);
+            entity1.CurrentTexture.GetData(bitsA);
             Color[] bitsB = new Color[entity2.Width * entity2.Height];
-            entity2._currentTexture.GetData(bitsB);
+            entity2.CurrentTexture.GetData(bitsB);
 
             // Calculate the intersecting rectangle
             int x1 = Math.Max(entity1.BoundingBox.X, entity2.BoundingBox.X);
