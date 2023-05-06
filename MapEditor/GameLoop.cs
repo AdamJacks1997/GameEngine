@@ -4,22 +4,26 @@ using Microsoft.Xna.Framework.Input;
 using GameEngine.Core;
 using GameEngine.Handlers;
 using System.Collections.Generic;
-using Template.States;
+using MapEditor.Entities;
+using MapEditor.States;
+using MapEditor.Handlers;
 
-namespace Template
+namespace MapEditor
 {
     public class GameLoop : Game
     {
         private static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private TextureHandler _textureHandler;
+        private MouseEntity _mouse;
+
         private readonly Dictionary<string, Component> _states = new();
 
         public GameLoop()
         {
             _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            Content.RootDirectory = "D:/Projects/GameEngine/Template/Content/bin/DesktopGL/Content";
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -52,6 +56,10 @@ namespace Template
 
             StateHandler.Update(gameTime);
 
+            _mouse.Update(gameTime);
+
+            MapHandler.Update();
+
             base.Update(gameTime);
         }
 
@@ -61,26 +69,31 @@ namespace Template
 
             StateHandler.Draw(_spriteBatch);
 
+            _spriteBatch.Begin();
+
+            _mouse.Draw(_spriteBatch);
+
+            _spriteBatch.End();
+
             base.Draw(gameTime);
         }
 
         private void LoadTextures()
         {
-           _textureHandler.LoadEntity("Duck");
+            _textureHandler.LoadEntity("Duck");
+            _textureHandler.LoadEntity("Entities/Mouse");
 
-           _textureHandler.LoadTile("Tiles/BlueTile");
-           _textureHandler.LoadTile("Tiles/GreenTile");
+            _textureHandler.LoadTile("Tiles/BlueTile");
+            _textureHandler.LoadTile("Tiles/GreenTile");
         }
 
         private void InitializeGameStateManager()
         {
-            MenuState menuState = new();
-            PlayState playState = new(_graphics);
-            PauseState pauseState = new();
+            _mouse = new MouseEntity();
 
-            _states.Add("menu", menuState);
+            PlayState playState = new(_graphics);
+            
             _states.Add("play", playState);
-            _states.Add("pause", pauseState);
 
             StateHandler.Init(_states, "play");
         }

@@ -12,15 +12,12 @@ namespace GameEngine.Components
     public class Tile : ITile
     {
         public Vector2 Position = new(0, 0);
-
-        public Rectangle BoundingBox => new((int)X, (int)Y, Texture.Width, Texture.Height);
-
-        [JsonProperty("TextureName")]
+        
         public string TextureName;
 
-        public Texture2D Texture => TextureHandler.Get(TextureName);
+        public Texture2D Texture => TextureHandler.GetTile(TextureName);
 
-        public bool RenderBoundingBox { get; set; }
+        public bool RenderBoundingBox { get; set; } = true;
 
         public float X
         {
@@ -34,10 +31,17 @@ namespace GameEngine.Components
             set => Position.Y = value;
         }
 
-        public Vector2 Location => new(Position.X * Texture.Width, Position.Y * Texture.Height);
+        public Vector2 Location => new(Position.X * Constants.TileSize, Position.Y * Constants.TileSize);
+
+        public Rectangle BoundingBox => new((int)Location.X, (int)Location.Y, Texture.Width, Texture.Height);
 
         public CollidableType CollidableType { get; set; } = CollidableType.None;
-        
+
+        public Tile(Vector2 position, string textureName) // TODO: include collision type
+        {
+            Position = position;
+            TextureName = textureName;
+        }
 
         public void DrawSprite(SpriteBatch spriteBatch)
         {
@@ -52,7 +56,7 @@ namespace GameEngine.Components
 
             if (RenderBoundingBox && CollidableType != CollidableType.None)
             {
-                spriteBatch.DrawRectangle(BoundingBox, Color.Red, 3);
+                spriteBatch.DrawRectangle(BoundingBox, Color.Red, 1);
             }
         }
     }

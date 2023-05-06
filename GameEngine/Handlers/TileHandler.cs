@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using GameEngine.Components;
+using GameEngine.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 
 namespace GameEngine.Handlers
 {
-    public class TileHandler
+    public static class TileHandler
     {
-        private static List<Tile> _currentMap;
+        private static HashSet<Tile> _currentMap;
 
-        public void Init(string map)
+        public static void Init(string map)
         {
             string mapFilePath = Path.Combine("D:/Projects/GameEngine/Template/Maps", $"{map}.json");
             using StreamReader reader = new StreamReader(mapFilePath);
             string mapJson = reader.ReadToEnd();
-            _currentMap = JsonConvert.DeserializeObject<List<Tile>>(mapJson);
+            _currentMap = JsonConvert.DeserializeObject<HashSet<Tile>>(mapJson);
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -24,6 +26,21 @@ namespace GameEngine.Handlers
             {
                 tile.DrawSprite(spriteBatch);
             }
+        }
+
+        public static HashSet<Tile> GetCurrentMap()
+        {
+            return _currentMap;
+        }
+
+        public static void SetCurrentMap(HashSet<Tile> currentMap)
+        {
+            _currentMap = currentMap;
+        }
+
+        public static Vector2 LocationToTilePosition(Vector2 location)
+        {
+            return location / Constants.TileSize;
         }
     }
 }

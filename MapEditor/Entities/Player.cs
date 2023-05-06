@@ -4,32 +4,20 @@ using GameEngine.Components;
 using GameEngine.Handlers;
 using Microsoft.Xna.Framework.Input;
 
-namespace Template.Entities
+namespace MapEditor.Entities
 {
     public class Player : Entity
     {
-
         public Player()
         {
             CurrentTexture = TextureHandler.GetEntity("Duck");
             Location = new Vector2(100, 100);
-
-            CollisionHandler.Add(this, "player");
         }
 
         public override void Update(GameTime gameTime)
         {
             Velocity = new Vector2(0, 0);
             HandleInputs();
-
-            if (CollisionHandler.IsPerPixelCollision("player", "collidable"))
-            {
-                RenderBoundingBox = true;
-            }
-            else
-            {
-                RenderBoundingBox = false;
-            }
 
             Move(gameTime);
         }

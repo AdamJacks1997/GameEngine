@@ -1,3 +1,3 @@
 ﻿
-using var game = new MapEditor.Game1();
+using var game = new MapEditor.GameLoop();
 game.Run();

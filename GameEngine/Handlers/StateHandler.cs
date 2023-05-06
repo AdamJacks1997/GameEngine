@@ -5,23 +5,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameEngine.Handlers
 {
-    public class StateHandler : Component
+    public static class StateHandler
     {
-        private Dictionary<string, Component> _states = new ();
-        private string _activeState = "";
+        private static Dictionary<string, Component> _states = new ();
+        private static string _activeState = "";
 
-        public void Init(Dictionary<string, Component> states, string activeState)
+        public static void Init(Dictionary<string, Component> states, string activeState)
         {
             _states = states;
             _activeState = activeState;
         }
 
-        public override void Update(GameTime gameTime)
+        public static void Update(GameTime gameTime)
         {
             _states[_activeState].Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public static void Draw(SpriteBatch spriteBatch)
         {
             _states[_activeState].Draw(spriteBatch);
         }

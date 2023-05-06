@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameEngine.Handlers
 {
-    public class CollisionHandler
+    public static class CollisionHandler
     {
         private static readonly Dictionary<string, Entity> EntityList = new ();
 
@@ -99,6 +99,14 @@ namespace GameEngine.Handlers
                    one.X + one.Width > two.X &&
                    one.Y < two.Y + two.Height &&
                    one.Y + one.Height > two.Y;
+        }
+
+        public static bool IsCollision(string source, string destination)
+        {
+            Entity sourceSprite = EntityList[source];
+            Entity destinationSprite = EntityList[destination];
+
+            return sourceSprite.BoundingBox.Intersects(destinationSprite.BoundingBox);
         }
 
         public static bool IsPerPixelCollision(string source, string destination)

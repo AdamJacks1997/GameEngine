@@ -2,17 +2,19 @@
   {
     "X": 0,
     "Y": 0,
-    "TextureName": "BlueTile"
+    "TextureName": "Tiles/BlueTile",
+    "CollidableType": "Boundary"
   },
   {
     "X": 1,
     "Y": 0,
-    "TextureName": "GreenTile",
+    "TextureName": "Tiles/GreenTile",
     "CollidableType": "Boundary"
   },
   {
     "X": 2,
     "Y": 0,
-    "TextureName": "BlueTile"
+    "TextureName": "Tiles/BlueTile",
+    "CollidableType": "Boundary"
   }
 ]

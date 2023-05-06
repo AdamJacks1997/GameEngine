@@ -4,6 +4,9 @@
     {
         public static int ScreenWidth { get; set; } = 1366;
         public static int ScreenHeight { get; set; } = 768;
+
+        public static int TileSize { get; } = 32;
+
         public static bool Exit { get; set; } = false;
     }
 }
