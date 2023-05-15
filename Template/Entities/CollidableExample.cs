@@ -7,9 +7,9 @@ namespace Template.Entities
 {
     public class CollidableExample : Entity
     {
-        public CollidableExample()
+        public CollidableExample(TextureHandler textureHandler)
         {
-            CurrentTexture = TextureHandler.GetEntity("Duck");
+            CurrentTexture = textureHandler.Get("Duck");
             Location = new Vector2(250, 100);
 
             CollisionHandler.Add(this, "collidable");

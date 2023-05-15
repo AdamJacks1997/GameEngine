@@ -12,7 +12,6 @@ namespace Template
     {
         private static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private TextureHandler _textureHandler;
         private readonly Dictionary<string, Component> _states = new();
 
         public GameLoop()
@@ -29,16 +28,13 @@ namespace Template
             _graphics.ApplyChanges();
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _textureHandler = new TextureHandler(Content);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            LoadTextures();
-
-            TileHandler.Init("ExampleMap");
+            //TileHandler.Init("ExampleMap");
 
             InitializeGameStateManager();
         }
@@ -64,18 +60,10 @@ namespace Template
             base.Draw(gameTime);
         }
 
-        private void LoadTextures()
-        {
-           _textureHandler.LoadEntity("Duck");
-
-           _textureHandler.LoadTile("Tiles/BlueTile");
-           _textureHandler.LoadTile("Tiles/GreenTile");
-        }
-
         private void InitializeGameStateManager()
         {
             MenuState menuState = new();
-            PlayState playState = new(_graphics);
+            PlayState playState = new(Content, _graphics);
             PauseState pauseState = new();
 
             _states.Add("menu", menuState);

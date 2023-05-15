@@ -1,8 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using GameEngine.Core;
+using GameEngine.Enums;
 using GameEngine.Renderers;
+using GameEngine.Handlers;
 
 namespace GameEngine.Components
 {
@@ -16,13 +20,15 @@ namespace GameEngine.Components
 
         public Vector2 Velocity = new(0, 0);
 
-        public bool Flip;
+        public Direction Direction = Direction.Right;
 
-        private Rectangle Dimensions => CurrentTexture.Bounds;
+        public static Dictionary<string, HashSet<Texture2D>> Textures = new ();
 
-        public Rectangle BoundingBox => new((int)X, (int)Y, CurrentTexture.Width, CurrentTexture.Height);
+        public List<Texture2D> CurrentDirectionTextures;
 
         public Texture2D CurrentTexture;
+
+        public Rectangle BoundingBox => new ((int)X, (int)Y, CurrentTexture.Width, CurrentTexture.Height);
 
         public bool RenderBoundingBox { get; set; }
 
@@ -40,6 +46,24 @@ namespace GameEngine.Components
             Y += VY * (gameTime.ElapsedGameTime.Milliseconds / 16);
         }
 
+        protected static HashSet<Texture2D> GetDirectionTextures(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Up: return
+                    Textures["Up"];
+
+                case Direction.Left:
+                case Direction.Right:
+                    return Textures["Right"];
+
+                case Direction.Down:
+                    return Textures["Down"];
+            };
+
+            return Textures["Right"];
+        }
+
         protected void DrawSprite(SpriteBatch spriteBatch)
         {
             if (CurrentTexture == null)
@@ -47,7 +71,7 @@ namespace GameEngine.Components
                 return;
             }
 
-            SpriteEffects effect = Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects effect = Direction == Direction.Left ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             spriteBatch.Draw(CurrentTexture, Location,
                 new Rectangle(0, 0, CurrentTexture.Width, CurrentTexture.Height), Color.White, 0,

@@ -11,12 +11,14 @@ namespace GameEngine.Handlers
     public static class TileHandler
     {
         private static HashSet<Tile> _currentMap;
+        public static TextureHandler TextureHandler;
 
         public static void Init(string map)
         {
             string mapFilePath = Path.Combine("D:/Projects/GameEngine/Template/Maps", $"{map}.json");
             using StreamReader reader = new StreamReader(mapFilePath);
             string mapJson = reader.ReadToEnd();
+
             _currentMap = JsonConvert.DeserializeObject<HashSet<Tile>>(mapJson);
         }
 

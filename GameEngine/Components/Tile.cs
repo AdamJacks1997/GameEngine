@@ -15,7 +15,7 @@ namespace GameEngine.Components
         
         public string TextureName;
 
-        public Texture2D Texture => TextureHandler.GetTile(TextureName);
+        public Texture2D Texture => TileHandler.TextureHandler.Get(TextureName);
 
         public bool RenderBoundingBox { get; set; } = true;
 
