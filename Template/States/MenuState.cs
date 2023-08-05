@@ -5,16 +5,16 @@ using System;
 
 namespace Template.States
 {
-    internal class MenuState : Component
-    {
-        public override void Update(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
+    //internal class MenuState : Component
+    //{
+    //    public override void Update(GameTime gameTime)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public override void Draw(SpriteBatch spriteBatch)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

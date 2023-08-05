@@ -1,4 +1,7 @@
-﻿namespace GameEngine.Core
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+
+namespace GameEngine.Core
 {
     public static class Constants
     {

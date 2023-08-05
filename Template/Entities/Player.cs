@@ -1,112 +1,52 @@
-﻿using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using GameEngine.Components;
-using GameEngine.Enums;
+﻿using Microsoft.Xna.Framework;
 using GameEngine.Handlers;
-using Microsoft.Xna.Framework.Input;
+using GameEngine.Core;
+using Template.Components;
 
 namespace Template.Entities
 {
     public class Player : Entity
     {
-        private int _internalTimer = 0;
-        private int _animationSpeed = 10;
-        private int _currentFrame = 0;
-
         public Player(TextureHandler textureHandler)
         {
-            Textures.Add("Up", textureHandler.GetGroup("StorkUp"));
-            Textures.Add("Right", textureHandler.GetGroup("StorkRight"));
-            Textures.Add("Down", textureHandler.GetGroup("StorkDown"));
 
-            CurrentDirectionTextures = GetDirectionTextures(Direction).ToList();
+            //CollisionHandler.Add(this, "player");
 
-            CurrentTexture = GetDirectionTextures(Direction).First();
+            var animatedSprite = AddComponent<AnimatedSpriteComponent>();
+            var transform = AddComponent<TransformComponent>();
+            var velocity = AddComponent<VelocityComponent>();
+            var collider = AddComponent<ColliderComponent>();
+            AddComponent<PlayerControllerComponent>();
 
-            Location = new Vector2(100, 100);
+            animatedSprite.Textures.Add("Up", textureHandler.GetGroup("StorkUp"));
+            animatedSprite.Textures.Add("Right", textureHandler.GetGroup("StorkRight"));
+            animatedSprite.Textures.Add("Down", textureHandler.GetGroup("StorkDown"));
 
-            CollisionHandler.Add(this, "player");
+            transform.Position = new Vector2(100, 100);
+            transform.Size = new Point(32, 32);
+
+            velocity.Speed = 100f;
+
+            collider.Bounds = transform.Bounds;
+
+            EntityHandler.Add(this);
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            Velocity = new Vector2(0, 0);
+        //public override void Update(GameTime gameTime)
+        //{
 
-            _internalTimer++;
+        //    HandleInputs();
 
-            if (_internalTimer >= _animationSpeed)
-            {
-                NextFrame();
-                _internalTimer = 0;
-            }
+        //    if (CollisionHandler.IsPerPixelCollision("player", "collidable"))
+        //    {
+        //        RenderBoundingBox = true;
+        //    }
+        //    else
+        //    {
+        //        RenderBoundingBox = false;
+        //    }
 
-            HandleInputs();
-
-            if (CollisionHandler.IsPerPixelCollision("player", "collidable"))
-            {
-                RenderBoundingBox = true;
-            }
-            else
-            {
-                RenderBoundingBox = false;
-            }
-
-            Move(gameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            DrawSprite(spriteBatch);
-        }
-
-        private void NextFrame()
-        {
-            if (_currentFrame < CurrentDirectionTextures.Count - 1)
-            {
-                _currentFrame++;
-                CurrentTexture = CurrentDirectionTextures[_currentFrame];
-            }
-            else
-            {
-                _currentFrame = 0;
-                CurrentTexture = CurrentDirectionTextures[_currentFrame];
-            }
-        }
-
-        private void HandleInputs()
-        {
-            if (InputHandler.KeyDown(Keys.W))
-            {
-                VY -= 1;
-                SetDirection (Direction.Up);
-            }
-
-            if (InputHandler.KeyDown(Keys.S))
-            {
-                VY += 1;
-                SetDirection(Direction.Down);
-            }
-
-            if (InputHandler.KeyDown(Keys.A))
-            {
-                VX -= 1;
-                SetDirection(Direction.Left);
-            }
-
-            if (InputHandler.KeyDown(Keys.D))
-            {
-                VX += 1;
-                SetDirection(Direction.Right);
-            }
-        }
-
-        private void SetDirection(Direction direction)
-        {
-            Direction = direction;
-            CurrentDirectionTextures = GetDirectionTextures(direction).ToList();
-        }
+        //    Move(gameTime);
+        //}
     }
 }

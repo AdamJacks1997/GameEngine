@@ -7,23 +7,23 @@ namespace GameEngine.Handlers
 {
     public static class StateHandler
     {
-        private static Dictionary<string, Component> _states = new ();
+        private static Dictionary<string, IComponent> _states = new ();
         private static string _activeState = "";
 
-        public static void Init(Dictionary<string, Component> states, string activeState)
+        public static void Init(Dictionary<string, IComponent> states, string activeState)
         {
             _states = states;
             _activeState = activeState;
         }
 
-        public static void Update(GameTime gameTime)
-        {
-            _states[_activeState].Update(gameTime);
-        }
+        //public static void Update(GameTime gameTime)
+        //{
+        //    _states[_activeState].Update(gameTime);
+        //}
 
-        public static void Draw(SpriteBatch spriteBatch)
-        {
-            _states[_activeState].Draw(spriteBatch);
-        }
+        //public static void Draw(SpriteBatch spriteBatch)
+        //{
+        //    _states[_activeState].Draw(spriteBatch);
+        //}
     }
 }

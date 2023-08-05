@@ -1,18 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameEngine.Core;
 using GameEngine.Handlers;
-using System.Collections.Generic;
-using Template.States;
+using Template.Entities;
+using Template.Systems;
 
 namespace Template
 {
     public class GameLoop : Game
     {
         private static GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        private readonly Dictionary<string, Component> _states = new();
+        private GameEngine.Systems.Systems _systems;
 
         public GameLoop()
         {
@@ -27,16 +25,26 @@ namespace Template
             _graphics.PreferredBackBufferHeight = Constants.ScreenHeight;
             _graphics.ApplyChanges();
 
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            //TileHandler.Init("ExampleMap");
+            _systems = new GameEngine.Systems.Systems();
+            _systems
+                .Add(new InputSystem())
+                .Add(new MovementSystem())
+                .Add(new AnimatedSpriteSystem(GraphicsDevice));
 
-            InitializeGameStateManager();
+            _systems.Initialize();
+
+            var textureHandler = new TextureHandler(Content);
+
+            textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
+            textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
+            textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
+
+            new Player(textureHandler);
         }
 
         protected override void Update(GameTime gameTime)
@@ -44,33 +52,9 @@ namespace Template
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            InputHandler.Update();
-
-            StateHandler.Update(gameTime);
+            _systems.Update(gameTime);
 
             base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            StateHandler.Draw(_spriteBatch);
-
-            base.Draw(gameTime);
-        }
-
-        private void InitializeGameStateManager()
-        {
-            MenuState menuState = new();
-            PlayState playState = new(Content, _graphics);
-            PauseState pauseState = new();
-
-            _states.Add("menu", menuState);
-            _states.Add("play", playState);
-            _states.Add("pause", pauseState);
-
-            StateHandler.Init(_states, "play");
         }
     }
 }

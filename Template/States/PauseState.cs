@@ -5,16 +5,16 @@ using GameEngine.Core;
 
 namespace Template.States
 {
-    internal class PauseState : Component
-    {
-        public override void Update(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
+    //internal class PauseState : Component
+    //{
+    //    public override void Update(GameTime gameTime)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public override void Draw(SpriteBatch spriteBatch)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

@@ -1,5 +1,4 @@
-﻿using GameEngine.Components;
-using GameEngine.Core;
+﻿using GameEngine.Core;
 using System.Collections.Generic;
 
 namespace GameEngine.Handlers
@@ -93,33 +92,33 @@ namespace GameEngine.Handlers
             return false;
         }
 
-        public static bool AABB(Entity one, Entity two)
-        {
-            return one.X < two.X + two.Width &&
-                   one.X + one.Width > two.X &&
-                   one.Y < two.Y + two.Height &&
-                   one.Y + one.Height > two.Y;
-        }
+        //public static bool AABB(Entity one, Entity two)
+        //{
+        //    return one.X < two.X + two.Width &&
+        //           one.X + one.Width > two.X &&
+        //           one.Y < two.Y + two.Height &&
+        //           one.Y + one.Height > two.Y;
+        //}
 
-        public static bool IsCollision(string source, string destination)
-        {
-            Entity sourceSprite = EntityList[source];
-            Entity destinationSprite = EntityList[destination];
+        //public static bool IsCollision(string source, string destination)
+        //{
+        //    Entity sourceSprite = EntityList[source];
+        //    Entity destinationSprite = EntityList[destination];
 
-            return sourceSprite.BoundingBox.Intersects(destinationSprite.BoundingBox);
-        }
+        //    return sourceSprite.BoundingBox.Intersects(destinationSprite.BoundingBox);
+        //}
 
-        public static bool IsPerPixelCollision(string source, string destination)
-        {
-            Entity sourceEntity = EntityList[source];
-            Entity destinationEntity = EntityList[destination];
+        //public static bool IsPerPixelCollision(string source, string destination)
+        //{
+        //    Entity sourceEntity = EntityList[source];
+        //    Entity destinationEntity = EntityList[destination];
 
-            if (sourceEntity.BoundingBox.Intersects(destinationEntity.BoundingBox))
-            {
-                return sourceEntity.CollidesWith(destinationEntity);
-            }
+        //    if (sourceEntity.BoundingBox.Intersects(destinationEntity.BoundingBox))
+        //    {
+        //        return sourceEntity.CollidesWith(destinationEntity);
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }

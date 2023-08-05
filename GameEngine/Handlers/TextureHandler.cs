@@ -10,7 +10,7 @@ namespace GameEngine.Handlers
         private readonly ContentManager _content;
 
         private static readonly Dictionary<string, Texture2D> Textures = new();
-        private static readonly Dictionary<string, HashSet<Texture2D>> TextureGroups = new();
+        private static readonly Dictionary<string, List<Texture2D>> TextureGroups = new();
 
         public TextureHandler(ContentManager content)
         {
@@ -33,7 +33,7 @@ namespace GameEngine.Handlers
 
             FileInfo[] files = dir.GetFiles("*.*");
 
-            TextureGroups.Add(name, new HashSet<Texture2D>());
+            TextureGroups.Add(name, new List<Texture2D>());
 
             foreach (FileInfo file in files)
             {
@@ -49,7 +49,7 @@ namespace GameEngine.Handlers
             return Textures[name];
         }
 
-        public HashSet<Texture2D> GetGroup(string name)
+        public List<Texture2D> GetGroup(string name)
         {
             return TextureGroups[name];
         }
