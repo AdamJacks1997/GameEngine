@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using GameEngine.Handlers;
-using GameEngine.Core;
 using Template.Components;
+using GameEngine.Models.ECS;
 
 namespace Template.Entities
 {

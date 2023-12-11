@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using GameEngine.Core;
+using GameEngine.Models.ECS;
 
 namespace Template.Components
 {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using GameEngine.Core;
 using GameEngine.Handlers;
 using Template.Entities;
 using Template.Systems;
+using GameEngine.Constants;
 
 namespace Template
 {
@@ -23,8 +23,8 @@ namespace Template
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = Constants.ScreenWidth;
-            _graphics.PreferredBackBufferHeight = Constants.ScreenHeight;
+            _graphics.PreferredBackBufferWidth = GameSettings.ScreenWidth;
+            _graphics.PreferredBackBufferHeight = GameSettings.ScreenHeight;
             _graphics.ApplyChanges();
 
             base.Initialize();

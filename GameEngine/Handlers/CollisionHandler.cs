@@ -1,4 +1,5 @@
-﻿using GameEngine.Core;
+﻿using GameEngine.Constants;
+using GameEngine.Models.ECS;
 using System.Collections.Generic;
 
 namespace GameEngine.Handlers
@@ -30,7 +31,7 @@ namespace GameEngine.Handlers
                 return true;
             }
 
-            if (xPosition > Constants.ScreenWidth - width) // Collides Right
+            if (xPosition > GameSettings.ScreenWidth - width) // Collides Right
             {
                 return true;
             }
@@ -45,7 +46,7 @@ namespace GameEngine.Handlers
                 return true;
             }
 
-            if (yPosition > Constants.ScreenHeight - height) // Collides Bottom
+            if (yPosition > GameSettings.ScreenHeight - height) // Collides Bottom
             {
                 return true;
             }
@@ -64,7 +65,7 @@ namespace GameEngine.Handlers
         }
         public static bool WithScreenRight(float xPosition, int width)
         {
-            if (xPosition > Constants.ScreenWidth - width)
+            if (xPosition > GameSettings.ScreenWidth - width)
             {
                 return true;
             }
@@ -84,7 +85,7 @@ namespace GameEngine.Handlers
 
         public static bool WithScreenBottom(float yPosition, int height)
         {
-            if (yPosition > Constants.ScreenHeight - height)
+            if (yPosition > GameSettings.ScreenHeight - height)
             {
                 return true;
             }

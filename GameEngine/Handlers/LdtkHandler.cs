@@ -1,10 +1,8 @@
-﻿using GameEngine.Core;
+﻿using GameEngine.Models.LDTK;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
 
 namespace GameEngine.Handlers
 {
@@ -22,7 +20,7 @@ namespace GameEngine.Handlers
         {
             var mapDataJson = LoadFile("D:/Projects/GameEngine/Template/Map/" + level + "/", "data.json");
 
-            currentMap.Data = JsonConvert.DeserializeObject<MapData>(mapDataJson);
+            currentMap = JsonConvert.DeserializeObject<Map>(mapDataJson);
 
             return currentMap;
         }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GameEngine.Core;
+using GameEngine.Models.ECS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

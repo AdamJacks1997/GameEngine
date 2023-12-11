@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GameEngine.Core;
+using GameEngine.Models;
 using GameEngine.Enums;
 using GameEngine.Handlers;
 using GameEngine.Systems;

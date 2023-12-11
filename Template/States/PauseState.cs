@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
-using GameEngine.Core;
+using GameEngine.Models;
 
 namespace Template.States
 {

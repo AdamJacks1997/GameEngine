@@ -1,4 +1,4 @@
-﻿namespace GameEngine.Core
+﻿namespace GameEngine.Models.ECS
 {
     public interface IComponent
     {

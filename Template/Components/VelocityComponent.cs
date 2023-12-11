@@ -1,5 +1,5 @@
-﻿using GameEngine.Core;
-using GameEngine.Enums;
+﻿using GameEngine.Enums;
+using GameEngine.Models.ECS;
 using Microsoft.Xna.Framework;
 
 namespace Template.Components

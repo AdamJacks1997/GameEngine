@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using GameEngine.Core;
+using GameEngine.Models;
 using GameEngine.Handlers;
 using Microsoft.Xna.Framework.Content;
 using Template.Entities;

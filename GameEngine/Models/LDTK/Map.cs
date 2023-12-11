@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameEngine.Core
+namespace GameEngine.Models.LDTK
 {
-    public class MapData
+    public class Map
     {
         public static int TileSize { get; set; } = 16;
 
         [JsonProperty("width")]
-        public int Width {
+        public int Width
+        {
             get
             {
                 return _width;
@@ -42,5 +43,7 @@ namespace GameEngine.Core
         private int _width;
 
         private int _height;
+
+
     }
 }

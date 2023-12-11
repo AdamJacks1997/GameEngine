@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using GameEngine.Core;
+using GameEngine.Models;
 using System;
 
 namespace Template.States

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GameEngine.Core
+namespace GameEngine.Models.ECS
 {
     public class Entity
     {
         private readonly Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
-        public T AddComponent<T>( ) where T : IComponent
+        public T AddComponent<T>() where T : IComponent
         {
             var newComponent = (T)Activator.CreateInstance(typeof(T));
 
@@ -29,7 +29,7 @@ namespace GameEngine.Core
                 return (T)component;
             }
 
-            return default(T);
+            return default;
         }
 
         public bool HasComponent<T>() where T : IComponent
