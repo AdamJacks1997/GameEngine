@@ -7,7 +7,6 @@ namespace GameEngine.Renderers
 {
 	public static class Primitives2D
 	{
-
 		private static readonly Dictionary<string, List<Vector2>> circleCache = new Dictionary<string, List<Vector2>>();
 		private static Texture2D pixel;
 

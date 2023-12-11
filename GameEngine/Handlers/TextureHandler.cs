@@ -17,14 +17,14 @@ namespace GameEngine.Handlers
             _content = content;
         }
 
-        public void Load(string name)
+        public void Load(string name, string path)
         {
-            Textures.Add(name, _content.Load<Texture2D>(name));
+            Textures.Add(name, _content.Load<Texture2D>(path));
         }
 
-        public void LoadGroup(string name, string route)
+        public void LoadGroup(string name, string path)
         {
-            DirectoryInfo dir = new DirectoryInfo(_content.RootDirectory + "/" + route);
+            DirectoryInfo dir = new DirectoryInfo(_content.RootDirectory + "/" + path);
 
             if (!dir.Exists)
             {
@@ -39,8 +39,8 @@ namespace GameEngine.Handlers
             {
                 string key = Path.GetFileNameWithoutExtension(file.Name);
 
-                Textures.Add(key, _content.Load<Texture2D>(route + "/" + key));
-                TextureGroups[name].Add(_content.Load<Texture2D>(route + "/" + key));
+                Textures.Add(key, _content.Load<Texture2D>(path + "/" + key));
+                TextureGroups[name].Add(_content.Load<Texture2D>(path + "/" + key));
             }
         }
 

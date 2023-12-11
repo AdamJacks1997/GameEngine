@@ -11,6 +11,8 @@ namespace Template
     {
         private static GraphicsDeviceManager _graphics;
         private GameEngine.Systems.Systems _systems;
+        private TextureHandler _textureHandler;
+        private LdtkHandler _ldtkHandler;
 
         public GameLoop()
         {
@@ -38,13 +40,17 @@ namespace Template
 
             _systems.Initialize();
 
-            var textureHandler = new TextureHandler(Content);
+            _textureHandler = new TextureHandler(Content);
 
-            textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
-            textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
-            textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
+            _ldtkHandler = new LdtkHandler(_textureHandler);
 
-            new Player(textureHandler);
+            _ldtkHandler.Init("Level_0");
+
+            _textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
+            _textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
+            _textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
+
+            new Player(_textureHandler);
         }
 
         protected override void Update(GameTime gameTime)

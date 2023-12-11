@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Enums
 {
-    public enum CollidableType
+    public enum CollidableTypeEnum
     {
         None,
         Boundary,

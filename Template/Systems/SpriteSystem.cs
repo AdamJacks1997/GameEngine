@@ -15,8 +15,7 @@ namespace Template.Systems
 
         private readonly List<Type> _componentTypes = new List<Type>()
         {
-            typeof(AnimatedSpriteComponent),
-            typeof(VelocityComponent)
+            typeof(SpriteComponent)
         };
 
         public SpriteSystem(GraphicsDevice graphicsDevice)

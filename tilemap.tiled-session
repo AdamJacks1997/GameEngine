@@ -1,0 +1,37 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "TileMap.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Full.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TileMap.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": -248,
+                "y": -379.5
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/adamj/Desktop",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+        "TileMap.tmx",
+        "Full.tsx"
+    ],
+    "project": "tilemap.tiled-project",
+    "recentFiles": [
+        "Full.tsx",
+        "TileMap.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}
