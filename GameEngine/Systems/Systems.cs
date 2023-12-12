@@ -14,7 +14,7 @@ namespace GameEngine.Systems
             var updateSystem = system as IUpdateSystem;
 
             if (initSystem != null)
-                _initializeSystems.Add((initSystem));
+                _initializeSystems.Add(initSystem);
 
             if (updateSystem != null)
                 _updateableSystems.Add(updateSystem);

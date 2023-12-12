@@ -12,38 +12,38 @@ namespace GameEngine.Models.LDTK
     {
         public static int TileSize { get; set; } = 16;
 
-        [JsonProperty("width")]
-        public int Width
-        {
-            get
-            {
-                return _width;
-            }
+        //[JsonProperty("width")] - These may not be needed any more
+        //public int Width
+        //{
+        //    get
+        //    {
+        //        return _width;
+        //    }
 
-            set
-            {
-                _width = value / TileSize;
-            }
-        }
+        //    set
+        //    {
+        //        _width = value / TileSize;
+        //    }
+        //}
 
-        [JsonProperty("height")]
-        public int Height
-        {
-            get
-            {
-                return _height;
-            }
+        //[JsonProperty("height")]
+        //public int Height
+        //{
+        //    get
+        //    {
+        //        return _height;
+        //    }
 
-            set
-            {
-                _height = value / TileSize;
-            }
-        }
+        //    set
+        //    {
+        //        _height = value / TileSize;
+        //    }
+        //}
 
-        private int _width;
+        //private int _width;
 
-        private int _height;
+        //private int _height;
 
-
+        public List<Level> Levels { get; set; }
     }
 }

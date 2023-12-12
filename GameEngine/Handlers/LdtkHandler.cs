@@ -8,19 +8,11 @@ namespace GameEngine.Handlers
 {
     public class LdtkHandler
     {
-        public Map currentMap = new Map();
-        private TextureHandler _textureHandler;
-
-        public LdtkHandler(TextureHandler textureHandler)
+        public Map Init()
         {
-            _textureHandler = textureHandler;
-        }
+            var mapDataJson = LoadFile("D:/Projects/GameEngine/Template/Map/", "Map.ldtk");
 
-        public Map Init(string level)
-        {
-            var mapDataJson = LoadFile("D:/Projects/GameEngine/Template/Map/" + level + "/", "data.json");
-
-            currentMap = JsonConvert.DeserializeObject<Map>(mapDataJson);
+            var currentMap = JsonConvert.DeserializeObject<Map>(mapDataJson);
 
             return currentMap;
         }

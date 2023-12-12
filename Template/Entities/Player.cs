@@ -9,21 +9,18 @@ namespace Template.Entities
     {
         public Player(TextureHandler textureHandler)
         {
-
-            //CollisionHandler.Add(this, "player");
-
-            var animatedSprite = AddComponent<AnimatedSpriteComponent>();
             var transform = AddComponent<TransformComponent>();
+            var animatedSprite = AddComponent<AnimatedSpriteComponent>();
             var velocity = AddComponent<VelocityComponent>();
             var collider = AddComponent<ColliderComponent>();
             AddComponent<PlayerControllerComponent>();
 
+            transform.Position = new Vector2(100, 100);
+            transform.Size = new Point(32, 32);
+
             animatedSprite.Textures.Add("Up", textureHandler.GetGroup("StorkUp"));
             animatedSprite.Textures.Add("Right", textureHandler.GetGroup("StorkRight"));
             animatedSprite.Textures.Add("Down", textureHandler.GetGroup("StorkDown"));
-
-            transform.Position = new Vector2(100, 100);
-            transform.Size = new Point(32, 32);
 
             velocity.Speed = 100f;
 
@@ -31,22 +28,5 @@ namespace Template.Entities
 
             EntityHandler.Add(this);
         }
-
-        //public override void Update(GameTime gameTime)
-        //{
-
-        //    HandleInputs();
-
-        //    if (CollisionHandler.IsPerPixelCollision("player", "collidable"))
-        //    {
-        //        RenderBoundingBox = true;
-        //    }
-        //    else
-        //    {
-        //        RenderBoundingBox = false;
-        //    }
-
-        //    Move(gameTime);
-        //}
     }
 }

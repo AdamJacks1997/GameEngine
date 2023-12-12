@@ -29,9 +29,6 @@
   <ItemGroup>
     <Compile Update="Components\AnimatedSpriteComponent.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Map\Map\simplified\" />
-  </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />

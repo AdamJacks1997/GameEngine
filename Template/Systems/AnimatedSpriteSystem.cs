@@ -44,8 +44,6 @@ namespace Template.Systems
         {
             var entities = EntityHandler.GetWithComponents(_componentTypes);
 
-            _graphicsDevice.Clear(Color.Honeydew);
-
             _spriteBatch.Begin();
 
             entities.ForEach(entity =>

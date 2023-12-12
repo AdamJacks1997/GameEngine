@@ -4,6 +4,8 @@ using GameEngine.Handlers;
 using Template.Entities;
 using Template.Systems;
 using GameEngine.Constants;
+using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace Template
 {
@@ -32,25 +34,44 @@ namespace Template
 
         protected override void LoadContent()
         {
+            _textureHandler = new TextureHandler(Content);
+
             _systems = new GameEngine.Systems.Systems();
             _systems
                 .Add(new InputSystem())
                 .Add(new MovementSystem())
-                .Add(new AnimatedSpriteSystem(GraphicsDevice));
+                .Add(new SpriteSystem(_graphics.GraphicsDevice))
+                .Add(new AnimatedSpriteSystem(_graphics.GraphicsDevice));
 
-            _systems.Initialize();
-
-            _textureHandler = new TextureHandler(Content);
-
-            _ldtkHandler = new LdtkHandler(_textureHandler);
-
-            _ldtkHandler.Init("Level_0");
+            _textureHandler.Load("Tiles", "TinyDungeon");
 
             _textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
             _textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
             _textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
 
+            //_graphics.GraphicsDevice.Clear(Color.Transparent);
+
+            _systems.Initialize();
+
             new Player(_textureHandler);
+
+            _ldtkHandler = new LdtkHandler();
+
+            var map = _ldtkHandler.Init();
+
+            var floor = map.Levels[0].LayerInstances.Single(li => li.Name == "Floor");
+
+            var walls = map.Levels[0].LayerInstances.Single(li => li.Name == "Walls");
+
+            floor.AutoLayerTiles.ForEach(tile =>
+            {
+                new Tile(_textureHandler, tile.PixelPosition, tile.Source);
+            });
+
+            walls.AutoLayerTiles.ForEach(tile =>
+            {
+                new Tile(_textureHandler, tile.PixelPosition, tile.Source);
+            });
         }
 
         protected override void Update(GameTime gameTime)
@@ -62,5 +83,18 @@ namespace Template
 
             base.Update(gameTime);
         }
+
+        //protected override void Draw(GameTime gameTime)
+        //{
+        //    _graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+        //    var spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
+
+        //    spriteBatch.Begin();
+
+        //    spriteBatch.End();
+
+        //    base.Draw(gameTime);
+        //}
     }
 }

@@ -15,6 +15,7 @@ namespace Template.Systems
 
         private readonly List<Type> _componentTypes = new List<Type>()
         {
+            typeof(TransformComponent),
             typeof(SpriteComponent)
         };
 
@@ -24,11 +25,9 @@ namespace Template.Systems
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
         
-        public void Update(GameTime gameTime) // THIS FILE IS COMPLETELY UNTESTED
+        public void Update(GameTime gameTime)
         {
             var entities = EntityHandler.GetWithComponents(_componentTypes);
-
-            _graphicsDevice.Clear(Color.Honeydew);
 
             _spriteBatch.Begin();
 
@@ -37,8 +36,8 @@ namespace Template.Systems
                 var transform = entity.GetComponent<TransformComponent>();
                 var sprite = entity.GetComponent<SpriteComponent>();
 
-                _spriteBatch.Draw(sprite.texture, transform.Position,
-                    new Rectangle(0, 0, sprite.texture.Width, sprite.texture.Height), Color.White, 0,
+                _spriteBatch.Draw(sprite.Texture, transform.Position,
+                    sprite.Source, Color.White, 0,
                     new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.0f);
             });
 
