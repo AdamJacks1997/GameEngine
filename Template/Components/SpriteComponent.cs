@@ -9,5 +9,7 @@ namespace Template.Components
         public Texture2D Texture;
 
         public Rectangle Source;
+
+        public float Layer;
     }
 }

@@ -9,17 +9,19 @@ namespace Template.Entities
     {
         public Tile(
             TextureHandler textureHandler,
-            Vector2 Position,
-            Rectangle source)
+            Vector2 position,
+            Rectangle source,
+            float layer)
         {
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
 
-            transform.Position = Position;
+            transform.Position = position;
             transform.Size = new Point(16, 16);
 
             sprite.Texture = textureHandler.Get("Tiles");
             sprite.Source = source;
+            sprite.Layer = layer;
 
 
             EntityHandler.Add(this);

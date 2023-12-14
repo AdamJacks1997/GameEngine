@@ -32,7 +32,7 @@ namespace GameEngine.Handlers
                 return true;
             }
 
-            if (xPosition > GameSettings.ScreenWidth - width) // Collides Right
+            if (xPosition > GameSettings.ScreenSize.X - width) // Collides Right
             {
                 return true;
             }
@@ -47,7 +47,7 @@ namespace GameEngine.Handlers
                 return true;
             }
 
-            if (yPosition > GameSettings.ScreenHeight - height) // Collides Bottom
+            if (yPosition > GameSettings.ScreenSize.Y - height) // Collides Bottom
             {
                 return true;
             }
@@ -66,7 +66,7 @@ namespace GameEngine.Handlers
         }
         public static bool WithScreenRight(float xPosition, int width)
         {
-            if (xPosition > GameSettings.ScreenWidth - width)
+            if (xPosition > GameSettings.ScreenSize.X - width)
             {
                 return true;
             }
@@ -86,7 +86,7 @@ namespace GameEngine.Handlers
 
         public static bool WithScreenBottom(float yPosition, int height)
         {
-            if (yPosition > GameSettings.ScreenHeight - height)
+            if (yPosition > GameSettings.ScreenSize.Y - height)
             {
                 return true;
             }

@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace GameEngine.Constants
 {
     public static class GameSettings
     {
-        public static int ScreenWidth { get; set; } = 1366;
-        public static int ScreenHeight { get; set; } = 768;
+        public static Vector2 ScreenSize { get; set; } = new Vector2(1280, 720);
+        public static Vector2 NativeSize { get; set; } = new Vector2(640, 360);
 
         public static int TileSize { get; } = 16;
 

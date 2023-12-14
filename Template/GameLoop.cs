@@ -5,7 +5,7 @@ using Template.Entities;
 using Template.Systems;
 using GameEngine.Constants;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
+using Template.Handlers;
 
 namespace Template
 {
@@ -13,8 +13,11 @@ namespace Template
     {
         private static GraphicsDeviceManager _graphics;
         private GameEngine.Systems.Systems _systems;
+        private SpriteBatch _spriteBatch;
         private TextureHandler _textureHandler;
         private LdtkHandler _ldtkHandler;
+
+        private RenderTarget2D _nativeRenderTarget;
 
         public GameLoop()
         {
@@ -25,23 +28,31 @@ namespace Template
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = GameSettings.ScreenWidth;
-            _graphics.PreferredBackBufferHeight = GameSettings.ScreenHeight;
+            _graphics.PreferredBackBufferWidth = (int)GameSettings.ScreenSize.X;
+            _graphics.PreferredBackBufferHeight = (int)GameSettings.ScreenSize.Y;
+
+            _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
+
+            _nativeRenderTarget = new RenderTarget2D(GraphicsDevice, 640, 360);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            Globals.SpriteBatch = _spriteBatch;
+
             _textureHandler = new TextureHandler(Content);
 
             _systems = new GameEngine.Systems.Systems();
             _systems
                 .Add(new InputSystem())
                 .Add(new MovementSystem())
-                .Add(new SpriteSystem(_graphics.GraphicsDevice))
-                .Add(new AnimatedSpriteSystem(_graphics.GraphicsDevice));
+                .Add(new SpriteSystem())
+                .Add(new AnimatedSpriteSystem())
+                .Add(new CameraFollowSystem());
 
             _textureHandler.Load("Tiles", "TinyDungeon");
 
@@ -55,23 +66,9 @@ namespace Template
 
             new Player(_textureHandler);
 
-            _ldtkHandler = new LdtkHandler();
+            _ldtkHandler = new LdtkHandler(_textureHandler);
 
-            var map = _ldtkHandler.Init();
-
-            var floor = map.Levels[0].LayerInstances.Single(li => li.Name == "Floor");
-
-            var walls = map.Levels[0].LayerInstances.Single(li => li.Name == "Walls");
-
-            floor.AutoLayerTiles.ForEach(tile =>
-            {
-                new Tile(_textureHandler, tile.PixelPosition, tile.Source);
-            });
-
-            walls.AutoLayerTiles.ForEach(tile =>
-            {
-                new Tile(_textureHandler, tile.PixelPosition, tile.Source);
-            });
+            _ldtkHandler.LoadLevel(0);
         }
 
         protected override void Update(GameTime gameTime)
@@ -84,17 +81,50 @@ namespace Template
             base.Update(gameTime);
         }
 
-        //protected override void Draw(GameTime gameTime)
-        //{
-        //    _graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
+        protected override void Draw(GameTime gameTime)
+        {
+            //GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        //    var spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
+            //var position = Matrix.CreateTranslation(
+            //                      -Globals.CameraPosition.X - (GameSettings.TileSize / 2),
+            //                      -Globals.CameraPosition.Y - (GameSettings.TileSize / 2),
+            //                      0);
 
-        //    spriteBatch.Begin();
+            //var cameraX = -Globals.CameraPosition.X - (GameSettings.TileSize / 2);
+            //var cameraY = -Globals.CameraPosition.Y - (GameSettings.TileSize / 2);
+            var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraPosition.X;
+            var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraPosition.Y;
 
-        //    spriteBatch.End();
+            cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
+            cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);
 
-        //    base.Draw(gameTime);
-        //}
+            var translation = Matrix.CreateTranslation(cameraX, cameraY, 0f);
+
+            //var offset = Matrix.CreateTranslation(
+            //GameSettings.NativeSize.X / 2,
+            //GameSettings.NativeSize.Y / 2,
+            //                    0);
+
+            //var transform = position * offset;
+
+            GraphicsDevice.SetRenderTarget(_nativeRenderTarget);
+
+            //_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(transformMatrix: translation, samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.FrontToBack);
+
+            _systems.Draw();
+
+            _spriteBatch.End();
+
+            _graphics.GraphicsDevice.SetRenderTarget(null);
+
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+            _spriteBatch.Draw(_nativeRenderTarget, new Rectangle(0, 0, (int)(GameSettings.ScreenSize.X / GameSettings.NativeSize.X * GameSettings.NativeSize.X), (int)(GameSettings.ScreenSize.Y / GameSettings.NativeSize.Y * GameSettings.NativeSize.Y)), Color.White);
+
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
     }
 }
