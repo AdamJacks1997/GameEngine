@@ -1,6 +1,6 @@
 ﻿namespace GameEngine.Enums
 {
-    public enum Direction
+    public enum DirectionEnum
     {
         Up,
         Down,

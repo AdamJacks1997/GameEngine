@@ -36,6 +36,8 @@ namespace Template
 
             _nativeRenderTarget = new RenderTarget2D(GraphicsDevice, 640, 360);
 
+            new DirectionConstants();
+
             base.Initialize();
         }
 
@@ -52,7 +54,8 @@ namespace Template
                 .Add(new MovementSystem())
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
-                .Add(new CameraFollowSystem());
+                .Add(new CameraFollowSystem())
+                .Add(new ColliderSystem());
 
             _textureHandler.Load("Tiles", "TinyDungeon");
 
@@ -64,7 +67,7 @@ namespace Template
 
             _systems.Initialize();
 
-            new Player(_textureHandler);
+            new PlayerEntity(_textureHandler);
 
             _ldtkHandler = new LdtkHandler(_textureHandler);
 

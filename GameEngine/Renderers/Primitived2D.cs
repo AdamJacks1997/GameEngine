@@ -394,7 +394,7 @@ namespace GameEngine.Renderers
 							 Vector2.Zero,
 							 new Vector2(length, thickness),
 							 SpriteEffects.None,
-							 0);
+							 1);
 		}
 
 		#endregion

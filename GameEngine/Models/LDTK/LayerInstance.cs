@@ -10,12 +10,7 @@ namespace GameEngine.Models.LDTK
 
         public List<AutoLayerTile> AutoLayerTiles { get; set; }
 
-        //[JsonProperty("intGridCsv")]
-        //public int[] Collisions { get; set; }
-
-        //public bool HasCollisionAt(Vector2 position)
-        //{
-        //    return Collisions[(position.Y * GridSize.X) + position.X]; // TEST THIS - GridSize wrong?
-        //}
+        [JsonProperty("intGridCsv")]
+        public int[] Collisions { get; set; }
     }
 }

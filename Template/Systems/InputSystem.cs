@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using GameEngine.Enums;
 using GameEngine.Handlers;
+using GameEngine.Models.ECS;
 using GameEngine.Systems;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Template.Components;
 
@@ -12,47 +11,55 @@ namespace Template.Systems
 {
     public class InputSystem : IUpdateSystem
     {
+        private List<Entity> _entities;
+
+        private readonly List<Type> _componentTypes = new List<Type>()
+        {
+            typeof(PlayerControllerComponent),
+            typeof(VelocityComponent),
+        };
+
         public void Update(GameTime gameTime)
         {
-            var entities = EntityHandler.GetWithComponent<PlayerControllerComponent>();
+            _entities = EntityHandler.GetWithComponents(_componentTypes);
 
-            entities.ForEach(entity =>
+            _entities.ForEach(entity =>
             {
                 var velocity = entity.GetComponent<VelocityComponent>();
 
                 if (InputHandler.KeyDown(Keys.W))
                 {
-                    velocity.Direction.Y = -1;
+                    velocity.DirectionVector.Y = -1;
                 }
 
                 if (InputHandler.KeyDown(Keys.S))
                 {
-                    velocity.Direction.Y = 1;
+                    velocity.DirectionVector.Y = 1;
                 }
 
                 if (InputHandler.KeyDown(Keys.A))
                 {
-                    velocity.Direction.X = -1;
+                    velocity.DirectionVector.X = -1;
                 }
 
                 if (InputHandler.KeyDown(Keys.D))
                 {
-                    velocity.Direction.X = 1;
+                    velocity.DirectionVector.X = 1;
                 }
 
                 if ((InputHandler.KeyDown(Keys.A) && InputHandler.KeyDown(Keys.D))
                     || !InputHandler.KeyDown(Keys.A) && !InputHandler.KeyDown(Keys.D))
                 {
-                    velocity.Direction.X = 0;
+                    velocity.DirectionVector.X = 0;
                 }
 
                 if ((InputHandler.KeyDown(Keys.W) && InputHandler.KeyDown(Keys.S))
                     || !InputHandler.KeyDown(Keys.W) && !InputHandler.KeyDown(Keys.S))
                 {
-                    velocity.Direction.Y = 0;
+                    velocity.DirectionVector.Y = 0;
                 }
 
-                if (velocity.Direction != Vector2.Zero)
+                if (velocity.DirectionVector != Vector2.Zero)
                 {
                     velocity.LastDirection = velocity.Direction;
                 }
