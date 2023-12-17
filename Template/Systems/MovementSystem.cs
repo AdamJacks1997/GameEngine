@@ -11,19 +11,27 @@ namespace Template.Systems
 {
     public class MovementSystem : IUpdateSystem
     {
-        private List<Entity> _collidables;
-        private List<Entity> _moveables;
+        private readonly CollisionHandler _collisionHandler;
 
-        private readonly List<Type> _collidableComponentTypes = new List<Type>()
+        private List<Entity> _moveables;
+        private List<Entity> _collidables;
+
+        private readonly List<Type> _moveableComponentTypes = new List<Type>()
         {
             typeof(TransformComponent),
             typeof(ColliderComponent),
+            typeof(VelocityComponent)
         };
+
+        public MovementSystem(CollisionHandler collisionHandler)
+        {
+            _collisionHandler = collisionHandler;
+        }
 
         public void Update(GameTime gameTime)
         {
-            _collidables = EntityHandler.GetWithComponents(_collidableComponentTypes);
-            _moveables = _collidables.Where(c => c.HasComponent<VelocityComponent>()).ToList();
+            _moveables = EntityHandler.GetWithComponents(_moveableComponentTypes);
+            //_moveables = _collidables.Where(c => c.HasComponent<VelocityComponent>()).ToList();
 
             _moveables.ForEach(moveable =>
             {
@@ -38,6 +46,8 @@ namespace Template.Systems
 
                 SetNewPosition(moveableTransform, moveableVelocity, moveableCollider, gameTime);
 
+                _collidables = _collisionHandler.CollisionQuadtree.FindCollisions(moveable);
+
                 _collidables.ForEach(collidable =>
                 {
                     if (moveable == collidable)
@@ -46,11 +56,6 @@ namespace Template.Systems
                     }
 
                     var collidableTransform = collidable.GetComponent<TransformComponent>();
-
-                    if (!IsCollidableInRange(moveableTransform, collidableTransform))
-                    {
-                        return;
-                    }
 
                     var collidableCollider = collidable.GetComponent<ColliderComponent>();
 

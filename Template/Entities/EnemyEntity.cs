@@ -8,11 +8,12 @@ namespace Template.Entities
 {
     public class EnemyEntity : Entity
     {
-        public EnemyEntity(TextureHandler textureHandler)
+        public EnemyEntity(TextureHandler textureHandler, Vector2 direction)
         {
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
             var velocity = AddComponent<VelocityComponent>();
+            var collider = AddComponent<ColliderComponent>();
 
             transform.Position = new Vector2(350, 500);
             transform.Size = new Point(16, 16);
@@ -22,6 +23,10 @@ namespace Template.Entities
             sprite.Layer = 0.105f;
 
             velocity.Speed = 100f;
+            velocity.DirectionVector = direction;
+
+            collider.Offset = new Point(0, GameSettings.TileSize / 2 - 1);
+            collider.Bounds = new Rectangle((int)transform.Position.X + collider.Offset.X, (int)transform.Position.Y + collider.Offset.Y, GameSettings.TileSize, GameSettings.TileSize + 2);
 
             EntityHandler.Add(this);
         }

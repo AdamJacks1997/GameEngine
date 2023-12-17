@@ -68,7 +68,7 @@ namespace Template
             _systems
                 .Add(new InputSystem())
                 .Add(new ColliderSystem(_collisionHandler))
-                .Add(new MovementSystem())
+                .Add(new MovementSystem(_collisionHandler))
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
                 .Add(new CameraFollowSystem());
@@ -79,7 +79,15 @@ namespace Template
 
             new PlayerEntity(_textureHandler);
 
-            new EnemyEntity(_textureHandler);
+            new EnemyEntity(_textureHandler, new Vector2(1, 0));
+
+            //for (int i = 0; i < 150; i++) // Efficiency test? Idk
+            //{
+            //    new EnemyEntity(_textureHandler, new Vector2(1, 0));
+            //    new EnemyEntity(_textureHandler, new Vector2(-1, 0));
+            //    new EnemyEntity(_textureHandler, new Vector2(0, 1));
+            //    new EnemyEntity(_textureHandler, new Vector2(0, -1));
+            //}
         }
 
         protected override void Update(GameTime gameTime)

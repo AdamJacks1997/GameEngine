@@ -71,7 +71,7 @@ namespace GameEngine.Models
             return removed;
         }
 
-        public IEnumerable<Entity> FindCollisions(Entity entity)
+        public List<Entity> FindCollisions(Entity entity)
         {
             var collider = entity.GetComponent<ColliderComponent>();
 

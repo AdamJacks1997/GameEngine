@@ -8,36 +8,35 @@ namespace GameEngine.Handlers
 {
     public class CollisionHandler
     {
+        public Quadtree CollisionQuadtree;
         public Rectangle Bounds;
-
-        private Quadtree _collisionQuadtree;
 
         public void Init(Rectangle bounds)
         {
+            CollisionQuadtree = new Quadtree(bounds);
             Bounds = bounds;
-            _collisionQuadtree = new Quadtree(bounds);
         }
 
         public void Add(Entity collidable)
         {
-            _collisionQuadtree.Insert(collidable);
+            CollisionQuadtree.Insert(collidable);
         }
 
         public void Remove(Entity collidable)
         {
-            _collisionQuadtree.Remove(collidable);
+            CollisionQuadtree.Remove(collidable);
         }
 
         public void Update(List<Entity> collidables)
         {
             foreach (Entity collidable in collidables)
             {
-                _collisionQuadtree.Remove(collidable);
+                CollisionQuadtree.Remove(collidable);
 
-                _collisionQuadtree.Insert(collidable);
+                CollisionQuadtree.Insert(collidable);
             }
         }
-
+        
         //protected bool PerPixelCollision(Entity entity1, Entity entity2)
         //{
         //    // Get Color data of each Texture
