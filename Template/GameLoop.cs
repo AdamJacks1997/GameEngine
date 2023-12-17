@@ -16,6 +16,7 @@ namespace Template
         private SpriteBatch _spriteBatch;
         private TextureHandler _textureHandler;
         private LdtkHandler _ldtkHandler;
+        private CollisionHandler _collisionHandler;
 
         private RenderTarget2D _nativeRenderTarget;
 
@@ -59,6 +60,9 @@ namespace Template
             _ldtkHandler.LoadLevel(0);
 
             // Create Quadtrees
+            _collisionHandler = new CollisionHandler();
+
+            _collisionHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
 
             _systems = new GameEngine.Systems.Systems();
             _systems

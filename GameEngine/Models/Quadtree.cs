@@ -14,6 +14,7 @@ namespace GameEngine.Models
         private readonly int _maxDepth;
 
         private Quadtree? _topLeft, _topRight, _bottomLeft, _bottomRight;
+
         public Quadtree(Rectangle bounds)
             : this(bounds, 32, 5)
         { }

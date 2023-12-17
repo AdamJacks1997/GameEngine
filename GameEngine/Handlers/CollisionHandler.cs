@@ -1,126 +1,43 @@
-﻿using GameEngine.Constants;
+﻿using GameEngine.Models;
 using GameEngine.Models.ECS.Core;
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace GameEngine.Handlers
 {
-    public static class CollisionHandler
+    public class CollisionHandler
     {
-        private static readonly Dictionary<string, Entity> EntityList = new ();
+        private Quadtree _collisionQuadtree;
 
-        public static void Add(Entity entity, string name)
+        public void Init(Rectangle bounds)
         {
-            if (!EntityList.ContainsKey(name))
-            {
-                EntityList.Add(name, entity);
-            }
+            _collisionQuadtree = new Quadtree(bounds);
         }
 
-        public static void Remove(Entity entity, string name)
+        public void Add(Entity collidable)
         {
-            if (EntityList.ContainsKey(name))
-            {
-                EntityList.Remove(name);
-            }
+            _collisionQuadtree.Insert(collidable);
         }
 
-        public static bool WithScreenHorizontal(float xPosition, int width)
+        public void Remove(Entity collidable)
         {
-            if (xPosition < 0) // Collides Left
-            {
-                return true;
-            }
-
-            if (xPosition > GameSettings.ScreenSize.X - width) // Collides Right
-            {
-                return true;
-            }
-
-            return false;
+            _collisionQuadtree.Remove(collidable);
         }
 
-        public static bool WithScreenVertical(float yPosition, int height)
-        {
-            if (yPosition < 0) // Collides Top
-            {
-                return true;
-            }
-
-            if (yPosition > GameSettings.ScreenSize.Y - height) // Collides Bottom
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool WithScreenLeft(float xPosition, int width)
-        {
-            if (xPosition < 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-        public static bool WithScreenRight(float xPosition, int width)
-        {
-            if (xPosition > GameSettings.ScreenSize.X - width)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool WithScreenTop(float yPosition, int height)
-        {
-            if (yPosition < 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool WithScreenBottom(float yPosition, int height)
-        {
-            if (yPosition > GameSettings.ScreenSize.Y - height)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        //public static bool AABB(Entity one, Entity two)
+        //public void Update()
         //{
-        //    return one.X < two.X + two.Width &&
-        //           one.X + one.Width > two.X &&
-        //           one.Y < two.Y + two.Height &&
-        //           one.Y + one.Height > two.Y;
-        //}
-
-        //public static bool IsCollision(string source, string destination)
-        //{
-        //    Entity sourceSprite = EntityList[source];
-        //    Entity destinationSprite = EntityList[destination];
-
-        //    return sourceSprite.BoundingBox.Intersects(destinationSprite.BoundingBox);
-        //}
-
-        //public static bool IsPerPixelCollision(string source, string destination)
-        //{
-        //    Entity sourceEntity = EntityList[source];
-        //    Entity destinationEntity = EntityList[destination];
-
-        //    if (sourceEntity.BoundingBox.Intersects(destinationEntity.BoundingBox))
+        //    foreach (ISpatialEntity collidable in _collidables)
         //    {
-        //        return sourceEntity.CollidesWith(destinationEntity);
-        //    }
+        //        _collisionTree.Remove(collidable);
 
-        //    return false;
+        //        IEnumerable<ISpatialEntity> collisions = _collisionTree.FindCollisions(collidable);
+
+        //        foreach (var collision in collisions)
+        //        {
+        //            collidable.ResolveCollision(collision.Bounds);
+        //        }
+
+        //        _collisionTree.Insert(collidable);
+        //    }
         //}
 
         //protected bool PerPixelCollision(Entity entity1, Entity entity2)
