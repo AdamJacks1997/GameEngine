@@ -52,7 +52,6 @@ namespace Template.Handlers
 
             walls.AutoLayerTiles.ForEach(tile =>
             {
-                //if (walls.) // if wall at position has a 1 in the intGridCsv then include boundry
                 if (_collisions[(int)tile.PixelPosition.Y / GameSettings.TileSize][(int)tile.PixelPosition.X / GameSettings.TileSize] == 1)
                 {
                     new TileEntity(_textureHandler, tile.PixelPosition, tile.Source, 0.1f, new Rectangle((int)tile.PixelPosition.X, (int)tile.PixelPosition.Y, GameSettings.TileSize, GameSettings.TileSize));

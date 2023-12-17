@@ -26,9 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Components\AnimatedSpriteComponent.cs" />
-  </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />

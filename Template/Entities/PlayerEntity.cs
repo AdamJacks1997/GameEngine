@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using GameEngine.Handlers;
-using Template.Components;
-using GameEngine.Models.ECS;
+using GameEngine.Components;
 using GameEngine.Constants;
+using GameEngine.Models.ECS.Core;
+using Template.Components;
 
 namespace Template.Entities
 {
@@ -18,7 +19,7 @@ namespace Template.Entities
             AddComponent<PlayerControllerComponent>();
             AddComponent<CameraFollowComponent>();
 
-            transform.Position = new Vector2(350, 500);
+            transform.Position = new Vector2(535, 380);
             transform.Size = new Point(16, 16);
 
             sprite.Texture = textureHandler.Get("Tiles");
@@ -31,7 +32,8 @@ namespace Template.Entities
 
             velocity.Speed = 100f;
 
-            collider.Bounds = new Rectangle((int)transform.Position.X, (int)transform.Position.Y + GameSettings.TileSize / 2, GameSettings.TileSize, GameSettings.TileSize + 1);
+            collider.Offset = new Point(0, GameSettings.TileSize / 2 - 1);
+            collider.Bounds = new Rectangle((int)transform.Position.X + collider.Offset.X, (int)transform.Position.Y + collider.Offset.Y, GameSettings.TileSize, GameSettings.TileSize + 2);
 
             EntityHandler.Add(this);
         }

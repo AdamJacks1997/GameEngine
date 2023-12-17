@@ -1,8 +1,8 @@
-﻿using GameEngine.Models.ECS;
+﻿using GameEngine.Models.ECS.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Template.Components
+namespace GameEngine.Components
 {
     public class SpriteComponent : IComponent
     {

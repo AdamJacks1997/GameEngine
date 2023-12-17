@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameEngine.Models.ECS;
+using GameEngine.Enums;
+using GameEngine.Models.ECS.Core;
 
 namespace GameEngine.Handlers
 {
     public static class EntityHandler
     {
-        private static readonly List<Entity> Entities = new List<Entity>();
-        private static readonly Dictionary<Type, List<Entity>> EntitiesByComponentType = new Dictionary<Type, List<Entity>>();
+        private static readonly List<Entity> _entities = new List<Entity>();
+        private static readonly Dictionary<Type, List<Entity>> _entitiesByComponentType = new Dictionary<Type, List<Entity>>();
 
         public static void Add(Entity entity)
         {
-            Entities.Add(entity);
+            _entities.Add(entity);
             UpdateEntitiesByComponentType(entity);
         }
+
+        //public static Entity GetWithType(EntityType type) // this was silly, this is less efficient than getting by type
+        //{
+        //    return _entities.Where(e => e.Type == type).FirstOrDefault();
+        //}
 
         public static List<Entity> GetWithComponent<T>() where T : IComponent
         {
             var componentType = typeof(T);
-            if (EntitiesByComponentType.TryGetValue(componentType, out var entities))
+            if (_entitiesByComponentType.TryGetValue(componentType, out var entities))
             {
                 return entities;
             }
@@ -36,11 +42,11 @@ namespace GameEngine.Handlers
                 return result;
             }
             
-            IEnumerable<Entity> entities = Entities;
+            IEnumerable<Entity> entities = _entities;
 
             foreach (var componentType in componentTypes)
             {
-                if (EntitiesByComponentType.TryGetValue(componentType, out var componentEntities))
+                if (_entitiesByComponentType.TryGetValue(componentType, out var componentEntities))
                 {
                     entities = entities.Intersect(componentEntities);
                 }
@@ -60,10 +66,10 @@ namespace GameEngine.Handlers
             foreach (var component in entity.GetComponents())
             {
                 var componentType = component.GetType();
-                if (!EntitiesByComponentType.TryGetValue(componentType, out var entities))
+                if (!_entitiesByComponentType.TryGetValue(componentType, out var entities))
                 {
                     entities = new List<Entity>();
-                    EntitiesByComponentType.Add(componentType, entities);
+                    _entitiesByComponentType.Add(componentType, entities);
                 }
 
                 entities.Add(entity);

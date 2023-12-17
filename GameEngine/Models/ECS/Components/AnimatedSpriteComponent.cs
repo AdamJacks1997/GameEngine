@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using GameEngine.Models.ECS;
+using GameEngine.Models.ECS.Core;
 
-namespace Template.Components
+namespace GameEngine.Components
 {
     public class AnimatedSpriteComponent : IComponent
     {

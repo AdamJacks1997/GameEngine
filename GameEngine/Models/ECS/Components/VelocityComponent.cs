@@ -1,8 +1,8 @@
 ﻿using GameEngine.Enums;
-using GameEngine.Models.ECS;
+using GameEngine.Models.ECS.Core;
 using Microsoft.Xna.Framework;
 
-namespace Template.Components
+namespace GameEngine.Components
 {
     public class VelocityComponent : IComponent
     {

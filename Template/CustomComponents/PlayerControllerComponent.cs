@@ -1,4 +1,4 @@
-﻿using GameEngine.Models.ECS;
+﻿using GameEngine.Models.ECS.Core;
 
 namespace Template.Components
 {

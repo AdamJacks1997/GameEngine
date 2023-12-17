@@ -1,11 +1,12 @@
-﻿using System;
+﻿using GameEngine.Enums;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace GameEngine.Models.ECS
+namespace GameEngine.Models.ECS.Core
 {
     public class Entity
     {
+        //public EntityType Type;
         private readonly Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
         public T AddComponent<T>() where T : IComponent

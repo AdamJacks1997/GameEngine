@@ -48,20 +48,26 @@ namespace Template
 
             _textureHandler = new TextureHandler(Content);
 
+            _textureHandler.Load("Tiles", "TinyDungeon");
+
+            //_textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
+            //_textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
+            //_textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
+
+            _ldtkHandler = new LdtkHandler(_textureHandler);
+
+            _ldtkHandler.LoadLevel(0);
+
+            // Create Quadtrees
+
             _systems = new GameEngine.Systems.Systems();
             _systems
                 .Add(new InputSystem())
+                .Add(new ColliderSystem())
                 .Add(new MovementSystem())
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
-                .Add(new CameraFollowSystem())
-                .Add(new ColliderSystem());
-
-            _textureHandler.Load("Tiles", "TinyDungeon");
-
-            _textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
-            _textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
-            _textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
+                .Add(new CameraFollowSystem());
 
             //_graphics.GraphicsDevice.Clear(Color.Transparent);
 
@@ -69,9 +75,7 @@ namespace Template
 
             new PlayerEntity(_textureHandler);
 
-            _ldtkHandler = new LdtkHandler(_textureHandler);
-
-            _ldtkHandler.LoadLevel(0);
+            new EnemyEntity(_textureHandler);
         }
 
         protected override void Update(GameTime gameTime)
