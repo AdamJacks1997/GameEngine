@@ -67,7 +67,7 @@ namespace Template
             _systems = new GameEngine.Systems.Systems();
             _systems
                 .Add(new InputSystem())
-                .Add(new ColliderSystem())
+                .Add(new ColliderSystem(_collisionHandler))
                 .Add(new MovementSystem())
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())

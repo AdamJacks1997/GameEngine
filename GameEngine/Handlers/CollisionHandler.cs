@@ -1,15 +1,20 @@
-﻿using GameEngine.Models;
+﻿using GameEngine.Components;
+using GameEngine.Models;
 using GameEngine.Models.ECS.Core;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace GameEngine.Handlers
 {
     public class CollisionHandler
     {
+        public Rectangle Bounds;
+
         private Quadtree _collisionQuadtree;
 
         public void Init(Rectangle bounds)
         {
+            Bounds = bounds;
             _collisionQuadtree = new Quadtree(bounds);
         }
 
@@ -23,22 +28,15 @@ namespace GameEngine.Handlers
             _collisionQuadtree.Remove(collidable);
         }
 
-        //public void Update()
-        //{
-        //    foreach (ISpatialEntity collidable in _collidables)
-        //    {
-        //        _collisionTree.Remove(collidable);
+        public void Update(List<Entity> collidables)
+        {
+            foreach (Entity collidable in collidables)
+            {
+                _collisionQuadtree.Remove(collidable);
 
-        //        IEnumerable<ISpatialEntity> collisions = _collisionTree.FindCollisions(collidable);
-
-        //        foreach (var collision in collisions)
-        //        {
-        //            collidable.ResolveCollision(collision.Bounds);
-        //        }
-
-        //        _collisionTree.Insert(collidable);
-        //    }
-        //}
+                _collisionQuadtree.Insert(collidable);
+            }
+        }
 
         //protected bool PerPixelCollision(Entity entity1, Entity entity2)
         //{

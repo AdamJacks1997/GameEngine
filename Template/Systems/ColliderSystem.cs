@@ -13,6 +13,8 @@ namespace Template.Systems
 {
     public class ColliderSystem : IUpdateSystem, IDrawSystem
     {
+        private readonly CollisionHandler _collisionHandler;
+
         private List<Entity> _entities;
 
         private readonly List<Type> _componentTypes = new List<Type>()
@@ -21,14 +23,21 @@ namespace Template.Systems
             typeof(ColliderComponent),
         };
 
+        public ColliderSystem(CollisionHandler collisionHandler)
+        {
+            _collisionHandler = collisionHandler;
+        }
+
         public void Update(GameTime gameTime)
         {
             _entities = EntityHandler.GetWithComponents(_componentTypes);
 
-            _entities.ForEach(entity =>
-            {
-                var collider = entity.GetComponent<ColliderComponent>();
-            });
+            _collisionHandler.Update(_entities);
+
+            //_entities.ForEach(entity =>
+            //{
+            //    _collisionHandler.Add(entity);
+            //});
         }
 
         public void Draw()
