@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameEngine.Components;
+using Template.Handlers;
+using GameEngine.Constants;
 
 namespace Template.Systems
 {
@@ -31,7 +33,6 @@ namespace Template.Systems
         public void Update(GameTime gameTime)
         {
             _moveables = EntityHandler.GetWithComponents(_moveableComponentTypes);
-            //_moveables = _collidables.Where(c => c.HasComponent<VelocityComponent>()).ToList();
 
             _moveables.ForEach(moveable =>
             {
@@ -56,7 +57,6 @@ namespace Template.Systems
                     }
 
                     var collidableTransform = collidable.GetComponent<TransformComponent>();
-
                     var collidableCollider = collidable.GetComponent<ColliderComponent>();
 
                     if (!moveableCollider.Bounds.Intersects(collidableCollider.Bounds))
@@ -73,20 +73,10 @@ namespace Template.Systems
 
         private void SetNewPosition(TransformComponent moveableTransform, VelocityComponent moveableVelocity, ColliderComponent moveableCollider, GameTime gameTime)
         {
-            moveableTransform.Position.X += (moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            moveableTransform.Position.Y += (moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            moveableTransform.Position.X += moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            moveableTransform.Position.Y += moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             moveableCollider.Bounds.X = (int)moveableTransform.Position.X + moveableCollider.Offset.X;
             moveableCollider.Bounds.Y = (int)moveableTransform.Position.Y + moveableCollider.Offset.Y;
-        }
-
-        private bool IsCollidableInRange(TransformComponent moveableTransform, TransformComponent collidableTransform)
-        {
-            if (Vector2.Distance(moveableTransform.Position, collidableTransform.Position) > 32)
-            {
-                return false; // return if distance is more than 32px away
-            }
-
-            return true;
         }
 
         private void ResolveCollision(TransformComponent moveableTransform, VelocityComponent moveableVelocity, ColliderComponent moveableCollider, ColliderComponent collidableCollider)
@@ -102,6 +92,46 @@ namespace Template.Systems
                 intersectionVector = Math.Min(intersectionVector.X, intersectionVector.Y) == intersectionVector.X ?
                 new Vector2(intersectionVector.X + 1, 0) :
                 new Vector2(0, intersectionVector.Y + 1);
+
+                if (moveableVelocity.DirectionVector.X == 0 && intersectionVector.Y == 0 && (moveableCollider.Bounds.X < collidableCollider.Bounds.X + GameSettings.TileSize || moveableCollider.Bounds.X + GameSettings.TileSize > collidableCollider.Bounds.X))
+                {
+                    if (moveableCollider.Bounds.X < collidableCollider.Bounds.X + GameSettings.TileSize) // collision on left
+                    {
+                        var collideFromTopSide = moveableCollider.Bounds.X - collidableCollider.Bounds.X + GameSettings.TileSize;
+
+                        var collideFromBottomSide = collidableCollider.Bounds.X - moveableCollider.Bounds.X + GameSettings.TileSize;
+
+                        if (collideFromTopSide > collideFromBottomSide)
+                        {
+                            moveableVelocity.DirectionVector.X = -1; // left side
+                        }
+
+                        if (collideFromBottomSide > collideFromTopSide) // right side
+                        {
+                            moveableVelocity.DirectionVector.X = 1;
+                        }
+                    }
+                }
+
+                if (moveableVelocity.DirectionVector.Y == 0 && intersectionVector.X == 0 && (moveableCollider.Bounds.Y < collidableCollider.Bounds.Y + GameSettings.TileSize || moveableCollider.Bounds.Y + GameSettings.TileSize > collidableCollider.Bounds.Y))
+                {
+                    if (moveableCollider.Bounds.Y < collidableCollider.Bounds.Y + GameSettings.TileSize) // collision on left
+                    {
+                        var collideFromTopSide = moveableCollider.Bounds.Y - collidableCollider.Bounds.Y + GameSettings.TileSize;
+
+                        var collideFromBottomSide = collidableCollider.Bounds.Y - moveableCollider.Bounds.Y + GameSettings.TileSize;
+
+                        if (collideFromTopSide > collideFromBottomSide)
+                        {
+                            moveableVelocity.DirectionVector.Y = -1; // bottom side
+                        }
+
+                        if (collideFromBottomSide > collideFromTopSide) // top side
+                        {
+                            moveableVelocity.DirectionVector.Y = 1;
+                        }
+                    }
+                }
             }
 
             moveableTransform.Position.X -= (float)Math.Round(intersectionVector.X * moveableVelocity.DirectionVector.X);

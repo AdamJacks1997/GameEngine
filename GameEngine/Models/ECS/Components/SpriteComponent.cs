@@ -8,6 +8,8 @@ namespace GameEngine.Components
     {
         public Texture2D Texture;
 
+        public Vector2 Offset;
+
         public Rectangle Source;
 
         public float Layer;

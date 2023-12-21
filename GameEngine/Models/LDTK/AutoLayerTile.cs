@@ -9,11 +9,11 @@ namespace GameEngine.Models.LDTK
         [JsonProperty("px")]
         private int[] _px { get; set; }
 
-        public Vector2 PixelPosition => new Vector2(
+        public Vector2 Position => new Vector2(
             _px[0],
             _px[1]);
 
-        public Vector2 Position => new Vector2(
+        public Vector2 GridPosition => new Vector2(
             _px[0] / GameSettings.TileSize,
             _px[1] / GameSettings.TileSize);
 

@@ -24,5 +24,18 @@ namespace GameEngine.Constants
                 { new Vector2(-1,1), DirectionEnum.Down },
             };
         }
+
+        public static readonly List<Point> Directions = new List<Point>
+        {
+            new Point(0, -1),    //  Up
+            new Point(0, 1),     //  Down
+            new Point(-1, 0),    //  Left
+            new Point(1, 0),     //  Right
+            
+            //new Point(-1, -1),    //  Up Left
+            //new Point(1, -1),    //  Up Right
+            //new Point(-1, 1),    //  Down Left
+            //new Point(1, 1),    //  Down Right
+        };
     }
 }

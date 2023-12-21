@@ -6,6 +6,9 @@ using Template.Systems;
 using GameEngine.Constants;
 using Microsoft.Xna.Framework.Graphics;
 using Template.Handlers;
+using GameEngine.Models.AStar;
+using Template.Components;
+using GameEngine.Renderers;
 
 namespace Template
 {
@@ -59,34 +62,30 @@ namespace Template
 
             _ldtkHandler.LoadLevel(0);
 
-            // Create Quadtrees
             _collisionHandler = new CollisionHandler();
 
             _collisionHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
 
             _systems = new GameEngine.Systems.Systems();
+
             _systems
                 .Add(new InputSystem())
+                .Add(new PathControllerSystem())
                 .Add(new ColliderSystem(_collisionHandler))
                 .Add(new MovementSystem(_collisionHandler))
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
                 .Add(new CameraFollowSystem());
 
-            //_graphics.GraphicsDevice.Clear(Color.Transparent);
-
             _systems.Initialize();
 
-            new PlayerEntity(_textureHandler);
+            Globals.PlayerEntity = new PlayerEntity(_textureHandler);
 
-            new EnemyEntity(_textureHandler, new Vector2(1, 0));
+            new EnemyEntity(_textureHandler);
 
-            //for (int i = 0; i < 150; i++) // Efficiency test? Idk
+            //for (int i = 0; i < 400; i++)
             //{
-            //    new EnemyEntity(_textureHandler, new Vector2(1, 0));
-            //    new EnemyEntity(_textureHandler, new Vector2(-1, 0));
-            //    new EnemyEntity(_textureHandler, new Vector2(0, 1));
-            //    new EnemyEntity(_textureHandler, new Vector2(0, -1));
+            //    new EnemyEntity(_textureHandler);
             //}
         }
 
@@ -132,6 +131,22 @@ namespace Template
             _spriteBatch.Begin(transformMatrix: translation, samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.FrontToBack);
 
             _systems.Draw();
+
+            //var entities = EntityHandler.GetWithComponent<PathControllerComponent>();
+
+            //entities.ForEach(entity =>
+            //{
+            //    var pathController = entity.GetComponent<PathControllerComponent>();
+
+            //    if (pathController.CurrentPath.Count < 1)
+            //    {
+            //        return;
+            //    }
+
+            //    var currentTargetTileRectangle = new Rectangle(pathController.CurrentPath[0], new Point(GameSettings.TileSize, GameSettings.TileSize));
+
+            //    Globals.SpriteBatch.DrawRectangle(currentTargetTileRectangle, Color.Red);
+            //});
 
             _spriteBatch.End();
 

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Template.Components;
 using GameEngine.Components;
+using GameEngine.Constants;
 
 namespace Template.Systems
 {
@@ -74,6 +75,13 @@ namespace Template.Systems
                 if (velocity.DirectionVector != Vector2.Zero)
                 {
                     velocity.LastDirection = velocity.Direction;
+
+                    velocity.DirectionVector.Normalize();
+
+                    if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
+                    {
+                        velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier, GameSettings.DiagnalSpeedMultiplier);
+                    }
                 }
             });
         }

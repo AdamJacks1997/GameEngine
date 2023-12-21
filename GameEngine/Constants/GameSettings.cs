@@ -9,6 +9,8 @@ namespace GameEngine.Constants
 
         public static int TileSize { get; } = 16;
 
+        public static float DiagnalSpeedMultiplier { get; } = 1.28f;
+
         public static bool Exit { get; set; } = false;
     }
 }
