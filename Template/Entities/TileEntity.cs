@@ -15,6 +15,7 @@ namespace Template.Entities
         {
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
+            AddComponent<TileComponent>();
 
             transform.Position = position;
             transform.Size = new Point(16, 16);
@@ -37,6 +38,7 @@ namespace Template.Entities
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
             var collider = AddComponent<ColliderComponent>();
+            AddComponent<TileComponent>();
 
             transform.Position = position;
             transform.Size = new Point(16, 16);
