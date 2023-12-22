@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Template.Components;
 using GameEngine.Components;
-using GameEngine.Constants;
+using GameEngine.Globals;
 
 namespace Template.Systems
 {

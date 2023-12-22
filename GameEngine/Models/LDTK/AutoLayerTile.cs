@@ -1,4 +1,4 @@
-﻿using GameEngine.Constants;
+﻿using GameEngine.Globals;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 

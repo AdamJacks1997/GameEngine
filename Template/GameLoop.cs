@@ -6,9 +6,7 @@ using Template.Systems;
 using GameEngine.Constants;
 using Microsoft.Xna.Framework.Graphics;
 using Template.Handlers;
-using GameEngine.Models.AStar;
-using Template.Components;
-using GameEngine.Renderers;
+using GameEngine.Globals;
 
 namespace Template
 {

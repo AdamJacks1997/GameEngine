@@ -4,10 +4,8 @@ using GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using GameEngine.Components;
-using Template.Handlers;
-using GameEngine.Constants;
+using GameEngine.Globals;
 
 namespace Template.Systems
 {
@@ -81,10 +79,6 @@ namespace Template.Systems
                     {
                         return;
                     }
-
-                    //ResolveCollision(moveableTransform, moveableVelocity, moveableCollider, collidableCollider);
-                    //ResolveCollisionTest(moveableTransform, moveableVelocity, moveableCollider, collidableCollider);
-
 
                     topLeft = new Rectangle(moveableCollider.Bounds.Left, moveableCollider.Bounds.Top, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
                     topRight = new Rectangle(moveableCollider.Bounds.Right - GameSettings.TileSize / 2, moveableCollider.Bounds.Top, GameSettings.TileSize / 2, GameSettings.TileSize / 2);

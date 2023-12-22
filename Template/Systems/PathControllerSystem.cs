@@ -8,6 +8,7 @@ using Template.Components;
 using GameEngine.Components;
 using GameEngine.Constants;
 using GameEngine.Renderers;
+using GameEngine.Globals;
 
 namespace Template.Systems
 {
@@ -66,14 +67,10 @@ namespace Template.Systems
                 if (pathController.StopDistanceFromTarget < Vector2.Distance(currentTargetTile, targetTransform.GridPosition.ToVector2()))
                 {
                     var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize));
-                    //var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize)) + new Vector2(GameSettings.TileSize / 2);
-
-                    //var distanceFromTargetTile = Vector2.Distance(currentTargetTile, transform.GridPosition.ToVector2());
                     var distanceFromTargetTile = Vector2.Distance(currentTargetTilePixelPosition, transform.Position);
 
                     if (distanceFromTargetTile != 0)
                     {
-                        //velocity.DirectionVector = currentTargetTile - transform.GridPosition.ToVector2();
                         velocity.DirectionVector = currentTargetTilePixelPosition - transform.Position;
 
                         if (velocity.DirectionVector != Vector2.Zero)

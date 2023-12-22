@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using GameEngine.Handlers;
 using GameEngine.Components;
-using GameEngine.Constants;
 using GameEngine.Models.ECS.Core;
 using Template.Components;
 using System;
+using GameEngine.Globals;
 
 namespace Template.Entities
 {

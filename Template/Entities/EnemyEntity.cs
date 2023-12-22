@@ -6,6 +6,7 @@ using GameEngine.Models.ECS.Core;
 using Template.Components;
 using Template.Handlers;
 using System;
+using GameEngine.Globals;
 
 namespace Template.Entities
 {

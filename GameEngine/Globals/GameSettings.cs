@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace GameEngine.Constants
+namespace GameEngine.Globals
 {
     public static class GameSettings
     {

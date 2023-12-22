@@ -7,7 +7,7 @@ using GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GameEngine.Components;
-using Template.Components;
+using GameEngine.Globals;
 
 namespace Template.Systems
 {
@@ -35,11 +35,6 @@ namespace Template.Systems
                 Globals.SpriteBatch.Draw(sprite.Texture, spritePosition,
                     sprite.Source, Color.White, 0,
                     new Vector2(0, 0), 1.0f, SpriteEffects.None, (spritePosition.Y / GameSettings.TileSize) / Globals.CurrentLevel.Size.Y + sprite.Layer);
-
-
-                //Globals.SpriteBatch.Draw(sprite.Texture, spritePosition,
-                //    sprite.Source, Color.White, 0,
-                //    new Vector2(0, 0), 1.0f, SpriteEffects.None, ((spritePosition.Y / Globals.CurrentLevel.Size.Y) / 100) + sprite.Layer);
             });
         }
     }

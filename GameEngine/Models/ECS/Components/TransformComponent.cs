@@ -1,4 +1,4 @@
-﻿using GameEngine.Constants;
+﻿using GameEngine.Globals;
 using GameEngine.Models.ECS.Core;
 using Microsoft.Xna.Framework;
 
