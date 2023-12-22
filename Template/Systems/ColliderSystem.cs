@@ -42,14 +42,14 @@ namespace Template.Systems
 
         public void Draw()
         {
-            _entities = EntityHandler.GetWithComponents(_componentTypes);
+            //_entities = EntityHandler.GetWithComponents(_componentTypes);
 
-            _entities.ForEach(entity =>
-            {
-                var collider = entity.GetComponent<ColliderComponent>();
+            //_entities.ForEach(entity =>
+            //{
+            //    var collider = entity.GetComponent<ColliderComponent>();
 
-                Globals.SpriteBatch.DrawRectangle(collider.Bounds, Color.Yellow);
-            });
+            //    Globals.SpriteBatch.DrawRectangle(collider.Bounds, Color.Yellow);
+            //});
         }
     }
 }

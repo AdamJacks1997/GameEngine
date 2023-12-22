@@ -65,17 +65,8 @@ namespace Template.Systems
 
                 if (pathController.StopDistanceFromTarget < Vector2.Distance(currentTargetTile, targetTransform.GridPosition.ToVector2()))
                 {
-                    //var currentTargetTileCenter = currentTargetTile * GameSettings.TileSize;
-
-                    //currentTargetTileCenter.X += GameSettings.TileSize / 2;
-                    //currentTargetTileCenter.Y += GameSettings.TileSize / 2;
-
-                    //var pixelDistanceFromTargetTile = Vector2.Distance(currentTargetTileCenter, transform.Position);
-
                     var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize));
                     //var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize)) + new Vector2(GameSettings.TileSize / 2);
-
-                    //currentTargetTilePixelPosition.Y += 1; // Added this so enemy wouldn't go under upper wall tile -- THIS COULD CAUSE ISSUES
 
                     //var distanceFromTargetTile = Vector2.Distance(currentTargetTile, transform.GridPosition.ToVector2());
                     var distanceFromTargetTile = Vector2.Distance(currentTargetTilePixelPosition, transform.Position);
