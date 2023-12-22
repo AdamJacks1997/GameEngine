@@ -26,17 +26,11 @@ namespace Template.Entities
             sprite.Texture = textureHandler.Get("Tiles");
             sprite.Offset = new Vector2(0, -(GameSettings.TileSize / 2) + 1);
             sprite.Source = new Rectangle(32, 128, GameSettings.TileSize, GameSettings.TileSize);
-            //sprite.Layer = 0.105f;
             sprite.Layer = 0.10045f;
-
-            //animatedSprite.Textures.Add("Up", textureHandler.GetGroup("StorkUp"));
-            //animatedSprite.Textures.Add("Right", textureHandler.GetGroup("StorkRight"));
-            //animatedSprite.Textures.Add("Down", textureHandler.GetGroup("StorkDown"));
 
             velocity.Speed = 100f;
 
             collider.Offset = new Point(0, 0);
-            //collider.Bounds = new Rectangle((int)transform.Position.X + collider.Offset.X, (int)transform.Position.Y + collider.Offset.Y, GameSettings.TileSize, GameSettings.TileSize);
             collider.Bounds = new Rectangle((int)Math.Round(transform.Position.X + collider.Offset.X), (int)Math.Round(transform.Position.Y + collider.Offset.Y), GameSettings.TileSize, GameSettings.TileSize + 1);
 
             EntityHandler.Add(this);
