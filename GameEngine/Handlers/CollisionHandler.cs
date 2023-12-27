@@ -1,6 +1,4 @@
-﻿using GameEngine.Components;
-using GameEngine.Models;
-using GameEngine.Models.ECS.Core;
+﻿using GameEngine.Models;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -17,23 +15,23 @@ namespace GameEngine.Handlers
             Bounds = bounds;
         }
 
-        public void Add(Entity collidable)
+        public void Add(Rectangle boundary)
         {
-            CollisionQuadtree.Insert(collidable);
+            CollisionQuadtree.Insert(boundary);
         }
 
-        public void Remove(Entity collidable)
+        public void Remove(Rectangle boundary)
         {
-            CollisionQuadtree.Remove(collidable);
+            CollisionQuadtree.Remove(boundary);
         }
 
-        public void Update(List<Entity> collidables)
+        public void Update(List<Rectangle> boundaries)
         {
-            foreach (Entity collidable in collidables)
+            foreach (Rectangle boundary in boundaries)
             {
-                CollisionQuadtree.Remove(collidable);
+                CollisionQuadtree.Remove(boundary);
 
-                CollisionQuadtree.Insert(collidable);
+                CollisionQuadtree.Insert(boundary);
             }
         }
         

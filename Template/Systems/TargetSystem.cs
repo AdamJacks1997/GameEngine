@@ -63,6 +63,16 @@ namespace Template.Systems
         {
             var newGridPosition = Randoms.PointWithinRadius(gridPosition, wanderRange);
 
+            if (newGridPosition.X < -20000)
+            {
+                var test = "";
+            }
+
+            if (newGridPosition.Y < -20000)
+            {
+                var test = "";
+            }
+
             if (newGridPosition.X > Globals.CurrentCollisions.Length)
             {
                 newGridPosition.X = Globals.CurrentCollisions.Length - 1;

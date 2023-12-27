@@ -89,10 +89,10 @@ namespace Template
 
             new MeleeEnemyEntity(_textureHandler);
 
-            for (int i = 0; i < 100; i++)
-            {
-                new MeleeEnemyEntity(_textureHandler);
-            }
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    new MeleeEnemyEntity(_textureHandler);
+            //}
         }
 
         protected override void Update(GameTime gameTime)

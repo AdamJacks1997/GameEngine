@@ -42,11 +42,12 @@ namespace Template.Entities
             brain.possibleStates.Add(EntityStateEnum.Wander);
             brain.possibleStates.Add(EntityStateEnum.FollowPath);
             brain.possibleStates.Add(EntityStateEnum.Chase);
-            brain.possibleStates.Add(EntityStateEnum.Melee);
+            brain.possibleStates.Add(EntityStateEnum.MeleeAttack);
 
             brain.PathStartDistance = 15;
             brain.PathStopDistance = 1;
             brain.LineOfSightMaxDistance = 20;
+            brain.AttackDistance = 1;
 
             EntityHandler.Add(this);
         }

@@ -19,7 +19,7 @@ namespace Template.Systems
 
         private Rectangle _losBoundary = new Rectangle();
 
-        private List<Entity> _collidables;
+        private List<Rectangle> _boundaries;
 
         private readonly List<Type> _componentTypes = new List<Type>()
         {
@@ -39,7 +39,7 @@ namespace Template.Systems
             _entities.ForEach(entity =>
             {
                 var transform = entity.GetComponent<TransformComponent>();
-                var pathController = entity.GetComponent<PathControllerComponent>();
+                var velocity = entity.GetComponent<VelocityComponent>();
                 var brain = entity.GetComponent<BrainComponent>();
                 var collider = entity.GetComponent<ColliderComponent>();
 
@@ -54,12 +54,14 @@ namespace Template.Systems
                 if (brain.PathStartDistance < distanceFromEntityToTarget)
                 {
                     brain.State = EntityStateEnum.Wander;
+                    velocity.DirectionVector = Vector2.Zero;
                 }
 
                 // FollowPath -- Entity is inside of Player Maximum Range
                 if (brain.PathStartDistance >= distanceFromEntityToTarget)
                 {
                     brain.State = EntityStateEnum.FollowPath;
+                    velocity.DirectionVector = Vector2.Zero;
                 }
 
                 bool hasLineOfSight = false;
@@ -77,23 +79,12 @@ namespace Template.Systems
                     {
                         _losBoundary.Location += new Point((int)Math.Round(stepDistance * -direction.X), (int)Math.Round(stepDistance * -direction.Y));
 
-                        _collidables = _collisionHandler.CollisionQuadtree.FindCollisions(_losBoundary);
+                        _boundaries = _collisionHandler.CollisionQuadtree.FindCollisions(_losBoundary);
 
-                        _collidables.ForEach(collidable =>
+                        _boundaries.ForEach(_boundary =>
                         {
-                            if (!collidable.HasComponent<TileComponent>() && !collidable.HasComponent<PlayerControllerComponent>())
-                            {
-                                return;
-                            }
 
-                            if (collidable.HasComponent<PlayerControllerComponent>())
-                            {
-                                return;
-                            }
-
-                            var collidableCollider = collidable.GetComponent<ColliderComponent>();
-
-                            if (!_losBoundary.Intersects(collidableCollider.Bounds))
+                            if (!_losBoundary.Intersects(_boundary))
                             {
                                 return;
                             }
@@ -107,9 +98,10 @@ namespace Template.Systems
                 // RangeAttack -- Entity has line of sight AND IS RANGED
 
                 // Chase -- Entity has line of sight AND IS MELEE
-                if (hasLineOfSight && brain.EntityType == EntityTypeEnum.Melee)
+                if (hasLineOfSight && brain.EntityType == EntityTypeEnum.Melee && brain.AttackDistance < distanceFromEntityToTarget)
                 {
                     brain.State = EntityStateEnum.Chase;
+                    velocity.DirectionVector = Vector2.Zero;
                 }
 
                 // if is in distance of player (stored in melee component
@@ -120,6 +112,12 @@ namespace Template.Systems
                 //if ()
 
                 // Melee -- Entity is within melee range of Player AND IS MELEE
+
+                if (brain.AttackDistance >= distanceFromEntityToTarget)
+                {
+                    brain.State = EntityStateEnum.MeleeAttack;
+                    velocity.DirectionVector = Vector2.Zero;
+                }
             });
         }
     }

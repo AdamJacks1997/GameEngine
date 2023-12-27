@@ -1,6 +1,4 @@
-﻿using GameEngine.Components;
-using GameEngine.Models.ECS.Core;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +6,7 @@ namespace GameEngine.Models
 {
     public class Quadtree
     {
-        private readonly List<Entity> _elements = new();
+        private readonly List<Rectangle> _elements = new();
 
         private readonly int _capacity;
         private readonly int _maxDepth;
@@ -34,35 +32,31 @@ namespace GameEngine.Models
         public bool IsLeaf
             => _topLeft == null || _topRight == null || _bottomLeft == null || _bottomRight == null;
 
-        public void Insert(Entity entity)
+        public void Insert(Rectangle boundary)
         {
             if (_elements.Count >= _capacity)
             {
                 Split();
             }
 
-            var collider = entity.GetComponent<ColliderComponent>();
-
-            Quadtree? containingChild = GetContainingChild(collider.Bounds);
+            Quadtree? containingChild = GetContainingChild(boundary);
 
             if (containingChild != null)
             {
-                containingChild.Insert(entity);
+                containingChild.Insert(boundary);
             }
             else
             {
-                _elements.Add(entity);
+                _elements.Add(boundary);
             }
         }
-        public bool Remove(Entity entity)
+        public bool Remove(Rectangle boundary)
         {
-            var collider = entity.GetComponent<ColliderComponent>();
-
-            Quadtree? containingChild = GetContainingChild(collider.Bounds);
+            Quadtree? containingChild = GetContainingChild(boundary);
 
             // If no child was returned, then this is the leaf node (or potentially non-leaf node, if the element's boundaries overlap
             // multiple children) containing the element.
-            bool removed = containingChild?.Remove(entity) ?? _elements.Remove(entity);
+            bool removed = containingChild?.Remove(boundary) ?? _elements.Remove(boundary);
 
             // If the total descendant element count is less than the bucket capacity, we ensure the node is in a non-split state.
             if (removed && CountElements() <= _capacity)
@@ -71,10 +65,10 @@ namespace GameEngine.Models
             return removed;
         }
 
-        public List<Entity> FindCollisions(Rectangle boundary)
+        public List<Rectangle> FindCollisions(Rectangle boundary)
         {
             var nodes = new Queue<Quadtree>();
-            var collisions = new List<Entity>();
+            var collisions = new List<Rectangle>();
 
             nodes.Enqueue(this);
 
@@ -85,7 +79,7 @@ namespace GameEngine.Models
                 if (!boundary.Intersects(node.Bounds))
                     continue;
 
-                collisions.AddRange(node._elements.Where(e => e.GetComponent<ColliderComponent>().Bounds.Intersects(boundary)));
+                collisions.AddRange(node._elements.Where(b => b.Intersects(boundary)));
 
                 if (!node.IsLeaf)
                 {
@@ -121,9 +115,9 @@ namespace GameEngine.Models
             return count;
         }
 
-        public IEnumerable<Entity> GetElements()
+        public IEnumerable<Rectangle> GetElements()
         {
-            var children = new List<Entity>();
+            var children = new List<Rectangle>();
             var nodes = new Queue<Quadtree>();
 
             nodes.Enqueue(this);
@@ -164,9 +158,7 @@ namespace GameEngine.Models
 
             foreach (var element in elements)
             {
-                var collider = element.GetComponent<ColliderComponent>();
-
-                Quadtree? containingChild = GetContainingChild(collider.Bounds);
+                Quadtree? containingChild = GetContainingChild(element);
 
                 // An entity is only moved if it completely fits into a child quadrant
                 if (containingChild != null)

@@ -25,6 +25,8 @@ namespace Template.Components
 
         public int PathStopDistance = 0; // How close the entity can get to it's target before it stops
 
-        public int LineOfSightMaxDistance = 0; // How close an entity has to be to spot the player with Line of Sight
+        public int LineOfSightMaxDistance = 20; // How close an entity has to be to spot the player with Line of Sight
+
+        public int AttackDistance; // How close the entity has to be to attack the player
     }
 }

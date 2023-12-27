@@ -6,6 +6,6 @@
         FollowPath,
         RangeAttack,
         Chase,
-        Melee,
+        MeleeAttack,
     }
 }

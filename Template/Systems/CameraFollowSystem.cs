@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using GameEngine.Components;
+using Template.Entities;
 
 namespace Template.Systems
 {
