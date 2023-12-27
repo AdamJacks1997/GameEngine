@@ -76,7 +76,11 @@ namespace Template.Handlers
 
             if (openList.Any())
             {
-                CheckForPath(openList.First(), goalTilePosition, depth++);
+                CheckForPath(openList.First(), goalTilePosition, ++depth);
+            }
+            else
+            {
+                return;
             }
         }
 

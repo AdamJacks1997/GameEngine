@@ -45,7 +45,7 @@ namespace Template.Systems
 
                 SetNewPosition(moveableTransform, moveableVelocity, moveableCollider, gameTime);
 
-                _collidables = _collisionHandler.CollisionQuadtree.FindCollisions(moveable);
+                _collidables = _collisionHandler.CollisionQuadtree.FindCollisions(moveableCollider.Bounds);
 
                 var topLeft = Rectangle.Empty;
                 var topRight = Rectangle.Empty;
@@ -155,33 +155,33 @@ namespace Template.Systems
 
                 if (topLeftCollides && topRightCollides && (!bottomLeftCollides && !bottomRightCollides))
                 {
-                    moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y + topLeftIntersection.Height);
+                    moveableTransform.Position.Y += topLeftIntersection.Height;
                 }
 
                 if (bottomLeftCollides && bottomRightCollides && (!topLeftCollides && !topRightCollides))
                 {
-                    moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y - bottomLeftIntersection.Height);
+                    moveableTransform.Position.Y -= bottomLeftIntersection.Height;
                 }
 
                 if (topLeftCollides && bottomLeftCollides && (!topRightCollides && !bottomRightCollides))
                 {
-                    moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X + topLeftIntersection.Width);
+                    moveableTransform.Position.X += topLeftIntersection.Width;
                 }
 
                 if (topRightCollides && bottomRightCollides && (!topLeftCollides && !bottomLeftCollides))
                 {
-                    moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X - topRightIntersection.Width);
+                    moveableTransform.Position.X -= topRightIntersection.Width;
                 }
 
                 if (topLeftCollides && (!topRightCollides && !bottomLeftCollides))
                 {
                     if (topLeftIntersection.Height > topLeftIntersection.Width)
                     {
-                        moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X + topLeftIntersection.Width);
+                        moveableTransform.Position.X += topLeftIntersection.Width;
                     }
                     else
                     {
-                        moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y + topLeftIntersection.Height);
+                        moveableTransform.Position.Y += topLeftIntersection.Height;
                     }
                 }
 
@@ -189,11 +189,11 @@ namespace Template.Systems
                 {
                     if (topRightIntersection.Height > topRightIntersection.Width)
                     {
-                        moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X - topRightIntersection.Width);
+                        moveableTransform.Position.X -= topRightIntersection.Width;
                     }
                     else
                     {
-                        moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y + topRightIntersection.Height);
+                        moveableTransform.Position.Y += topRightIntersection.Height;
                     }
                 }
 
@@ -201,11 +201,11 @@ namespace Template.Systems
                 {
                     if (bottomLeftIntersection.Height > bottomLeftIntersection.Width)
                     {
-                        moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X + bottomLeftIntersection.Width);
+                        moveableTransform.Position.X += bottomLeftIntersection.Width;
                     }
                     else
                     {
-                        moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y - bottomLeftIntersection.Height);
+                        moveableTransform.Position.Y -= bottomLeftIntersection.Height;
                     }
                 }
 
@@ -213,37 +213,39 @@ namespace Template.Systems
                 {
                     if (bottomRightIntersection.Height > bottomRightIntersection.Width)
                     {
-                        moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X - bottomRightIntersection.Width);
+                        moveableTransform.Position.X -= bottomRightIntersection.Width;
                     }
                     else
                     {
-                        moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y - bottomRightIntersection.Height);
+                        moveableTransform.Position.Y -= bottomRightIntersection.Height;
                     }
                 }
 
                 if (topLeftCollides && (topRightCollides && bottomLeftCollides))
                 {
-                    moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X + 2);
-                    moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y + 2);
+                    moveableTransform.Position.X += 2;
+                    moveableTransform.Position.Y += 2;
                 }
 
                 if (topRightCollides && (topLeftCollides && bottomRightCollides))
                 {
-                    moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X - 2);
-                    moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y + 2);
+                    moveableTransform.Position.X -= 2;
+                    moveableTransform.Position.Y += 2;
                 }
 
                 if (bottomLeftCollides && (bottomRightCollides && topLeftCollides))
                 {
-                    moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X + 2);
-                    moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y - 2);
+                    moveableTransform.Position.X += 2;
+                    moveableTransform.Position.Y -= 2;
                 }
 
                 if (bottomRightCollides && (bottomLeftCollides && topRightCollides))
                 {
-                    moveableTransform.Position.X = (float)Math.Round(moveableTransform.Position.X - 2);
-                    moveableTransform.Position.Y = (float)Math.Round(moveableTransform.Position.Y - 2);
+                    moveableTransform.Position.X -= - 2;
+                    moveableTransform.Position.Y -= 2;
                 }
+
+                moveableTransform.Position.Round();
 
                 moveableCollider.Bounds.X = (int)moveableTransform.Position.X + moveableCollider.Offset.X;
                 moveableCollider.Bounds.Y = (int)moveableTransform.Position.Y + moveableCollider.Offset.Y;

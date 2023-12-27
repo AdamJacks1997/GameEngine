@@ -55,42 +55,8 @@ namespace Template.Handlers
                 }
             }
 
-            for (int y = 0; y < currentLevel.Size.Y / GameSettings.TileSize; y++)
-            {
-                for (int x = 0; x < currentLevel.Size.X / GameSettings.TileSize; x++)
-                {
-                    if (_collisions[y][x] != 1)
-                    {
-                        continue;
-                    }
-
-                    if (y + 1 < 63)
-                    {
-                        _weightedCollisions[y + 1][x] = 1;
-                    }
-
-
-                    if (y - 1 < 63)
-                    {
-                        _weightedCollisions[y - 1][x] = 1;
-                    }
-
-
-                    if (x + 1 < 63)
-                    {
-                        _weightedCollisions[y][x + 1] = 1;
-                    }
-
-                    if (x - 1 < 63)
-                    {
-                        _weightedCollisions[y][x - 1] = 1;
-                    }
-                }
-            }
-
 
             Globals.CurrentCollisions = _collisions;
-            Globals.WeightedCollisions = _weightedCollisions;
 
             walls.AutoLayerTiles.ForEach(tile =>
             {

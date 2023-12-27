@@ -71,10 +71,8 @@ namespace GameEngine.Models
             return removed;
         }
 
-        public List<Entity> FindCollisions(Entity entity)
+        public List<Entity> FindCollisions(Rectangle boundary)
         {
-            var collider = entity.GetComponent<ColliderComponent>();
-
             var nodes = new Queue<Quadtree>();
             var collisions = new List<Entity>();
 
@@ -84,23 +82,23 @@ namespace GameEngine.Models
             {
                 var node = nodes.Dequeue();
 
-                if (!collider.Bounds.Intersects(node.Bounds))
+                if (!boundary.Intersects(node.Bounds))
                     continue;
 
-                collisions.AddRange(node._elements.Where(e => e.GetComponent<ColliderComponent>().Bounds.Intersects(collider.Bounds)));
+                collisions.AddRange(node._elements.Where(e => e.GetComponent<ColliderComponent>().Bounds.Intersects(boundary)));
 
                 if (!node.IsLeaf)
                 {
-                    if (collider.Bounds.Intersects(node._topLeft.Bounds))
+                    if (boundary.Intersects(node._topLeft.Bounds))
                         nodes.Enqueue(node._topLeft);
 
-                    if (collider.Bounds.Intersects(node._topRight.Bounds))
+                    if (boundary.Intersects(node._topRight.Bounds))
                         nodes.Enqueue(node._topRight);
 
-                    if (collider.Bounds.Intersects(node._bottomLeft.Bounds))
+                    if (boundary.Intersects(node._bottomLeft.Bounds))
                         nodes.Enqueue(node._bottomLeft);
 
-                    if (collider.Bounds.Intersects(node._bottomRight.Bounds))
+                    if (boundary.Intersects(node._bottomRight.Bounds))
                         nodes.Enqueue(node._bottomRight);
                 }
             }

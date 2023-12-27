@@ -80,7 +80,7 @@ namespace Template.Systems
 
                     if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
                     {
-                        velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier, GameSettings.DiagnalSpeedMultiplier);
+                        velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier);
                     }
                 }
             });

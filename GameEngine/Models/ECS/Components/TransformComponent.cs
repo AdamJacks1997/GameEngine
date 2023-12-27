@@ -8,11 +8,9 @@ namespace GameEngine.Components
     {
         public Vector2 Position;
 
-        // Unsure if centering the position before dividing by tilesize helps or not
-        //public Point GridPosition => new Point((int)Math.Round((Position.X - GameSettings.TileSize / 2) / GameSettings.TileSize), (int)Math.Round((Position.Y - GameSettings.TileSize / 2) / GameSettings.TileSize));
-        //public Point GridPosition => new Point((int)Math.Round(Position.X / GameSettings.TileSize), (int)Math.Round(Position.Y / GameSettings.TileSize));
-        //public Point GridPosition => new Point((int)(Position.X / GameSettings.TileSize), (int)(Position.Y / GameSettings.TileSize));
-        public Point GridPosition => new Point((int)((Position.X + (GameSettings.TileSize / 2) + 1) / GameSettings.TileSize), (int)((Position.Y + (GameSettings.TileSize / 2) + 1) / GameSettings.TileSize));
+        public Point GridPosition => new Point((int)((Position.X + (GameSettings.TileSize / 2)) / GameSettings.TileSize), (int)((Position.Y + (GameSettings.TileSize / 2)) / GameSettings.TileSize));
+
+        public Vector3 Position3D => new Vector3(Position.X, Position.Y, 0);
 
         public Point Size;
     }

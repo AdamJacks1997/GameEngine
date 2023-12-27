@@ -21,7 +21,7 @@ namespace Template.Systems
 
         public void Update(GameTime gameTime)
         {
-            _entities = EntityHandler.GetWithComponent<CameraFollowComponent>();
+            _entities = EntityHandler.GetWithComponents(_componentTypes);
 
             _entities.ForEach(entity =>
             {

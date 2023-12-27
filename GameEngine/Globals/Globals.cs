@@ -13,8 +13,6 @@ namespace GameEngine.Constants
 
         public static int[][] CurrentCollisions { get; set; }
 
-        public static int[][] WeightedCollisions { get; set; }
-
         public static Vector2 CameraPosition { get; set; }
 
         public static Entity PlayerEntity { get; set; }

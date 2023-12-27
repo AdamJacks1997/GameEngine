@@ -7,6 +7,7 @@ using GameEngine.Constants;
 using Microsoft.Xna.Framework.Graphics;
 using Template.Handlers;
 using GameEngine.Globals;
+using System;
 
 namespace Template
 {
@@ -26,6 +27,10 @@ namespace Template
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            // Fix framerate to 60FPS, idk if this is needed:
+            IsFixedTimeStep = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
         }
 
         protected override void Initialize()
@@ -68,8 +73,11 @@ namespace Template
 
             _systems
                 .Add(new InputSystem())
-                .Add(new PathControllerSystem())
                 .Add(new ColliderSystem(_collisionHandler))
+                .Add(new EntityStateSystem(_collisionHandler))
+                .Add(new TargetSystem())
+                .Add(new PathControllerSystem())
+                .Add(new ChaseSystem())
                 .Add(new MovementSystem(_collisionHandler))
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
@@ -79,12 +87,12 @@ namespace Template
 
             Globals.PlayerEntity = new PlayerEntity(_textureHandler);
 
-            new EnemyEntity(_textureHandler);
+            new MeleeEnemyEntity(_textureHandler);
 
-            //for (int i = 0; i < 400; i++)
-            //{
-            //    new EnemyEntity(_textureHandler);
-            //}
+            for (int i = 0; i < 100; i++)
+            {
+                new MeleeEnemyEntity(_textureHandler);
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -99,15 +107,6 @@ namespace Template
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            //var position = Matrix.CreateTranslation(
-            //                      -Globals.CameraPosition.X - (GameSettings.TileSize / 2),
-            //                      -Globals.CameraPosition.Y - (GameSettings.TileSize / 2),
-            //                      0);
-
-            //var cameraX = -Globals.CameraPosition.X - (GameSettings.TileSize / 2);
-            //var cameraY = -Globals.CameraPosition.Y - (GameSettings.TileSize / 2);
             var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraPosition.X;
             var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraPosition.Y;
 
@@ -116,35 +115,11 @@ namespace Template
 
             var translation = Matrix.CreateTranslation(cameraX, cameraY, 0f);
 
-            //var offset = Matrix.CreateTranslation(
-            //GameSettings.NativeSize.X / 2,
-            //GameSettings.NativeSize.Y / 2,
-            //                    0);
-
-            //var transform = position * offset;
-
             GraphicsDevice.SetRenderTarget(_nativeRenderTarget);
 
-            //_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Begin(transformMatrix: translation, samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.FrontToBack);
 
             _systems.Draw();
-
-            //var entities = EntityHandler.GetWithComponent<PathControllerComponent>();
-
-            //entities.ForEach(entity =>
-            //{
-            //    var pathController = entity.GetComponent<PathControllerComponent>();
-
-            //    if (pathController.CurrentPath.Count < 1)
-            //    {
-            //        return;
-            //    }
-
-            //    var currentTargetTileRectangle = new Rectangle(pathController.CurrentPath[0], new Point(GameSettings.TileSize, GameSettings.TileSize));
-
-            //    Globals.SpriteBatch.DrawRectangle(currentTargetTileRectangle, Color.Red);
-            //});
 
             _spriteBatch.End();
 

@@ -1,9 +1,9 @@
 ﻿namespace GameEngine.Enums
 {
-    public enum EntityType
+    public enum EntityTypeEnum
     {
-        Player,
-        Tile,
-        CollidableTile
+        Melee,
+        Ranged,
+        Passive // Idk just an idea
     }
 }

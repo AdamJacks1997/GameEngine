@@ -7,18 +7,21 @@ using Template.Components;
 using Template.Handlers;
 using System;
 using GameEngine.Globals;
+using GameEngine.Enums;
+using System.Collections.Generic;
 
 namespace Template.Entities
 {
-    public class EnemyEntity : Entity
+    public class MeleeEnemyEntity : Entity
     {
-        public EnemyEntity(TextureHandler textureHandler)
+        public MeleeEnemyEntity(TextureHandler textureHandler)
         {
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
             var velocity = AddComponent<VelocityComponent>();
             var collider = AddComponent<ColliderComponent>();
             var pathController = AddComponent<PathControllerComponent>();
+            var brain = AddComponent<BrainComponent>();
 
             transform.Position = new Vector2(166, 150);
             transform.Size = new Point(16, 16);
@@ -34,10 +37,16 @@ namespace Template.Entities
             collider.Bounds = new Rectangle((int)Math.Round(transform.Position.X + collider.Offset.X), (int)Math.Round(transform.Position.Y + collider.Offset.Y), GameSettings.TileSize / 2, GameSettings.TileSize + 1);
 
             pathController.PathHandler = new PathHandler();
-            pathController.DestinationEntity = Globals.PlayerEntity;
             pathController.PathRefreshInterval = 10;
-            pathController.StopDistanceFromTarget = 1;
-            pathController.MaxDistanceFromTarget = 20;
+
+            brain.possibleStates.Add(EntityStateEnum.Wander);
+            brain.possibleStates.Add(EntityStateEnum.FollowPath);
+            brain.possibleStates.Add(EntityStateEnum.Chase);
+            brain.possibleStates.Add(EntityStateEnum.Melee);
+
+            brain.PathStartDistance = 15;
+            brain.PathStopDistance = 1;
+            brain.LineOfSightMaxDistance = 20;
 
             EntityHandler.Add(this);
         }

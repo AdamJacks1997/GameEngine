@@ -9,6 +9,7 @@ using GameEngine.Components;
 using GameEngine.Constants;
 using GameEngine.Renderers;
 using GameEngine.Globals;
+using GameEngine.Enums;
 
 namespace Template.Systems
 {
@@ -19,6 +20,7 @@ namespace Template.Systems
         private readonly List<Type> _componentTypes = new List<Type>()
         {
             typeof(PathControllerComponent),
+            typeof(BrainComponent),
             typeof(TransformComponent),
             typeof(VelocityComponent),
         };
@@ -30,46 +32,56 @@ namespace Template.Systems
             _entities.ForEach(entity =>
             {
                 var pathController = entity.GetComponent<PathControllerComponent>();
-
+                var brain = entity.GetComponent<BrainComponent>();
                 var transform = entity.GetComponent<TransformComponent>();
                 var velocity = entity.GetComponent<VelocityComponent>();
                 var sprite = entity.GetComponent<SpriteComponent>();
 
-                var targetEntity = pathController.DestinationEntity;
+                if (pathController.Destination == Vector2.Zero)
+                {
+                    return;
+                }
 
-                var targetTransform = targetEntity.GetComponent<TransformComponent>();
+                if (brain.State != EntityStateEnum.Wander && brain.State != EntityStateEnum.FollowPath)
+                {
+                    return;
+                }
 
-                var isWithinMaxDistance = Vector2.Distance(transform.GridPosition.ToVector2(), targetTransform.GridPosition.ToVector2()) <= pathController.MaxDistanceFromTarget;
+                var isWithinPathStartDistance = Vector2.Distance(transform.GridPosition.ToVector2(), pathController.GridDestination.ToVector2()) <= brain.PathStartDistance;
 
                 if (pathController.CurrentPath == null)
                 {
-                    pathController.CurrentPath = pathController.PathHandler.FindPath(transform.GridPosition, targetTransform.GridPosition);
+                    pathController.CurrentPath = pathController.PathHandler.FindPath(transform.GridPosition, pathController.GridDestination);
 
                     return;
                 }
 
                 pathController.PathRefreshCounter++;
 
-                if (pathController.PathRefreshCounter >= pathController.PathRefreshInterval && isWithinMaxDistance) // Might be better if this is only ran when outside of stop distance
+                if (pathController.PathRefreshCounter >= pathController.PathRefreshInterval && isWithinPathStartDistance) // Might be better if this is only ran when outside of stop distance
                 {
-                    pathController.CurrentPath = pathController.PathHandler.FindPath(transform.GridPosition, targetTransform.GridPosition);
+                    pathController.CurrentPath = pathController.PathHandler.FindPath(transform.GridPosition, pathController.GridDestination);
 
                     pathController.PathRefreshCounter = 0;
                 }
 
                 if (pathController.CurrentPath.Count < 1)
                 {
+                    velocity.DirectionVector = Vector2.Zero;
+
                     return;
                 }
 
                 var currentTargetTile = pathController.CurrentPath[0].ToVector2();
 
-                if (pathController.StopDistanceFromTarget < Vector2.Distance(currentTargetTile, targetTransform.GridPosition.ToVector2()))
+                var isCloserThanPathStopDistance = brain.PathStopDistance < Vector2.Distance(currentTargetTile, pathController.GridDestination.ToVector2());
+
+                if (isCloserThanPathStopDistance || brain.State == EntityStateEnum.Wander)
                 {
                     var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize));
                     var distanceFromTargetTile = Vector2.Distance(currentTargetTilePixelPosition, transform.Position);
 
-                    if (distanceFromTargetTile != 0)
+                    if (distanceFromTargetTile > 1.5)
                     {
                         velocity.DirectionVector = currentTargetTilePixelPosition - transform.Position;
 
@@ -103,7 +115,7 @@ namespace Template.Systems
             {
                 var pathController = entity.GetComponent<PathControllerComponent>();
 
-                if (pathController.CurrentPath.Count < 1)
+                if (pathController.CurrentPath == null || pathController.CurrentPath?.Count < 1)
                 {
                     return;
                 }
