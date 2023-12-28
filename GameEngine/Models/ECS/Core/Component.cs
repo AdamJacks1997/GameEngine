@@ -1,6 +1,7 @@
 ﻿namespace GameEngine.Models.ECS.Core
 {
-    public interface IComponent
+    public abstract class IComponent
     {
+        public Entity ParentEntity { get; set; }
     }
 }

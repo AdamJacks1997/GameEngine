@@ -30,7 +30,7 @@ namespace Template.Systems
                 var transform = entity.GetComponent<TransformComponent>();
                 var sprite = entity.GetComponent<SpriteComponent>();
 
-                var spritePosition = transform.Position + sprite.Offset;
+                var spritePosition = transform.Position + sprite.Offset.ToVector2();
 
                 Globals.SpriteBatch.Draw(sprite.Texture, spritePosition,
                     sprite.Source, Color.White, 0,

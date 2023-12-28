@@ -16,10 +16,10 @@ namespace GameEngine.Handlers
             UpdateEntitiesByComponentType(entity);
         }
 
-        //public static Entity GetWithType(EntityType type) // this was silly, this is less efficient than getting by type
-        //{
-        //    return _entities.Where(e => e.Type == type).FirstOrDefault();
-        //}
+        public static void Remove(Entity entity)
+        {
+            _entities.Remove(entity);
+        }
 
         public static List<Entity> GetWithComponent<T>() where T : IComponent
         {

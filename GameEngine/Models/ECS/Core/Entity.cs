@@ -1,4 +1,4 @@
-﻿using GameEngine.Enums;
+﻿using GameEngine.Components;
 using System;
 using System.Collections.Generic;
 
@@ -6,12 +6,13 @@ namespace GameEngine.Models.ECS.Core
 {
     public class Entity
     {
-        //public EntityType Type;
         private readonly Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
         public T AddComponent<T>() where T : IComponent
         {
             var newComponent = (T)Activator.CreateInstance(typeof(T));
+
+            newComponent.ParentEntity = this;
 
             _components.Add(typeof(T), newComponent);
 
@@ -36,6 +37,14 @@ namespace GameEngine.Models.ECS.Core
         public bool HasComponent<T>() where T : IComponent
         {
             return _components.ContainsKey(typeof(T));
+        }
+
+        public TransformComponent Transform
+        {
+            get
+            {
+                return GetComponent<TransformComponent>();
+            }
         }
     }
 }

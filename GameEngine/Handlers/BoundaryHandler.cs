@@ -4,34 +4,34 @@ using System.Collections.Generic;
 
 namespace GameEngine.Handlers
 {
-    public class CollisionHandler
+    public class BoundaryHandler
     {
-        public Quadtree CollisionQuadtree;
+        public Quadtree BoundaryQuadtree;
         public Rectangle Bounds;
 
         public void Init(Rectangle bounds)
         {
-            CollisionQuadtree = new Quadtree(bounds);
+            BoundaryQuadtree = new Quadtree(bounds);
             Bounds = bounds;
         }
 
         public void Add(Rectangle boundary)
         {
-            CollisionQuadtree.Insert(boundary);
+            BoundaryQuadtree.Insert(boundary);
         }
 
         public void Remove(Rectangle boundary)
         {
-            CollisionQuadtree.Remove(boundary);
+            BoundaryQuadtree.Remove(boundary);
         }
 
         public void Update(List<Rectangle> boundaries)
         {
             foreach (Rectangle boundary in boundaries)
             {
-                CollisionQuadtree.Remove(boundary);
+                BoundaryQuadtree.Remove(boundary);
 
-                CollisionQuadtree.Insert(boundary);
+                BoundaryQuadtree.Insert(boundary);
             }
         }
         

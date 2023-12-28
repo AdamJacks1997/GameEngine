@@ -13,7 +13,7 @@ namespace Template.Systems
 {
     public class EntityStateSystem : IUpdateSystem
     {
-        private readonly CollisionHandler _collisionHandler;
+        private readonly BoundaryHandler _tileBoundaryHandler;
 
         private List<Entity> _entities;
 
@@ -27,9 +27,9 @@ namespace Template.Systems
             typeof(TransformComponent),
         };
 
-        public EntityStateSystem(CollisionHandler collisionHandler)
+        public EntityStateSystem(BoundaryHandler tileBoundaryHandler)
         {
-            _collisionHandler = collisionHandler;
+            _tileBoundaryHandler = tileBoundaryHandler;
         }
 
         public void Update(GameTime gameTime)
@@ -79,7 +79,7 @@ namespace Template.Systems
                     {
                         _losBoundary.Location += new Point((int)Math.Round(stepDistance * -direction.X), (int)Math.Round(stepDistance * -direction.Y));
 
-                        _boundaries = _collisionHandler.CollisionQuadtree.FindCollisions(_losBoundary);
+                        _boundaries = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(_losBoundary);
 
                         _boundaries.ForEach(_boundary =>
                         {

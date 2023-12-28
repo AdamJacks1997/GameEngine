@@ -24,7 +24,6 @@ namespace Template.Entities
             sprite.Source = source;
             sprite.Layer = layer;
 
-
             EntityHandler.Add(this);
         }
         public TileEntity(
@@ -32,8 +31,7 @@ namespace Template.Entities
             Vector2 position,
             Rectangle source,
             float layer,
-            Rectangle bounds
-            )
+            Rectangle bounds)
         {
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
@@ -47,7 +45,9 @@ namespace Template.Entities
             sprite.Source = source;
             sprite.Layer = layer;
 
-            collider.Bounds = bounds;
+            collider.Offset = new Point(0, 0);
+            collider.Width = bounds.Width;
+            collider.Height = bounds.Height;
 
             EntityHandler.Add(this);
         }

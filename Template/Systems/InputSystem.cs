@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Template.Components;
 using GameEngine.Components;
 using GameEngine.Globals;
+using Template.Entities;
 
 namespace Template.Systems
 {
@@ -82,6 +83,11 @@ namespace Template.Systems
                     {
                         velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier);
                     }
+                }
+
+                if (InputHandler.MouseLeftButtonPressed())
+                {
+                    //new MeleeAttackEntity(_textureHandler, new Vector2(1, 0));
                 }
             });
         }

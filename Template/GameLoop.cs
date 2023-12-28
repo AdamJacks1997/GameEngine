@@ -18,7 +18,9 @@ namespace Template
         private SpriteBatch _spriteBatch;
         private TextureHandler _textureHandler;
         private LdtkHandler _ldtkHandler;
-        private CollisionHandler _collisionHandler;
+
+        private BoundaryHandler _tileBoundaryHandler;
+        private BoundaryHandler _attackBoundaryHandler;
 
         private RenderTarget2D _nativeRenderTarget;
 
@@ -65,34 +67,40 @@ namespace Template
 
             _ldtkHandler.LoadLevel(0);
 
-            _collisionHandler = new CollisionHandler();
+            _tileBoundaryHandler = new BoundaryHandler();
+            _attackBoundaryHandler = new BoundaryHandler();
 
-            _collisionHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            _tileBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            _attackBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
 
             _systems = new GameEngine.Systems.Systems();
 
             _systems
+                .Add(new SpriteSystem())
+                .Add(new AnimatedSpriteSystem())
+                .Add(new CameraFollowSystem())
                 .Add(new InputSystem())
-                .Add(new ColliderSystem(_collisionHandler))
-                .Add(new EntityStateSystem(_collisionHandler))
+                .Add(new BoundarySystem(_tileBoundaryHandler, _attackBoundaryHandler))
+                .Add(new EntityStateSystem(_tileBoundaryHandler))
                 .Add(new TargetSystem())
                 .Add(new PathControllerSystem())
                 .Add(new ChaseSystem())
-                .Add(new MovementSystem(_collisionHandler))
-                .Add(new SpriteSystem())
-                .Add(new AnimatedSpriteSystem())
-                .Add(new CameraFollowSystem());
-
-            _systems.Initialize();
+                .Add(new MovementSystem(_tileBoundaryHandler, _attackBoundaryHandler))
+                .Add(new AttackSystem());
 
             Globals.PlayerEntity = new PlayerEntity(_textureHandler);
 
             new MeleeEnemyEntity(_textureHandler);
 
+            new MeleeAttackEntity(_textureHandler, new Vector2(-1, 0));
+            new MeleeAttackEntity(_textureHandler, new Vector2(1, 0));
+
             //for (int i = 0; i < 100; i++)
             //{
             //    new MeleeEnemyEntity(_textureHandler);
             //}
+
+            _systems.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
