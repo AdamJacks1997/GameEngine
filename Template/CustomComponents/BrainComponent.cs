@@ -1,5 +1,5 @@
-﻿using GameEngine.Constants;
-using GameEngine.Enums;
+﻿using GameEngine.Enums;
+using GameEngine.Globals;
 using GameEngine.Models.ECS.Core;
 using System.Collections.Generic;
 

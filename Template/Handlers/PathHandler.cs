@@ -1,4 +1,5 @@
 ﻿using GameEngine.Constants;
+using GameEngine.Globals;
 using GameEngine.Models.AStar;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;

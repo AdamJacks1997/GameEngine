@@ -16,7 +16,7 @@ namespace Template
         private static GraphicsDeviceManager _graphics;
         private GameEngine.Systems.Systems _systems;
         private SpriteBatch _spriteBatch;
-        private TextureHandler _textureHandler;
+        //private TextureHandler _textureHandler;
         private LdtkHandler _ldtkHandler;
 
         private BoundaryHandler _tileBoundaryHandler;
@@ -52,18 +52,20 @@ namespace Template
 
         protected override void LoadContent()
         {
+            Globals.ContentManager = Content;
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.SpriteBatch = _spriteBatch;
 
-            _textureHandler = new TextureHandler(Content);
+            //_textureHandler = new TextureHandler(Content);
 
-            _textureHandler.Load("Tiles", "TinyDungeon");
+            TextureHandler.Load("Tiles", "TinyDungeon");
 
             //_textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
             //_textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
             //_textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
 
-            _ldtkHandler = new LdtkHandler(_textureHandler);
+            _ldtkHandler = new LdtkHandler();
 
             _ldtkHandler.LoadLevel(0);
 
@@ -88,12 +90,12 @@ namespace Template
                 .Add(new MovementSystem(_tileBoundaryHandler, _attackBoundaryHandler))
                 .Add(new AttackSystem());
 
-            Globals.PlayerEntity = new PlayerEntity(_textureHandler);
+            Globals.PlayerEntity = new PlayerEntity();
 
-            new MeleeEnemyEntity(_textureHandler);
+            new MeleeEnemyEntity();
 
-            new MeleeAttackEntity(_textureHandler, new Vector2(-1, 0));
-            new MeleeAttackEntity(_textureHandler, new Vector2(1, 0));
+            new MeleeAttackEntity(new Vector2(-1, 0));
+            new MeleeAttackEntity(new Vector2(1, 0));
 
             //for (int i = 0; i < 100; i++)
             //{

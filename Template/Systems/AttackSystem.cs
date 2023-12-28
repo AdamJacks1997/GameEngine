@@ -1,5 +1,5 @@
 ﻿using GameEngine.Components;
-using GameEngine.Constants;
+using GameEngine.Globals;
 using GameEngine.Handlers;
 using GameEngine.Models.ECS.Core;
 using GameEngine.Systems;

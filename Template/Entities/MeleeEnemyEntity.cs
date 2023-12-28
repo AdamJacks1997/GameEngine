@@ -14,7 +14,7 @@ namespace Template.Entities
 {
     public class MeleeEnemyEntity : Entity
     {
-        public MeleeEnemyEntity(TextureHandler textureHandler)
+        public MeleeEnemyEntity()
         {
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
@@ -29,7 +29,7 @@ namespace Template.Entities
 
             velocity.Speed = 100f;
 
-            sprite.Texture = textureHandler.Get("Tiles");
+            sprite.Texture = TextureHandler.Get("Tiles");
             sprite.Offset = new Point(0, -(GameSettings.TileSize / 2) + 1);
             sprite.Source = new Rectangle(32, 128, GameSettings.TileSize, GameSettings.TileSize);
             sprite.Layer = 0.10045f;

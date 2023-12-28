@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using GameEngine.Components;
-using GameEngine.Constants;
 using GameEngine.Renderers;
+using GameEngine.Globals;
 
 namespace Template.Systems
 {

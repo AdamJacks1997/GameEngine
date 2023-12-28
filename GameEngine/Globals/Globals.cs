@@ -1,12 +1,15 @@
 ﻿using GameEngine.Models.ECS.Core;
 using GameEngine.Models.LDTK;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GameEngine.Constants
+namespace GameEngine.Globals
 {
-    public class Globals
+    public static class Globals
     {
+        public static ContentManager ContentManager { get; set; }
+
         public static SpriteBatch SpriteBatch { get; set; }
 
         public static Level CurrentLevel { get; set; }

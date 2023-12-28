@@ -12,15 +12,12 @@ namespace Template.Handlers
 {
     public class LdtkHandler
     {
-        private readonly TextureHandler _textureHandler;
         private readonly Map _map = new Map();
         private int[][] _collisions;
         private int[][] _weightedCollisions;
 
-        public LdtkHandler(TextureHandler textureHandler)
+        public LdtkHandler()
         {
-            _textureHandler = textureHandler;
-
             var mapDataJson = LoadFile("D:/Projects/GameEngine/Template/Map/", "Map.ldtk");
 
             _map = JsonConvert.DeserializeObject<Map>(mapDataJson);
@@ -37,7 +34,7 @@ namespace Template.Handlers
 
             floor.AutoLayerTiles.ForEach(tile =>
             {
-                new TileEntity(_textureHandler, tile.Position, tile.Source, 0f);
+                new TileEntity(tile.Position, tile.Source, 0f);
             });
 
             _collisions = new int[(int)currentLevel.Size.Y / GameSettings.TileSize][];
@@ -62,11 +59,11 @@ namespace Template.Handlers
             {
                 if (_collisions[(int)tile.Position.Y / GameSettings.TileSize][(int)tile.Position.X / GameSettings.TileSize] == 1)
                 {
-                    new TileEntity(_textureHandler, tile.Position, tile.Source, 0.1f, new Rectangle((int)tile.Position.X, (int)tile.Position.Y, GameSettings.TileSize, GameSettings.TileSize));
+                    new TileEntity(tile.Position, tile.Source, 0.1f, new Rectangle((int)tile.Position.X, (int)tile.Position.Y, GameSettings.TileSize, GameSettings.TileSize));
                 }
                 else
                 {
-                    new TileEntity(_textureHandler, tile.Position, tile.Source, 0.1f);
+                    new TileEntity(tile.Position, tile.Source, 0.1f);
                 }
             });
         }

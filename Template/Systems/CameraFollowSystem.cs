@@ -1,12 +1,11 @@
-﻿using GameEngine.Constants;
-using GameEngine.Handlers;
+﻿using GameEngine.Handlers;
 using GameEngine.Models.ECS.Core;
 using GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using GameEngine.Components;
-using Template.Entities;
+using GameEngine.Globals;
 
 namespace Template.Systems
 {
