@@ -10,7 +10,7 @@ namespace Template.Entities
 {
     public class MeleeAttackEntity : Entity
     {
-        public MeleeAttackEntity(Vector2 direction)
+        public MeleeAttackEntity(Vector2 position, Vector2 direction, float rotation)
         {
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
@@ -18,7 +18,7 @@ namespace Template.Entities
             var attackBox = AddComponent<AttackBoxComponent>();
             var attack = AddComponent<AttackComponent>();
 
-            transform.Position = new Vector2(500, 380);
+            transform.Position = position;
             transform.Size = new Point(16, 16);
 
             velocity.Speed = 150f;
@@ -28,6 +28,7 @@ namespace Template.Entities
             sprite.Offset = new Point(0, -(GameSettings.TileSize / 2) + 1);
             sprite.Source = new Rectangle(112, 128, GameSettings.TileSize, GameSettings.TileSize);
             sprite.Layer = 0.10045f;
+            sprite.Rotation = rotation;
 
             attackBox.Width = transform.Size.X - 4;
             attackBox.Height = transform.Size.Y - 2;

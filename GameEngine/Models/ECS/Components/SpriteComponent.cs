@@ -13,5 +13,7 @@ namespace GameEngine.Components
         public Rectangle Source;
 
         public float Layer;
+
+        public float Rotation = 0;
     }
 }

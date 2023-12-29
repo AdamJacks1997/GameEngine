@@ -8,9 +8,7 @@ namespace GameEngine.Components
     {
         public Vector2 Position;
 
-        public Point GridPosition => new Point((int)((Position.X + (GameSettings.TileSize / 2)) / GameSettings.TileSize), (int)((Position.Y + (GameSettings.TileSize / 2)) / GameSettings.TileSize));
-
-        public Vector3 Position3D => new Vector3(Position.X, Position.Y, 0);
+        public Point GridPosition => new Point((int)((Position.X + (Size.X / 2)) / GameSettings.TileSize), (int)((Position.Y + (Size.Y / 2)) / GameSettings.TileSize));
 
         public Point Size;
     }

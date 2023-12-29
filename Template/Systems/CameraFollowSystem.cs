@@ -27,7 +27,7 @@ namespace Template.Systems
             {
                 var transform = entity.GetComponent<TransformComponent>();
 
-                Globals.CameraPosition = transform.Position;
+                Globals.CameraFocusPosition = transform.Position;
             });
         }
     }

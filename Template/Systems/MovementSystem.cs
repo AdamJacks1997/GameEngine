@@ -280,6 +280,22 @@ namespace Template.Systems
 
                 EntityHandler.Remove(moveable);
             });
+
+            _attackBoxes.ForEach(attackBox =>
+            {
+                if (!moveableAttackBox.Bounds.Intersects(attackBox))
+                {
+                    return;
+                }
+
+                if (moveableAttackBox.Bounds == attackBox)
+                {
+                    return;
+                }
+
+                EntityHandler.Remove(moveable);
+                //EntityHandler.Remove(attackBox);
+            });
         }
     }
 }

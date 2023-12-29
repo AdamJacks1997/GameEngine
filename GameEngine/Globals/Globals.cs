@@ -16,6 +16,10 @@ namespace GameEngine.Globals
 
         public static int[][] CurrentCollisions { get; set; }
 
+        public static Matrix CameraMatrix { get; set; }
+
+        public static Vector2 CameraFocusPosition { get; set; }
+
         public static Vector2 CameraPosition { get; set; }
 
         public static Entity PlayerEntity { get; set; }

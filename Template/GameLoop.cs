@@ -94,8 +94,8 @@ namespace Template
 
             new MeleeEnemyEntity();
 
-            new MeleeAttackEntity(new Vector2(-1, 0));
-            new MeleeAttackEntity(new Vector2(1, 0));
+            //new MeleeAttackEntity(new Vector2(-1, 0));
+            //new MeleeAttackEntity(new Vector2(1, 0));
 
             //for (int i = 0; i < 100; i++)
             //{
@@ -117,17 +117,21 @@ namespace Template
 
         protected override void Draw(GameTime gameTime)
         {
-            var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraPosition.X;
-            var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraPosition.Y;
+            var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraFocusPosition.X;
+            var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraFocusPosition.Y;
+
+            Globals.CameraPosition = new Vector2(Globals.CameraFocusPosition.X - (GameSettings.NativeSize.X / 2), Globals.CameraFocusPosition.Y - (GameSettings.NativeSize.Y / 2));
 
             cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
             cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);
 
-            var translation = Matrix.CreateTranslation(cameraX, cameraY, 0f);
+            var matrix = Matrix.CreateTranslation(cameraX, cameraY, 0f);
+
+            Globals.CameraMatrix = matrix;
 
             GraphicsDevice.SetRenderTarget(_nativeRenderTarget);
 
-            _spriteBatch.Begin(transformMatrix: translation, samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.FrontToBack);
+            _spriteBatch.Begin(transformMatrix: matrix, samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.FrontToBack);
 
             _systems.Draw();
 
