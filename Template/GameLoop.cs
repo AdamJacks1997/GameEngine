@@ -80,7 +80,6 @@ namespace Template
             _systems
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
-                .Add(new CameraFollowSystem())
                 .Add(new InputSystem())
                 .Add(new BoundarySystem(_tileBoundaryHandler, _attackBoundaryHandler))
                 .Add(new EntityStateSystem(_tileBoundaryHandler))
@@ -88,11 +87,12 @@ namespace Template
                 .Add(new PathControllerSystem())
                 .Add(new ChaseSystem())
                 .Add(new MovementSystem(_tileBoundaryHandler, _attackBoundaryHandler))
-                .Add(new AttackSystem());
+                .Add(new AttackSystem())
+                .Add(new CameraFollowSystem());
 
             Globals.PlayerEntity = new PlayerEntity();
 
-            new MeleeEnemyEntity();
+            //new MeleeEnemyEntity();
 
             //new MeleeAttackEntity(new Vector2(-1, 0));
             //new MeleeAttackEntity(new Vector2(1, 0));
