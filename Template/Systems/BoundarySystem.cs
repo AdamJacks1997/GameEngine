@@ -13,43 +13,41 @@ namespace Template.Systems
     public class BoundarySystem : IInitializeSystem, IUpdateSystem, IDrawSystem
     {
         private readonly BoundaryHandler _tileBoundaryHandler;
-        private readonly BoundaryHandler _attackBoundaryHandler;
+        private readonly BoundaryHandler _hitBoxBoundaryHandler;
 
-        private List<Entity> _entities;
+        private List<Entity> _tileColliderEntities;
+        private List<Entity> _hitBoxEntities;
 
-        private List<Rectangle> _boundaries = new List<Rectangle>();
-
-        private readonly List<Type> _componentTypes = new List<Type>()
+        private readonly List<Type> _tileColliderComponents = new List<Type>()
         {
-            typeof(TransformComponent),
             typeof(ColliderComponent),
+            typeof(TileComponent),
         };
 
-        public BoundarySystem(BoundaryHandler tileBoundaryHandler, BoundaryHandler attackBoundaryHandler)
+        public BoundarySystem(BoundaryHandler tileBoundaryHandler, BoundaryHandler hitBoxBoundaryHandler)
         {
             _tileBoundaryHandler = tileBoundaryHandler;
-            _attackBoundaryHandler = attackBoundaryHandler;
+            _hitBoxBoundaryHandler = hitBoxBoundaryHandler;
         }
 
         public void Initialize()
         {
-            _entities = EntityHandler.GetWithComponents(_componentTypes);
+            _tileColliderEntities = EntityHandler.GetWithComponents(_tileColliderComponents);
 
-            _entities.ForEach(entity =>
+            _tileColliderEntities.ForEach(tileColliderEntity =>
             {
-                if (entity.HasComponent<TileComponent>())
-                {
-                    var collider = entity.GetComponent<ColliderComponent>();
+                var tileCollider = tileColliderEntity.GetComponent<ColliderComponent>();
 
-                    _tileBoundaryHandler.Add(collider.Bounds);
-                }
+                _tileBoundaryHandler.Add(tileCollider);
+            });
 
-                if (entity.HasComponent<AttackBoxComponent>())
-                {
-                    var collider = entity.GetComponent<AttackBoxComponent>();
+            _hitBoxEntities = EntityHandler.GetWithComponent<HitBoxComponent>();
 
-                    _attackBoundaryHandler.Add(collider.Bounds);
-                }
+            _hitBoxEntities.ForEach(hitBoxEntity =>
+            {
+                var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
+
+                _hitBoxBoundaryHandler.Add(hitBox);
             });
         }
 
@@ -74,23 +72,18 @@ namespace Template.Systems
 
         public void Draw()
         {
-            _entities = EntityHandler.GetWithComponents(_componentTypes);
-
-            _entities.ForEach(entity =>
+            _tileColliderEntities.ForEach(tileColliderEntity =>
             {
-                if (entity.HasComponent<TileComponent>())
-                {
-                    var collider = entity.GetComponent<ColliderComponent>();
+                var tileCollider = tileColliderEntity.GetComponent<ColliderComponent>();
 
-                    Globals.SpriteBatch.DrawRectangle(collider.Bounds, Color.Yellow);
-                }
+                Globals.SpriteBatch.DrawRectangle(tileCollider.Bounds, Color.Yellow);
+            });
 
-                if (entity.HasComponent<AttackBoxComponent>())
-                {
-                    var collider = entity.GetComponent<AttackBoxComponent>();
+            _hitBoxEntities.ForEach(hitBoxEntity =>
+            {
+                var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
 
-                    Globals.SpriteBatch.DrawRectangle(collider.Bounds, Color.Blue);
-                }
+                Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Blue);
             });
         }
     }

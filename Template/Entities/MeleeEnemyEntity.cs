@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using GameEngine.Handlers;
 using GameEngine.Components;
-using GameEngine.Constants;
 using GameEngine.Models.ECS.Core;
 using Template.Components;
 using Template.Handlers;
-using System;
 using GameEngine.Globals;
 using GameEngine.Enums;
-using System.Collections.Generic;
 
 namespace Template.Entities
 {
@@ -19,7 +16,7 @@ namespace Template.Entities
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
             var sprite = AddComponent<SpriteComponent>();
-            var attackBox = AddComponent<AttackBoxComponent>();
+            var hurtBox = AddComponent<HurtBoxComponent>();
             var collider = AddComponent<ColliderComponent>();
             var pathController = AddComponent<PathControllerComponent>();
             var brain = AddComponent<BrainComponent>();
@@ -34,9 +31,9 @@ namespace Template.Entities
             sprite.Source = new Rectangle(32, 128, GameSettings.TileSize, GameSettings.TileSize);
             sprite.Layer = 0.10045f;
 
-            attackBox.Width = transform.Size.X - 4;
-            attackBox.Height = transform.Size.Y - 2;
-            attackBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
+            hurtBox.Width = transform.Size.X - 4;
+            hurtBox.Height = transform.Size.Y - 2;
+            hurtBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
 
             collider.Width = transform.Size.X / 2;
             collider.Height = transform.Size.Y + 1;

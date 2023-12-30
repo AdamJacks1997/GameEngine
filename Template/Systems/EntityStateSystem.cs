@@ -19,7 +19,7 @@ namespace Template.Systems
 
         private Rectangle _losBoundary = new Rectangle();
 
-        private List<Rectangle> _boundaries;
+        private List<ColliderComponent> _boundaries;
 
         private readonly List<Type> _componentTypes = new List<Type>()
         {
@@ -84,7 +84,7 @@ namespace Template.Systems
                         _boundaries.ForEach(_boundary =>
                         {
 
-                            if (!_losBoundary.Intersects(_boundary))
+                            if (!_losBoundary.Intersects(_boundary.Bounds))
                             {
                                 return;
                             }

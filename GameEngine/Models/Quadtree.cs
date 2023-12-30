@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameEngine.Components;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace GameEngine.Models
 {
     public class Quadtree
     {
-        private readonly List<Rectangle> _elements = new();
+        private readonly List<ColliderComponent> _elements = new();
 
         private readonly int _capacity;
         private readonly int _maxDepth;
@@ -32,31 +33,31 @@ namespace GameEngine.Models
         public bool IsLeaf
             => _topLeft == null || _topRight == null || _bottomLeft == null || _bottomRight == null;
 
-        public void Insert(Rectangle boundary)
+        public void Insert(ColliderComponent collider)
         {
             if (_elements.Count >= _capacity)
             {
                 Split();
             }
 
-            Quadtree? containingChild = GetContainingChild(boundary);
+            Quadtree? containingChild = GetContainingChild(collider);
 
             if (containingChild != null)
             {
-                containingChild.Insert(boundary);
+                containingChild.Insert(collider);
             }
             else
             {
-                _elements.Add(boundary);
+                _elements.Add(collider);
             }
         }
-        public bool Remove(Rectangle boundary)
+        public bool Remove(ColliderComponent collider)
         {
-            Quadtree? containingChild = GetContainingChild(boundary);
+            Quadtree? containingChild = GetContainingChild(collider);
 
             // If no child was returned, then this is the leaf node (or potentially non-leaf node, if the element's boundaries overlap
             // multiple children) containing the element.
-            bool removed = containingChild?.Remove(boundary) ?? _elements.Remove(boundary);
+            bool removed = containingChild?.Remove(collider) ?? _elements.Remove(collider);
 
             // If the total descendant element count is less than the bucket capacity, we ensure the node is in a non-split state.
             if (removed && CountElements() <= _capacity)
@@ -65,10 +66,10 @@ namespace GameEngine.Models
             return removed;
         }
 
-        public List<Rectangle> FindCollisions(Rectangle boundary)
+        public List<ColliderComponent> FindCollisions(Rectangle boundary)
         {
             var nodes = new Queue<Quadtree>();
-            var collisions = new List<Rectangle>();
+            var collisions = new List<ColliderComponent>();
 
             nodes.Enqueue(this);
 
@@ -79,7 +80,7 @@ namespace GameEngine.Models
                 if (!boundary.Intersects(node.Bounds))
                     continue;
 
-                collisions.AddRange(node._elements.Where(b => b.Intersects(boundary)));
+                collisions.AddRange(node._elements.Where(collider => collider.Bounds.Intersects(boundary)));
 
                 if (!node.IsLeaf)
                 {
@@ -115,9 +116,9 @@ namespace GameEngine.Models
             return count;
         }
 
-        public IEnumerable<Rectangle> GetElements()
+        public IEnumerable<ColliderComponent> GetElements()
         {
-            var children = new List<Rectangle>();
+            var children = new List<ColliderComponent>();
             var nodes = new Queue<Quadtree>();
 
             nodes.Enqueue(this);
@@ -189,21 +190,21 @@ namespace GameEngine.Models
             _topLeft = _topRight = _bottomLeft = _bottomRight = null;
         }
 
-        private Quadtree? GetContainingChild(Rectangle bounds)
+        private Quadtree? GetContainingChild(ColliderComponent collider)
         {
             if (IsLeaf)
                 return null;
 
-            if (_topLeft.Bounds.Contains(bounds))
+            if (_topLeft.Bounds.Contains(collider.Bounds))
                 return _topLeft;
 
-            if (_topRight.Bounds.Contains(bounds))
+            if (_topRight.Bounds.Contains(collider.Bounds))
                 return _topRight;
 
-            if (_bottomLeft.Bounds.Contains(bounds))
+            if (_bottomLeft.Bounds.Contains(collider.Bounds))
                 return _bottomLeft;
 
-            return _bottomRight.Bounds.Contains(bounds) ? _bottomRight : null;
+            return _bottomRight.Bounds.Contains(collider.Bounds) ? _bottomRight : null;
         }
     }
 }

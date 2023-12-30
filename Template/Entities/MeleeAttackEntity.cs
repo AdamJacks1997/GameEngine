@@ -15,7 +15,7 @@ namespace Template.Entities
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
             var sprite = AddComponent<SpriteComponent>();
-            var attackBox = AddComponent<AttackBoxComponent>();
+            var hitBox = AddComponent<HitBoxComponent>();
             var attack = AddComponent<AttackComponent>();
 
             transform.Position = position;
@@ -30,9 +30,9 @@ namespace Template.Entities
             sprite.Layer = 0.10045f;
             sprite.Rotation = rotation;
 
-            attackBox.Width = transform.Size.X - 4;
-            attackBox.Height = transform.Size.Y - 2;
-            attackBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
+            hitBox.Width = transform.Size.X - 4;
+            hitBox.Height = transform.Size.Y - 2;
+            hitBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
 
             attack.LifeTimeLimit = 60;
 

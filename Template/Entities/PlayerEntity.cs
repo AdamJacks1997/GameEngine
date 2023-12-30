@@ -10,20 +10,14 @@ namespace Template.Entities
 {
     public class PlayerEntity : Entity
     {
-        TransformComponent transform;
-        VelocityComponent velocity;
-        SpriteComponent sprite;
-        AttackBoxComponent attackBox;
-        ColliderComponent collider;
-
         public PlayerEntity()
         {
-            transform = AddComponent<TransformComponent>();
-            velocity = AddComponent<VelocityComponent>();
+            var transform = AddComponent<TransformComponent>();
+            var velocity = AddComponent<VelocityComponent>();
             //var animatedSprite = AddComponent<AnimatedSpriteComponent>();
-            sprite = AddComponent<SpriteComponent>();
-            attackBox = AddComponent<AttackBoxComponent>();
-            collider = AddComponent<ColliderComponent>();
+            var sprite = AddComponent<SpriteComponent>();
+            var hurtBox = AddComponent<HurtBoxComponent>();
+            var collider = AddComponent<ColliderComponent>();
             AddComponent<PlayerControllerComponent>();
             AddComponent<CameraFollowComponent>();
 
@@ -37,9 +31,9 @@ namespace Template.Entities
             sprite.Source = new Rectangle(32, 128, GameSettings.TileSize, GameSettings.TileSize);
             sprite.Layer = 0.10045f;
 
-            attackBox.Width = transform.Size.X - 4;
-            attackBox.Height = transform.Size.Y - 2;
-            attackBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
+            hurtBox.Width = transform.Size.X - 4;
+            hurtBox.Height = transform.Size.Y - 2;
+            hurtBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
 
             collider.Width = transform.Size.X;
             collider.Height = transform.Size.Y + 1;

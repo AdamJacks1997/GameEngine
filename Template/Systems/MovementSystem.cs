@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using GameEngine.Components;
 using GameEngine.Globals;
-using Template.Components;
 
 namespace Template.Systems
 {
@@ -16,8 +15,8 @@ namespace Template.Systems
         private readonly BoundaryHandler _attackBoundaryHandler;
 
         private List<Entity> _moveables;
-        private List<Rectangle> _bounaries;
-        private List<Rectangle> _attackBoxes;
+        private List<ColliderComponent> _colliders;
+        private List<ColliderComponent> _hitBoxes;
 
         private readonly List<Type> _moveableComponentTypes = new List<Type>()
         {
@@ -54,11 +53,11 @@ namespace Template.Systems
                     CheckAndResolveTileCollisions(moveableTransform, moveableCollider);
                 }
 
-                if (moveable.HasComponent<AttackBoxComponent>() && moveable.HasComponent<AttackComponent>())
+                if (moveable.HasComponent<HitBoxComponent>())
                 {
-                    var moveableAttackBox = moveable.GetComponent<AttackBoxComponent>();
+                    var moveableHitBox = moveable.GetComponent<HitBoxComponent>();
 
-                    CheckAndResolveAttackBoxCollisions(moveable, moveableAttackBox);
+                    CheckAndResolveHitBoxCollisions(moveable, moveableHitBox);
                 }
             });
         }
@@ -71,7 +70,7 @@ namespace Template.Systems
 
         private void CheckAndResolveTileCollisions(TransformComponent moveableTransform, ColliderComponent moveableCollider)
         {
-            _bounaries = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
+            _colliders = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
 
             var topLeft = Rectangle.Empty;
             var topRight = Rectangle.Empty;
@@ -91,9 +90,9 @@ namespace Template.Systems
             var bottomLeftIntersection = Rectangle.Empty;
             var bottomRightIntersection = Rectangle.Empty;
 
-            _bounaries.ForEach(boundary =>
+            _colliders.ForEach(collider =>
             {
-                if (!moveableCollider.Bounds.Intersects(boundary))
+                if (!moveableCollider.Bounds.Intersects(collider.Bounds))
                 {
                     return;
                 }
@@ -104,15 +103,15 @@ namespace Template.Systems
                 bottomLeft = new Rectangle(moveableCollider.Bounds.Left, moveableCollider.Bounds.Bottom - GameSettings.TileSize / 2, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
                 bottomRight = new Rectangle(moveableCollider.Bounds.Right - GameSettings.TileSize / 2, moveableCollider.Bounds.Bottom - GameSettings.TileSize / 2, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
 
-                topLeftCollides = topLeft.Intersects(boundary) ? true : topLeftCollides;
-                topRightCollides = topRight.Intersects(boundary) ? true : topRightCollides;
+                topLeftCollides = topLeft.Intersects(collider.Bounds) ? true : topLeftCollides;
+                topRightCollides = topRight.Intersects(collider.Bounds) ? true : topRightCollides;
 
-                bottomLeftCollides = bottomLeft.Intersects(boundary) ? true : bottomLeftCollides;
-                bottomRightCollides = bottomRight.Intersects(boundary) ? true : bottomRightCollides;
+                bottomLeftCollides = bottomLeft.Intersects(collider.Bounds) ? true : bottomLeftCollides;
+                bottomRightCollides = bottomRight.Intersects(collider.Bounds) ? true : bottomRightCollides;
 
                 if (topLeftCollides)
                 {
-                    var newTopLeftIntersection = Rectangle.Intersect(topLeft, boundary);
+                    var newTopLeftIntersection = Rectangle.Intersect(topLeft, collider.Bounds);
 
                     if (newTopLeftIntersection.Width > topLeftIntersection.Width)
                     {
@@ -127,7 +126,7 @@ namespace Template.Systems
 
                 if (topRightCollides)
                 {
-                    var newTopRightIntersection = Rectangle.Intersect(topRight, boundary);
+                    var newTopRightIntersection = Rectangle.Intersect(topRight, collider.Bounds);
 
                     if (newTopRightIntersection.Width > topRightIntersection.Width)
                     {
@@ -142,7 +141,7 @@ namespace Template.Systems
 
                 if (bottomLeftCollides)
                 {
-                    var newBottomLeftIntersection = Rectangle.Intersect(bottomLeft, boundary);
+                    var newBottomLeftIntersection = Rectangle.Intersect(bottomLeft, collider.Bounds);
 
                     if (newBottomLeftIntersection.Width > bottomLeftIntersection.Width)
                     {
@@ -157,7 +156,7 @@ namespace Template.Systems
 
                 if (bottomRightCollides)
                 {
-                    var newBottomRightIntersection = Rectangle.Intersect(bottomRight, boundary);
+                    var newBottomRightIntersection = Rectangle.Intersect(bottomRight, collider.Bounds);
 
                     if (newBottomRightIntersection.Width > bottomRightIntersection.Width)
                     {
@@ -266,14 +265,14 @@ namespace Template.Systems
             moveableTransform.Position.Round();
         }
 
-        private void CheckAndResolveAttackBoxCollisions(Entity moveable, AttackBoxComponent moveableAttackBox)
+        private void CheckAndResolveHitBoxCollisions(Entity moveable, HitBoxComponent moveableHitBox)
         {
-            _bounaries = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableAttackBox.Bounds);
-            _attackBoxes = _attackBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableAttackBox.Bounds);
+            _colliders = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
+            _hitBoxes = _attackBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
 
-            _bounaries.ForEach(boundary =>
+            _colliders.ForEach(collider =>
             {
-                if (!moveableAttackBox.Bounds.Intersects(boundary))
+                if (!moveableHitBox.Bounds.Intersects(collider.Bounds))
                 {
                     return;
                 }
@@ -281,14 +280,14 @@ namespace Template.Systems
                 EntityHandler.Remove(moveable);
             });
 
-            _attackBoxes.ForEach(attackBox =>
+            _hitBoxes.ForEach(attackBox =>
             {
-                if (!moveableAttackBox.Bounds.Intersects(attackBox))
+                if (!moveableHitBox.Bounds.Intersects(attackBox.Bounds))
                 {
                     return;
                 }
 
-                if (moveableAttackBox.Bounds == attackBox)
+                if (moveableHitBox.Bounds == attackBox.Bounds)
                 {
                     return;
                 }
