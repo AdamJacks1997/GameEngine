@@ -64,8 +64,12 @@ namespace Template.Systems
 
         private void SetNewPosition(TransformComponent moveableTransform, VelocityComponent moveableVelocity, GameTime gameTime)
         {
-            moveableTransform.Position.X += (float)Math.Round(moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            moveableTransform.Position.Y += (float)Math.Round(moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            //moveableTransform.Position.X += (float)Math.Round(moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            //moveableTransform.Position.Y += (float)Math.Round(moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            moveableTransform.Position += moveableVelocity.DirectionVector * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            moveableTransform.Position.Round();
         }
 
         private void CheckAndResolveTileCollisions(TransformComponent moveableTransform, ColliderComponent moveableCollider)
