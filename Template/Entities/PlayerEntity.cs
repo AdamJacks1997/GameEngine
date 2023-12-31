@@ -10,7 +10,7 @@ namespace Template.Entities
 {
     public class PlayerEntity : Entity
     {
-        public PlayerEntity()
+        public PlayerEntity(Vector2 position)
         {
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
@@ -21,7 +21,7 @@ namespace Template.Entities
             AddComponent<PlayerControllerComponent>();
             AddComponent<CameraFollowComponent>();
 
-            transform.Position = new Vector2(535, 380);
+            transform.Position = position;
             transform.Size = new Point(16, 16);
 
             velocity.Speed = 100f;

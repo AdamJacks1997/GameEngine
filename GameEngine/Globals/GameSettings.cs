@@ -10,6 +10,7 @@ namespace GameEngine.Globals
         public static int TileSize { get; } = 16;
 
         public static float DiagnalSpeedMultiplier { get; } = 1.28f;
+        //public static float DiagnalSpeedMultiplier { get; } = 1;
 
         public static bool Exit { get; set; } = false;
     }

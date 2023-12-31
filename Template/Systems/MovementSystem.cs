@@ -11,9 +11,6 @@ namespace Template.Systems
 {
     public class MovementSystem : IUpdateSystem
     {
-        private readonly BoundaryHandler _tileBoundaryHandler;
-        private readonly BoundaryHandler _attackBoundaryHandler;
-
         private List<Entity> _moveables;
         private List<ColliderComponent> _colliders;
         private List<ColliderComponent> _hitBoxes;
@@ -23,12 +20,6 @@ namespace Template.Systems
             typeof(TransformComponent),
             typeof(VelocityComponent)
         };
-
-        public MovementSystem(BoundaryHandler tileBoundaryHandler, BoundaryHandler attackBoundaryHandler)
-        {
-            _tileBoundaryHandler = tileBoundaryHandler;
-            _attackBoundaryHandler = attackBoundaryHandler;
-        }
 
         public void Update(GameTime gameTime)
         {
@@ -74,7 +65,7 @@ namespace Template.Systems
 
         private void CheckAndResolveTileCollisions(TransformComponent moveableTransform, ColliderComponent moveableCollider)
         {
-            _colliders = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
+            _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
 
             var topLeft = Rectangle.Empty;
             var topRight = Rectangle.Empty;
@@ -271,8 +262,8 @@ namespace Template.Systems
 
         private void CheckAndResolveHitBoxCollisions(Entity moveable, HitBoxComponent moveableHitBox)
         {
-            _colliders = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
-            _hitBoxes = _attackBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
+            _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
+            _hitBoxes = BoundaryGroups.HitBoxBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
 
             _colliders.ForEach(collider =>
             {

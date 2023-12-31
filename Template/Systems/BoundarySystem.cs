@@ -12,9 +12,6 @@ namespace Template.Systems
 {
     public class BoundarySystem : IInitializeSystem, IUpdateSystem, IDrawSystem
     {
-        private readonly BoundaryHandler _tileBoundaryHandler;
-        private readonly BoundaryHandler _hitBoxBoundaryHandler;
-
         private List<Entity> _tileColliderEntities;
         private List<Entity> _hitBoxEntities;
 
@@ -24,12 +21,6 @@ namespace Template.Systems
             typeof(TileComponent),
         };
 
-        public BoundarySystem(BoundaryHandler tileBoundaryHandler, BoundaryHandler hitBoxBoundaryHandler)
-        {
-            _tileBoundaryHandler = tileBoundaryHandler;
-            _hitBoxBoundaryHandler = hitBoxBoundaryHandler;
-        }
-
         public void Initialize()
         {
             _tileColliderEntities = EntityHandler.GetWithComponents(_tileColliderComponents);
@@ -38,7 +29,7 @@ namespace Template.Systems
             {
                 var tileCollider = tileColliderEntity.GetComponent<ColliderComponent>();
 
-                _tileBoundaryHandler.Add(tileCollider);
+                BoundaryGroups.TileBoundaryHandler.Add(tileCollider);
             });
 
             _hitBoxEntities = EntityHandler.GetWithComponent<HitBoxComponent>();
@@ -47,7 +38,7 @@ namespace Template.Systems
             {
                 var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
 
-                _hitBoxBoundaryHandler.Add(hitBox);
+                BoundaryGroups.HitBoxBoundaryHandler.Add(hitBox);
             });
         }
 

@@ -12,5 +12,7 @@ namespace GameEngine.Models.LDTK
 
         [JsonProperty("intGridCsv")]
         public int[] Collisions { get; set; }
+
+        public List<EntityInstance> EntityInstances { get; set; }
     }
 }

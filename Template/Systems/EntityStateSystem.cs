@@ -13,8 +13,6 @@ namespace Template.Systems
 {
     public class EntityStateSystem : IUpdateSystem
     {
-        private readonly BoundaryHandler _tileBoundaryHandler;
-
         private List<Entity> _entities;
 
         private Rectangle _losBoundary = new Rectangle();
@@ -26,11 +24,6 @@ namespace Template.Systems
             typeof(BrainComponent),
             typeof(TransformComponent),
         };
-
-        public EntityStateSystem(BoundaryHandler tileBoundaryHandler)
-        {
-            _tileBoundaryHandler = tileBoundaryHandler;
-        }
 
         public void Update(GameTime gameTime)
         {
@@ -79,7 +72,7 @@ namespace Template.Systems
                     {
                         _losBoundary.Location += new Point((int)Math.Round(stepDistance * -direction.X), (int)Math.Round(stepDistance * -direction.Y));
 
-                        _boundaries = _tileBoundaryHandler.BoundaryQuadtree.FindCollisions(_losBoundary);
+                        _boundaries = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(_losBoundary);
 
                         _boundaries.ForEach(_boundary =>
                         {

@@ -19,9 +19,6 @@ namespace Template
         //private TextureHandler _textureHandler;
         private LdtkHandler _ldtkHandler;
 
-        private BoundaryHandler _tileBoundaryHandler;
-        private BoundaryHandler _attackBoundaryHandler;
-
         private RenderTarget2D _nativeRenderTarget;
 
         public GameLoop()
@@ -69,11 +66,11 @@ namespace Template
 
             _ldtkHandler.LoadLevel(0);
 
-            _tileBoundaryHandler = new BoundaryHandler();
-            _attackBoundaryHandler = new BoundaryHandler();
+            BoundaryGroups.TileBoundaryHandler = new BoundaryHandler();
+            BoundaryGroups.HitBoxBoundaryHandler = new BoundaryHandler();
 
-            _tileBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
-            _attackBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            BoundaryGroups.TileBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            BoundaryGroups.HitBoxBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
 
             _systems = new GameEngine.Systems.Systems();
 
@@ -81,16 +78,17 @@ namespace Template
                 .Add(new SpriteSystem())
                 .Add(new AnimatedSpriteSystem())
                 .Add(new InputSystem())
-                .Add(new BoundarySystem(_tileBoundaryHandler, _attackBoundaryHandler))
-                .Add(new EntityStateSystem(_tileBoundaryHandler))
+                .Add(new EntitySpawnSystem())
+                .Add(new BoundarySystem())
+                .Add(new EntityStateSystem())
                 .Add(new TargetSystem())
                 .Add(new PathControllerSystem())
                 .Add(new ChaseSystem())
-                .Add(new MovementSystem(_tileBoundaryHandler, _attackBoundaryHandler))
+                .Add(new MovementSystem())
                 .Add(new AttackSystem())
                 .Add(new CameraFollowSystem());
 
-            Globals.PlayerEntity = new PlayerEntity();
+            //Globals.PlayerEntity = new PlayerEntity();
 
             //new MeleeEnemyEntity();
 

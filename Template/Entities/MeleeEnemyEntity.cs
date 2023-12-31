@@ -11,7 +11,7 @@ namespace Template.Entities
 {
     public class MeleeEnemyEntity : Entity
     {
-        public MeleeEnemyEntity()
+        public MeleeEnemyEntity(Vector2 position)
         {
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
@@ -21,14 +21,14 @@ namespace Template.Entities
             var pathController = AddComponent<PathControllerComponent>();
             var brain = AddComponent<BrainComponent>();
 
-            transform.Position = new Vector2(166, 150);
+            transform.Position = position;
             transform.Size = new Point(16, 16);
 
-            velocity.Speed = 100f;
+            velocity.Speed = 50f;
 
             sprite.Texture = TextureHandler.Get("Tiles");
             sprite.Offset = new Point(0, -(GameSettings.TileSize / 2) + 1);
-            sprite.Source = new Rectangle(32, 128, GameSettings.TileSize, GameSettings.TileSize);
+            sprite.Source = new Rectangle(1 * 16, 9 * 16, GameSettings.TileSize, GameSettings.TileSize);
             sprite.Layer = 0.10045f;
 
             hurtBox.Width = transform.Size.X - 4;
