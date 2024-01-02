@@ -73,12 +73,22 @@ namespace Template.Systems
                 var test = "";
             }
 
-            if (newGridPosition.X > Globals.CurrentCollisions.Length || newGridPosition.X < 0)
+            if (newGridPosition.X < 1)
+            {
+                newGridPosition.X = 1;
+            }
+
+            if (newGridPosition.X > Globals.CurrentCollisions.Length)
             {
                 newGridPosition.X = Globals.CurrentCollisions.Length - 1;
             }
 
-            if (newGridPosition.Y > Globals.CurrentCollisions[newGridPosition.X].Length || newGridPosition.Y < 0)
+            if (newGridPosition.Y < 1)
+            {
+                newGridPosition.Y = 1;
+            }
+
+            if (newGridPosition.Y > Globals.CurrentCollisions[newGridPosition.X].Length)
             {
                 newGridPosition.Y = Globals.CurrentCollisions[newGridPosition.X].Length - 1;
             }

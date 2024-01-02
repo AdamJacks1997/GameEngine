@@ -67,9 +67,11 @@ namespace Template
             _ldtkHandler.LoadLevel(0);
 
             BoundaryGroups.TileBoundaryHandler = new BoundaryHandler();
+            BoundaryGroups.MovableBoundaryHandler = new BoundaryHandler();
             BoundaryGroups.HitBoxBoundaryHandler = new BoundaryHandler();
 
             BoundaryGroups.TileBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            BoundaryGroups.MovableBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
             BoundaryGroups.HitBoxBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
 
             _systems = new GameEngine.Systems.Systems();
@@ -84,6 +86,7 @@ namespace Template
                 .Add(new TargetSystem())
                 .Add(new PathControllerSystem())
                 .Add(new ChaseSystem())
+                .Add(new MovableSpacingSystem())
                 .Add(new MovementSystem())
                 .Add(new AttackSystem())
                 .Add(new CameraFollowSystem());

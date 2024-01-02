@@ -7,18 +7,31 @@ using System.Collections.Generic;
 using GameEngine.Components;
 using GameEngine.Renderers;
 using GameEngine.Globals;
+using Template.Components;
 
 namespace Template.Systems
 {
     public class BoundarySystem : IInitializeSystem, IUpdateSystem, IDrawSystem
     {
         private List<Entity> _tileColliderEntities;
+        private List<Entity> _movableColliderEntities;
         private List<Entity> _hitBoxEntities;
 
         private readonly List<Type> _tileColliderComponents = new List<Type>()
         {
             typeof(ColliderComponent),
             typeof(TileComponent),
+        };
+
+        private readonly List<Type> _movableColliderComponents = new List<Type>()
+        {
+            typeof(ColliderComponent),
+            typeof(VelocityComponent),
+        };
+
+        private readonly List<Type> _hitBoxComponents = new List<Type>()
+        {
+            typeof(HitBoxComponent),
         };
 
         public void Initialize()
@@ -32,7 +45,16 @@ namespace Template.Systems
                 BoundaryGroups.TileBoundaryHandler.Add(tileCollider);
             });
 
-            _hitBoxEntities = EntityHandler.GetWithComponent<HitBoxComponent>();
+            _movableColliderEntities = EntityHandler.GetWithComponents(_movableColliderComponents);
+
+            _movableColliderEntities.ForEach(movableColliderEntity =>
+            {
+                var movableCollider = movableColliderEntity.GetComponent<ColliderComponent>();
+
+                BoundaryGroups.MovableBoundaryHandler.Add(movableCollider);
+            });
+
+            _hitBoxEntities = EntityHandler.GetWithComponents(_hitBoxComponents);
 
             _hitBoxEntities.ForEach(hitBoxEntity =>
             {
