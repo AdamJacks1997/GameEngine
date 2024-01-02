@@ -79,9 +79,12 @@ namespace Template.Systems
                 if (isCloserThanPathStopDistance || brain.State == EntityStateEnum.Wander)
                 {
                     var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize));
+
+                    //currentTargetTilePixelPosition.Y -= 1; // Due to collision boxes being 1 pixel taller
+
                     var distanceFromTargetTile = Vector2.Distance(currentTargetTilePixelPosition, transform.Position);
 
-                    if (distanceFromTargetTile > 1.5)
+                    if (distanceFromTargetTile > 0)
                     {
                         velocity.DirectionVector = currentTargetTilePixelPosition - transform.Position;
 

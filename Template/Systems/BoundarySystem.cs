@@ -85,6 +85,15 @@ namespace Template.Systems
 
         public void Draw()
         {
+            var meleeEnemies = EntityHandler.GetWithComponent<BrainComponent>();
+
+            meleeEnemies.ForEach(meleeEnemy =>
+            {
+                var meleeEnemyCollider = meleeEnemy.GetComponent<ColliderComponent>();
+
+                Globals.SpriteBatch.DrawRectangle(meleeEnemyCollider.Bounds, Color.Blue);
+            });
+
             _tileColliderEntities.ForEach(tileColliderEntity =>
             {
                 var tileCollider = tileColliderEntity.GetComponent<ColliderComponent>();
@@ -96,7 +105,7 @@ namespace Template.Systems
             {
                 var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
 
-                Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Blue);
+                Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Green);
             });
         }
     }
