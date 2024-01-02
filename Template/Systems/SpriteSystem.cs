@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GameEngine.Constants;
 using GameEngine.Handlers;
 using GameEngine.Models.ECS.Core;
 using GameEngine.Systems;
@@ -8,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GameEngine.Components;
 using GameEngine.Globals;
+using Template.Components;
 
 namespace Template.Systems
 {
@@ -32,9 +32,18 @@ namespace Template.Systems
 
                 var spritePosition = transform.Position + sprite.Offset.ToVector2();
 
+                if (entity.HasComponent<PlayerControllerComponent>())
+                {
+                    spritePosition.Y -= 1;
+                }
+
+                //Globals.SpriteBatch.Draw(sprite.Texture, spritePosition,
+                //    sprite.Source, Color.White, sprite.Rotation,
+                //    new Vector2(0, 0), 1.0f, SpriteEffects.None, (spritePosition.Y / GameSettings.TileSize) / Globals.CurrentLevel.Size.Y + sprite.Layer);
+
                 Globals.SpriteBatch.Draw(sprite.Texture, spritePosition,
                     sprite.Source, Color.White, sprite.Rotation,
-                    new Vector2(0, 0), 1.0f, SpriteEffects.None, (spritePosition.Y / GameSettings.TileSize) / Globals.CurrentLevel.Size.Y + sprite.Layer);
+                    new Vector2(0, 0), 1.0f, SpriteEffects.None, (spritePosition.Y / Globals.CurrentLevel.Size.Y) + sprite.Layer);
             });
         }
     }

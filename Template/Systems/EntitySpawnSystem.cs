@@ -36,7 +36,7 @@ namespace Template.Systems
 
                     if (Vector2.Distance(transform.GridPosition.ToVector2(), playerTransform.GridPosition.ToVector2()) > 25)
                     {
-                        new MeleeEnemyEntity(transform.Position);
+                        //new MeleeEnemyEntity(transform.Position);
                     }
 
                     spawn.SpawnCounter = 0;

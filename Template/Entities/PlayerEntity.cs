@@ -36,7 +36,7 @@ namespace Template.Entities
             hurtBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
 
             collider.Width = transform.Size.X;
-            collider.Height = transform.Size.Y + 1;
+            collider.Height = transform.Size.Y;
             collider.Offset = new Point(0, 0);
 
             EntityHandler.Add(this);
