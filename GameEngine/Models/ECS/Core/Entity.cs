@@ -39,6 +39,11 @@ namespace GameEngine.Models.ECS.Core
             return _components.ContainsKey(typeof(T));
         }
 
+        public void Destroy()
+        {
+            _components.Clear();
+        }
+
         public TransformComponent Transform
         {
             get

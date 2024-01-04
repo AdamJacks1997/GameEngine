@@ -3,7 +3,6 @@ using GameEngine.Handlers;
 using GameEngine.Components;
 using GameEngine.Models.ECS.Core;
 using Template.Components;
-using System;
 using GameEngine.Globals;
 
 namespace Template.Entities
@@ -21,7 +20,7 @@ namespace Template.Entities
             transform.Position = position;
             transform.Size = new Point(16, 16);
 
-            velocity.Speed = 150f;
+            velocity.Speed = 100f;
             velocity.DirectionVector = direction;
 
             sprite.Texture = TextureHandler.Get("Tiles");

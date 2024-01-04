@@ -18,6 +18,13 @@ namespace GameEngine.Handlers
 
         public static void Remove(Entity entity)
         {
+            entity.Destroy();
+
+            _entitiesByComponentType.ToList().ForEach(entityList =>
+            {
+                entityList.Value.Remove(entity);
+            });
+
             _entities.Remove(entity);
         }
 

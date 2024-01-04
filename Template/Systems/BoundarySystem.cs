@@ -16,6 +16,7 @@ namespace Template.Systems
         private List<Entity> _tileColliderEntities;
         private List<Entity> _movableColliderEntities;
         private List<Entity> _hitBoxEntities;
+        private List<Entity> _hurtBoxEntities;
 
         private readonly List<Type> _tileColliderComponents = new List<Type>()
         {
@@ -34,8 +35,23 @@ namespace Template.Systems
             typeof(HitBoxComponent),
         };
 
+        private readonly List<Type> _hurtBoxComponents = new List<Type>()
+        {
+            typeof(HurtBoxComponent),
+        };
+
         public void Initialize()
         {
+            BoundaryGroups.TileBoundaryHandler = new BoundaryHandler();
+            BoundaryGroups.MovableBoundaryHandler = new BoundaryHandler();
+            BoundaryGroups.HitBoxBoundaryHandler = new BoundaryHandler();
+            BoundaryGroups.HurtBoxBoundaryHandler = new BoundaryHandler();
+
+            BoundaryGroups.TileBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            BoundaryGroups.MovableBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            BoundaryGroups.HitBoxBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+            BoundaryGroups.HurtBoxBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
+
             _tileColliderEntities = EntityHandler.GetWithComponents(_tileColliderComponents);
 
             _tileColliderEntities.ForEach(tileColliderEntity =>
@@ -61,6 +77,15 @@ namespace Template.Systems
                 var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
 
                 BoundaryGroups.HitBoxBoundaryHandler.Add(hitBox);
+            });
+
+            _hurtBoxEntities = EntityHandler.GetWithComponents(_hurtBoxComponents);
+
+            _hurtBoxEntities.ForEach(hurtBoxEntity =>
+            {
+                var hurtBox = hurtBoxEntity.GetComponent<HurtBoxComponent>();
+
+                BoundaryGroups.HurtBoxBoundaryHandler.Add(hurtBox);
             });
         }
 

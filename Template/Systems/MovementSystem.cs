@@ -13,7 +13,7 @@ namespace Template.Systems
     {
         private List<Entity> _moveables;
         private List<ColliderComponent> _colliders;
-        private List<ColliderComponent> _hitBoxes;
+        private List<ColliderComponent> _hurtBoxes;
 
         private readonly List<Type> _moveableComponentTypes = new List<Type>()
         {
@@ -35,14 +35,15 @@ namespace Template.Systems
                     return;
                 }
 
-                //SetNewPosition(moveableTransform, moveableVelocity, gameTime);
-
                 if (moveable.HasComponent<ColliderComponent>())
                 {
                     var moveableCollider = moveable.GetComponent<ColliderComponent>();
 
-                    //CheckAndResolveTileCollisions(moveableTransform, moveableCollider);
-                    NewCollisionsTest(moveableTransform, moveableVelocity, moveableCollider, gameTime);
+                    MoveWithCollisionCheck(moveableTransform, moveableVelocity, moveableCollider, gameTime);
+                }
+                else
+                {
+                    MoveWithoutCollisionCheck(moveableTransform, moveableVelocity, gameTime);
                 }
 
                 if (moveable.HasComponent<HitBoxComponent>())
@@ -54,13 +55,28 @@ namespace Template.Systems
             });
         }
 
-        private void NewCollisionsTest(TransformComponent moveableTransform, VelocityComponent moveableVelocity, ColliderComponent moveableCollider, GameTime gameTime)
+        private void MoveWithoutCollisionCheck(TransformComponent moveableTransform, VelocityComponent moveableVelocity, GameTime gameTime) // idk if lerp is best for all of these movements
+        {
+            //moveableTransform.Position += moveableVelocity.DirectionVector * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var destination = moveableTransform.Position + (moveableVelocity.DirectionVector * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            var distance = moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //moveableTransform.Position.Round();
+            moveableTransform.Position = Vector2.Lerp(moveableTransform.Position, destination, distance);
+        }
+
+        private void MoveWithCollisionCheck(TransformComponent moveableTransform, VelocityComponent moveableVelocity, ColliderComponent moveableCollider, GameTime gameTime)
         {
             if (moveableVelocity.DirectionVector.X != 0)
             {
                 var horizontalMovement = moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 moveableTransform.Position.X += RoundToOne(horizontalMovement);
+
+                //var destination = new Vector2(moveableTransform.Position.X + (moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds), moveableTransform.Position.Y);
+                //var distance = moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                //moveableTransform.Position = Vector2.Lerp(moveableTransform.Position, destination, distance); // Lerp stuff is weird with pathfinding
 
                 _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
 
@@ -82,6 +98,11 @@ namespace Template.Systems
                 var verticalMovement = moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 moveableTransform.Position.Y += RoundToOne(verticalMovement);
+
+                //var destination = new Vector2(moveableTransform.Position.X, moveableTransform.Position.Y + (moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                //var distance = moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                //moveableTransform.Position = Vector2.Lerp(moveableTransform.Position, destination, distance); // Lerp stuff is weird with pathfinding
 
                 _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
 
@@ -117,217 +138,10 @@ namespace Template.Systems
             }
         }
 
-        private void SetNewPosition(TransformComponent moveableTransform, VelocityComponent moveableVelocity, GameTime gameTime)
-        {
-            //moveableTransform.Position.X += (float)Math.Round(moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            //moveableTransform.Position.Y += (float)Math.Round(moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-            //moveableTransform.Position += moveableVelocity.DirectionVector * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //moveableTransform.Position.Round();
-        }
-
-        //private void CheckAndResolveTileCollisions(TransformComponent moveableTransform, ColliderComponent moveableCollider)
-        //{
-        //    _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
-
-        //    var topLeft = Rectangle.Empty;
-        //    var topRight = Rectangle.Empty;
-
-        //    var bottomLeft = Rectangle.Empty;
-        //    var bottomRight = Rectangle.Empty;
-
-        //    var topLeftCollides = false;
-        //    var topRightCollides = false;
-
-        //    var bottomLeftCollides = false;
-        //    var bottomRightCollides = false;
-
-        //    var topLeftIntersection = Rectangle.Empty;
-        //    var topRightIntersection = Rectangle.Empty;
-
-        //    var bottomLeftIntersection = Rectangle.Empty;
-        //    var bottomRightIntersection = Rectangle.Empty;
-
-        //    _colliders.ForEach(collider =>
-        //    {
-        //        if (!moveableCollider.Bounds.Intersects(collider.Bounds))
-        //        {
-        //            return;
-        //        }
-
-        //        topLeft = new Rectangle(moveableCollider.Bounds.Left, moveableCollider.Bounds.Top, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
-        //        topRight = new Rectangle(moveableCollider.Bounds.Right - GameSettings.TileSize / 2, moveableCollider.Bounds.Top, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
-
-        //        bottomLeft = new Rectangle(moveableCollider.Bounds.Left, moveableCollider.Bounds.Bottom - GameSettings.TileSize / 2, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
-        //        bottomRight = new Rectangle(moveableCollider.Bounds.Right - GameSettings.TileSize / 2, moveableCollider.Bounds.Bottom - GameSettings.TileSize / 2, GameSettings.TileSize / 2, GameSettings.TileSize / 2);
-
-        //        topLeftCollides = topLeft.Intersects(collider.Bounds) ? true : topLeftCollides;
-        //        topRightCollides = topRight.Intersects(collider.Bounds) ? true : topRightCollides;
-
-        //        bottomLeftCollides = bottomLeft.Intersects(collider.Bounds) ? true : bottomLeftCollides;
-        //        bottomRightCollides = bottomRight.Intersects(collider.Bounds) ? true : bottomRightCollides;
-
-        //        if (topLeftCollides)
-        //        {
-        //            var newTopLeftIntersection = Rectangle.Intersect(topLeft, collider.Bounds);
-
-        //            if (newTopLeftIntersection.Width > topLeftIntersection.Width)
-        //            {
-        //                topLeftIntersection.Width = newTopLeftIntersection.Width;
-        //            }
-
-        //            if (newTopLeftIntersection.Height > topLeftIntersection.Height)
-        //            {
-        //                topLeftIntersection.Height = newTopLeftIntersection.Height;
-        //            }
-        //        }
-
-        //        if (topRightCollides)
-        //        {
-        //            var newTopRightIntersection = Rectangle.Intersect(topRight, collider.Bounds);
-
-        //            if (newTopRightIntersection.Width > topRightIntersection.Width)
-        //            {
-        //                topRightIntersection.Width = newTopRightIntersection.Width;
-        //            }
-
-        //            if (newTopRightIntersection.Height > topRightIntersection.Height)
-        //            {
-        //                topRightIntersection.Height = newTopRightIntersection.Height;
-        //            }
-        //        }
-
-        //        if (bottomLeftCollides)
-        //        {
-        //            var newBottomLeftIntersection = Rectangle.Intersect(bottomLeft, collider.Bounds);
-
-        //            if (newBottomLeftIntersection.Width > bottomLeftIntersection.Width)
-        //            {
-        //                bottomLeftIntersection.Width = newBottomLeftIntersection.Width;
-        //            }
-
-        //            if (newBottomLeftIntersection.Height > bottomLeftIntersection.Height)
-        //            {
-        //                bottomLeftIntersection.Height = newBottomLeftIntersection.Height;
-        //            }
-        //        }
-
-        //        if (bottomRightCollides)
-        //        {
-        //            var newBottomRightIntersection = Rectangle.Intersect(bottomRight, collider.Bounds);
-
-        //            if (newBottomRightIntersection.Width > bottomRightIntersection.Width)
-        //            {
-        //                bottomRightIntersection.Width = newBottomRightIntersection.Width;
-        //            }
-
-        //            if (newBottomRightIntersection.Height > bottomRightIntersection.Height)
-        //            {
-        //                bottomRightIntersection.Height = newBottomRightIntersection.Height;
-        //            }
-        //        }
-        //    });
-
-        //    if (topLeftCollides && topRightCollides && (!bottomLeftCollides && !bottomRightCollides))
-        //    {
-        //        moveableTransform.Position.Y += topLeftIntersection.Height;
-        //    }
-
-        //    if (bottomLeftCollides && bottomRightCollides && (!topLeftCollides && !topRightCollides))
-        //    {
-        //        moveableTransform.Position.Y -= bottomLeftIntersection.Height;
-        //    }
-
-        //    if (topLeftCollides && bottomLeftCollides && (!topRightCollides && !bottomRightCollides))
-        //    {
-        //        moveableTransform.Position.X += topLeftIntersection.Width;
-        //    }
-
-        //    if (topRightCollides && bottomRightCollides && (!topLeftCollides && !bottomLeftCollides))
-        //    {
-        //        moveableTransform.Position.X -= topRightIntersection.Width;
-        //    }
-
-        //    if (topLeftCollides && (!topRightCollides && !bottomLeftCollides))
-        //    {
-        //        if (topLeftIntersection.Height > topLeftIntersection.Width)
-        //        {
-        //            moveableTransform.Position.X += topLeftIntersection.Width;
-        //        }
-        //        else
-        //        {
-        //            moveableTransform.Position.Y += topLeftIntersection.Height;
-        //        }
-        //    }
-
-        //    if (topRightCollides && (!topLeftCollides && !bottomRightCollides))
-        //    {
-        //        if (topRightIntersection.Height > topRightIntersection.Width)
-        //        {
-        //            moveableTransform.Position.X -= topRightIntersection.Width;
-        //        }
-        //        else
-        //        {
-        //            moveableTransform.Position.Y += topRightIntersection.Height;
-        //        }
-        //    }
-
-        //    if (bottomLeftCollides && (!bottomRightCollides && !topLeftCollides))
-        //    {
-        //        if (bottomLeftIntersection.Height > bottomLeftIntersection.Width)
-        //        {
-        //            moveableTransform.Position.X += bottomLeftIntersection.Width;
-        //        }
-        //        else
-        //        {
-        //            moveableTransform.Position.Y -= bottomLeftIntersection.Height;
-        //        }
-        //    }
-
-        //    if (bottomRightCollides && (!bottomLeftCollides && !topRightCollides))
-        //    {
-        //        if (bottomRightIntersection.Height > bottomRightIntersection.Width)
-        //        {
-        //            moveableTransform.Position.X -= bottomRightIntersection.Width;
-        //        }
-        //        else
-        //        {
-        //            moveableTransform.Position.Y -= bottomRightIntersection.Height;
-        //        }
-        //    }
-
-        //    if (topLeftCollides && (topRightCollides && bottomLeftCollides))
-        //    {
-        //        moveableTransform.Position.X += 2;
-        //        moveableTransform.Position.Y += 2;
-        //    }
-
-        //    if (topRightCollides && (topLeftCollides && bottomRightCollides))
-        //    {
-        //        moveableTransform.Position.X -= 2;
-        //        moveableTransform.Position.Y += 2;
-        //    }
-
-        //    if (bottomLeftCollides && (bottomRightCollides && topLeftCollides))
-        //    {
-        //        moveableTransform.Position.X += 2;
-        //        moveableTransform.Position.Y -= 2;
-        //    }
-
-        //    if (bottomRightCollides && (bottomLeftCollides && topRightCollides))
-        //    {
-        //        moveableTransform.Position.X -= 2;
-        //        moveableTransform.Position.Y -= 2;
-        //    }
-
-        //    moveableTransform.Position.Round();
-        //}
-
         private void CheckAndResolveHitBoxCollisions(Entity moveable, HitBoxComponent moveableHitBox)
         {
             _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
-            _hitBoxes = BoundaryGroups.HitBoxBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
+            _hurtBoxes = BoundaryGroups.HurtBoxBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
 
             _colliders.ForEach(collider =>
             {
@@ -339,20 +153,23 @@ namespace Template.Systems
                 EntityHandler.Remove(moveable);
             });
 
-            _hitBoxes.ForEach(attackBox =>
+            _hurtBoxes.ForEach(hurtBox =>
             {
-                if (!moveableHitBox.Bounds.Intersects(attackBox.Bounds))
+                if (!moveableHitBox.Bounds.Intersects(hurtBox.Bounds))
                 {
                     return;
                 }
 
-                if (moveableHitBox.Bounds == attackBox.Bounds)
+                if (moveableHitBox.Bounds == hurtBox.Bounds)
                 {
                     return;
                 }
+
+                BoundaryGroups.HitBoxBoundaryHandler.Remove(moveableHitBox);
+                BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
 
                 EntityHandler.Remove(moveable);
-                //EntityHandler.Remove(attackBox);
+                EntityHandler.Remove(hurtBox.ParentEntity);
             });
         }
     }

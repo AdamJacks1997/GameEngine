@@ -66,14 +66,6 @@ namespace Template
 
             _ldtkHandler.LoadLevel(0);
 
-            BoundaryGroups.TileBoundaryHandler = new BoundaryHandler();
-            BoundaryGroups.MovableBoundaryHandler = new BoundaryHandler();
-            BoundaryGroups.HitBoxBoundaryHandler = new BoundaryHandler();
-
-            BoundaryGroups.TileBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
-            BoundaryGroups.MovableBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
-            BoundaryGroups.HitBoxBoundaryHandler.Init(new Rectangle(Point.Zero, Globals.CurrentLevel.Size.ToPoint()));
-
             _systems = new GameEngine.Systems.Systems();
 
             _systems
@@ -123,8 +115,8 @@ namespace Template
 
             Globals.CameraPosition = new Vector2(Globals.CameraFocusPosition.X - (GameSettings.NativeSize.X / 2), Globals.CameraFocusPosition.Y - (GameSettings.NativeSize.Y / 2));
 
-            cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
-            cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);
+            //cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
+            //cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);
 
             var matrix = Matrix.CreateTranslation(cameraX, cameraY, 0f);
 

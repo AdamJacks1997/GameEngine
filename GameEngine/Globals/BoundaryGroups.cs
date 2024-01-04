@@ -7,5 +7,6 @@ namespace GameEngine.Globals
         public static BoundaryHandler TileBoundaryHandler;
         public static BoundaryHandler MovableBoundaryHandler;
         public static BoundaryHandler HitBoxBoundaryHandler;
+        public static BoundaryHandler HurtBoxBoundaryHandler;
     }
 }
