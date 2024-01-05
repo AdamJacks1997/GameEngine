@@ -6,14 +6,13 @@ using GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using Template.Components;
 using GameEngine.Components;
-using GameEngine.Constants;
 using GameEngine.Renderers;
 using GameEngine.Globals;
 using GameEngine.Enums;
 
 namespace Template.Systems
 {
-    public class PathControllerSystem : IUpdateSystem, IDrawSystem
+    public class PathFindSystem : IUpdateSystem, IDrawSystem
     {
         private List<Entity> _entities;
 
@@ -22,7 +21,6 @@ namespace Template.Systems
             typeof(PathControllerComponent),
             typeof(BrainComponent),
             typeof(TransformComponent),
-            typeof(VelocityComponent),
         };
 
         public void Update(GameTime gameTime)
@@ -34,8 +32,6 @@ namespace Template.Systems
                 var pathController = entity.GetComponent<PathControllerComponent>();
                 var brain = entity.GetComponent<BrainComponent>();
                 var transform = entity.GetComponent<TransformComponent>();
-                var velocity = entity.GetComponent<VelocityComponent>();
-                var sprite = entity.GetComponent<SpriteComponent>();
 
                 if (pathController.Destination == Vector2.Zero)
                 {
@@ -63,49 +59,6 @@ namespace Template.Systems
                     pathController.CurrentPath = pathController.PathHandler.FindPath(transform.GridPosition, pathController.GridDestination);
 
                     pathController.PathRefreshCounter = 0;
-                }
-
-                if (pathController.CurrentPath.Count < 1)
-                {
-                    velocity.DirectionVector = Vector2.Zero;
-
-                    return;
-                }
-
-                var currentTargetTile = pathController.CurrentPath[0].ToVector2();
-
-                var isCloserThanPathStopDistance = brain.PathStopDistance < Vector2.Distance(currentTargetTile, pathController.GridDestination.ToVector2());
-
-                if (isCloserThanPathStopDistance || brain.State == EntityStateEnum.Wander)
-                {
-                    var currentTargetTilePixelPosition = (currentTargetTile * new Vector2(GameSettings.TileSize));
-
-                    //currentTargetTilePixelPosition.Y -= 1; // Due to collision boxes being 1 pixel taller
-
-                    var distanceFromTargetTile = Vector2.Distance(currentTargetTilePixelPosition, transform.Position);
-
-                    if (distanceFromTargetTile > 0)
-                    {
-                        velocity.DirectionVector = currentTargetTilePixelPosition - transform.Position;
-
-                        if (velocity.DirectionVector != Vector2.Zero)
-                        {
-                            velocity.DirectionVector.Normalize();
-
-                            if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
-                            {
-                                velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier, GameSettings.DiagnalSpeedMultiplier);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        pathController.CurrentPath.RemoveAt(0);
-                    }
-                }
-                else
-                {
-                    velocity.DirectionVector = Vector2.Zero;
                 }
             });
         }

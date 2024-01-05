@@ -87,24 +87,24 @@ namespace Template.Systems
                     }
                 }
 
-                if (MouseLeftButtonPressed())
-                {
-                    var transform = entity.GetComponent<TransformComponent>();
+                //if (MouseLeftButtonPressed())
+                //{
+                //    var transform = entity.GetComponent<TransformComponent>();
 
-                    var spawnPosition = transform.Position;
+                //    var spawnPosition = transform.Position;
 
-                    var mouseWorldPosition = ScreenToWorld(_mousePosition);
+                //    var mouseWorldPosition = ScreenToWorld(_mousePosition);
 
-                    new TileEntity(mouseWorldPosition, new Rectangle(7 * 16, 7 * 16,4,4), 0.3f);
+                //    new TileEntity(mouseWorldPosition, new Rectangle(7 * 16, 7 * 16,4,4), 0.3f);
 
-                    Vector2 direction = -Vector2.Normalize(transform.Position - mouseWorldPosition);
+                //    Vector2 direction = -Vector2.Normalize(transform.Position - mouseWorldPosition);
 
-                    Vector2 offset = ((transform.Size.X / 2) + (transform.Size.Y / 2) / 2) * direction;
+                //    Vector2 offset = ((transform.Size.X / 2) + (transform.Size.Y / 2) / 2) * direction;
 
-                    spawnPosition += offset;
+                //    spawnPosition += offset;
 
-                    new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
-                }
+                //    new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
+                //}
             });
         }
 
