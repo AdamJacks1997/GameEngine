@@ -17,7 +17,7 @@ namespace Template.Handlers
 
         public LdtkHandler()
         {
-            var mapDataJson = LoadFile("D:/Projects/GameEngine/Template/Map/", "Map.ldtk");
+            var mapDataJson = LoadFile("../../../Map/", "Map.ldtk");
 
             _map = JsonConvert.DeserializeObject<Map>(mapDataJson);
         }
