@@ -12,7 +12,7 @@ namespace Template.Systems
     public class MovementSystem : IUpdateSystem
     {
         private List<Entity> _moveables;
-        private List<ColliderComponent> _colliders;
+        private List<ColliderComponent> _tiles;
         private List<ColliderComponent> _hurtBoxes;
 
         private readonly List<Type> _moveableComponentTypes = new List<Type>()
@@ -72,15 +72,11 @@ namespace Template.Systems
                 var horizontalMovement = moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 moveableTransform.Position.X += RoundToOne(horizontalMovement);
+                //moveableTransform.Position.X += horizontalMovement;
 
-                //var destination = new Vector2(moveableTransform.Position.X + (moveableVelocity.DirectionVector.X * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds), moveableTransform.Position.Y);
-                //var distance = moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _tiles = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
 
-                //moveableTransform.Position = Vector2.Lerp(moveableTransform.Position, destination, distance); // Lerp stuff is weird with pathfinding
-
-                _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
-
-                _colliders.ForEach(collider =>
+                _tiles.ForEach(collider =>
                 {
                     if (!moveableCollider.Bounds.Intersects(collider.Bounds))
                     {
@@ -90,6 +86,7 @@ namespace Template.Systems
                     var intersection = Rectangle.Intersect(moveableCollider.Bounds, collider.Bounds);
 
                     moveableTransform.Position.X -= RoundToOne(intersection.Width * moveableVelocity.DirectionVector.X);
+                    //moveableTransform.Position.X -= intersection.Width * moveableVelocity.DirectionVector.X;
                 });
             }
 
@@ -98,15 +95,11 @@ namespace Template.Systems
                 var verticalMovement = moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 moveableTransform.Position.Y += RoundToOne(verticalMovement);
+                //moveableTransform.Position.Y += verticalMovement;
 
-                //var destination = new Vector2(moveableTransform.Position.X, moveableTransform.Position.Y + (moveableVelocity.DirectionVector.Y * moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds));
-                //var distance = moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _tiles = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
 
-                //moveableTransform.Position = Vector2.Lerp(moveableTransform.Position, destination, distance); // Lerp stuff is weird with pathfinding
-
-                _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableCollider.Bounds);
-
-                _colliders.ForEach(collider =>
+                _tiles.ForEach(collider =>
                 {
                     if (!moveableCollider.Bounds.Intersects(collider.Bounds))
                     {
@@ -116,6 +109,7 @@ namespace Template.Systems
                     var intersection = Rectangle.Intersect(moveableCollider.Bounds, collider.Bounds);
 
                     moveableTransform.Position.Y -= RoundToOne(intersection.Height * moveableVelocity.DirectionVector.Y);
+                    //moveableTransform.Position.Y -= intersection.Height * moveableVelocity.DirectionVector.Y;
                 });
             }
 
@@ -140,15 +134,17 @@ namespace Template.Systems
 
         private void CheckAndResolveHitBoxCollisions(Entity moveable, HitBoxComponent moveableHitBox)
         {
-            _colliders = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
+            _tiles = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
             _hurtBoxes = BoundaryGroups.HurtBoxBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
 
-            _colliders.ForEach(collider =>
+            _tiles.ForEach(collider =>
             {
                 if (!moveableHitBox.Bounds.Intersects(collider.Bounds))
                 {
                     return;
                 }
+
+                BoundaryGroups.MovableBoundaryHandler.Remove(moveableHitBox);
 
                 EntityHandler.Remove(moveable);
             });
@@ -166,10 +162,17 @@ namespace Template.Systems
                 }
 
                 BoundaryGroups.HitBoxBoundaryHandler.Remove(moveableHitBox);
+
                 BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
+                BoundaryGroups.MovableBoundaryHandler.Remove(hurtBox.ParentEntity.Collider);
 
                 EntityHandler.Remove(moveable);
                 EntityHandler.Remove(hurtBox.ParentEntity);
+
+                if (hurtBox.ParentEntity == Globals.PlayerEntity)
+                {
+                    return;
+                }
             });
         }
     }

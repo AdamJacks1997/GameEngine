@@ -6,7 +6,7 @@ namespace GameEngine.Components
 {
     public class VelocityComponent : IComponent
     {
-        public Vector2 DirectionVector = Vector2.Zero;
+        public Vector2 DirectionVector;
 
         public DirectionEnum Direction
         {

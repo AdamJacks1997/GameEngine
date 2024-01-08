@@ -68,6 +68,11 @@ namespace GameEngine.Models
 
         public List<ColliderComponent> FindCollisions(Rectangle boundary)
         {
+            boundary.X -= 10;
+            boundary.Y -= 10;
+            boundary.Width += 20;
+            boundary.Height += 20;
+
             var nodes = new Queue<Quadtree>();
             var collisions = new List<ColliderComponent>();
 

@@ -78,7 +78,7 @@ namespace Template.Systems
                 newGridPosition.X = 1;
             }
 
-            if (newGridPosition.X > Globals.CurrentCollisions.Length)
+            if (newGridPosition.X > Globals.CurrentCollisions.Length - 1)
             {
                 newGridPosition.X = Globals.CurrentCollisions.Length - 1;
             }
@@ -88,7 +88,7 @@ namespace Template.Systems
                 newGridPosition.Y = 1;
             }
 
-            if (newGridPosition.Y > Globals.CurrentCollisions[newGridPosition.X].Length)
+            if (newGridPosition.Y > Globals.CurrentCollisions[newGridPosition.X].Length - 1)
             {
                 newGridPosition.Y = Globals.CurrentCollisions[newGridPosition.X].Length - 1;
             }

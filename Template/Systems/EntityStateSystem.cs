@@ -43,50 +43,26 @@ namespace Template.Systems
 
                 var distanceFromEntityToTarget = Vector2.Distance(transform.GridPosition.ToVector2(), targetTranform.GridPosition.ToVector2());
 
+                bool hasLineOfSight = false;
+
+                if (brain.LineOfSightMaxDistance > distanceFromEntityToTarget)
+                {
+                    hasLineOfSight = HasLineOfSight(distanceFromEntityToTarget, brain.LineOfSightMaxDistance, transform, targetTranform, collider);
+                }
+
                 // Wander -- Entity is outside of Player range
-                if (brain.PathStartDistance < distanceFromEntityToTarget)
+                if (!hasLineOfSight && brain.State != EntityStateEnum.Wander && brain.PathStartDistance < distanceFromEntityToTarget)
                 {
                     brain.State = EntityStateEnum.Wander;
                     velocity.DirectionVector = Vector2.Zero;
                 }
 
                 // FollowPath -- Entity is inside of Player Maximum Range
-                if (brain.PathStartDistance >= distanceFromEntityToTarget)
+                if (!hasLineOfSight && brain.State != EntityStateEnum.FollowPath && brain.PathStartDistance >= distanceFromEntityToTarget)
                 {
                     brain.State = EntityStateEnum.FollowPath;
                     velocity.DirectionVector = Vector2.Zero;
                 }
-
-                bool hasLineOfSight = false;
-
-                if (brain.LineOfSightMaxDistance > distanceFromEntityToTarget)
-                {
-                    hasLineOfSight = true;
-
-                    var stepDistance = (distanceFromEntityToTarget / brain.LineOfSightMaxDistance) * GameSettings.TileSize;
-                    Vector2 direction = Vector2.Normalize(transform.Position - targetTranform.Position);
-
-                    _losBoundary = collider.Bounds;
-
-                    for (int i = 0; i < brain.LineOfSightMaxDistance - 1; i++)
-                    {
-                        _losBoundary.Location += new Point((int)Math.Round(stepDistance * -direction.X), (int)Math.Round(stepDistance * -direction.Y));
-
-                        _boundaries = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(_losBoundary);
-
-                        _boundaries.ForEach(_boundary =>
-                        {
-
-                            if (!_losBoundary.Intersects(_boundary.Bounds))
-                            {
-                                return;
-                            }
-
-                            hasLineOfSight = false; // if this is never ran, hasLineOfSight = true
-                        });
-                    }
-                }
-
 
                 // RangeAttack -- Entity has line of sight AND IS RANGED
 
@@ -94,7 +70,7 @@ namespace Template.Systems
                 if (hasLineOfSight && brain.EntityType == EntityTypeEnum.Melee && brain.AttackDistance < distanceFromEntityToTarget)
                 {
                     brain.State = EntityStateEnum.Chase;
-                    velocity.DirectionVector = Vector2.Zero;
+                    //velocity.DirectionVector = Vector2.Zero;
                 }
 
                 // if is in distance of player (stored in melee component
@@ -112,6 +88,36 @@ namespace Template.Systems
                     velocity.DirectionVector = Vector2.Zero;
                 }
             });
+        }
+
+        private bool HasLineOfSight(float distanceFromEntityToTarget, float LineOfSightMaxDistance, TransformComponent transform, TransformComponent targetTransform, ColliderComponent collider)
+        {
+            var hasLineOfSight = true;
+
+            var stepDistance = (distanceFromEntityToTarget / LineOfSightMaxDistance) * GameSettings.TileSize;
+            Vector2 direction = Vector2.Normalize(transform.Position - targetTransform.Position);
+
+            _losBoundary = collider.Bounds;
+
+            for (int i = 0; i < LineOfSightMaxDistance - 1; i++)
+            {
+                _losBoundary.Location += new Point((int)Math.Round(stepDistance * -direction.X), (int)Math.Round(stepDistance * -direction.Y));
+
+                _boundaries = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(_losBoundary);
+
+                _boundaries.ForEach(_boundary =>
+                {
+
+                    if (!_losBoundary.Intersects(_boundary.Bounds))
+                    {
+                        return;
+                    }
+
+                    hasLineOfSight = false; // if this is never ran, hasLineOfSight = true
+                });
+            }
+
+            return hasLineOfSight;
         }
     }
 }

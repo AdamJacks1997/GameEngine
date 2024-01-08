@@ -51,5 +51,13 @@ namespace GameEngine.Models.ECS.Core
                 return GetComponent<TransformComponent>();
             }
         }
+
+        public ColliderComponent Collider
+        {
+            get
+            {
+                return GetComponent<ColliderComponent>();
+            }
+        }
     }
 }

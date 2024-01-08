@@ -88,6 +88,8 @@ namespace Template
 
             new MeleeEnemyEntity(new Vector2(400, 400));
 
+            new MeleeEnemyEntity(new Vector2(450, 400));
+
             //new MeleeAttackEntity(new Vector2(-1, 0));
             //new MeleeAttackEntity(new Vector2(1, 0));
 
@@ -116,8 +118,8 @@ namespace Template
 
             Globals.CameraPosition = new Vector2(Globals.CameraFocusPosition.X - (GameSettings.NativeSize.X / 2), Globals.CameraFocusPosition.Y - (GameSettings.NativeSize.Y / 2));
 
-            //cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
-            //cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);
+            cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
+            cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);
 
             var matrix = Matrix.CreateTranslation(cameraX, cameraY, 0f);
 

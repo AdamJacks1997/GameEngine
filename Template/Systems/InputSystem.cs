@@ -9,6 +9,7 @@ using Template.Components;
 using GameEngine.Components;
 using GameEngine.Globals;
 using Template.Entities;
+using System.Diagnostics;
 
 namespace Template.Systems
 {
@@ -87,25 +88,60 @@ namespace Template.Systems
                     }
                 }
 
-                //if (MouseLeftButtonPressed())
-                //{
-                //    var transform = entity.GetComponent<TransformComponent>();
+                if (MouseLeftButtonPressed())
+                {
+                    var transform = entity.GetComponent<TransformComponent>();
 
-                //    var spawnPosition = transform.Position;
+                    var spawnPosition = transform.Position;
 
-                //    var mouseWorldPosition = ScreenToWorld(_mousePosition);
+                    var mouseWorldPosition = ScreenToWorld(_mousePosition);
 
-                //    new TileEntity(mouseWorldPosition, new Rectangle(7 * 16, 7 * 16,4,4), 0.3f);
+                    new TileEntity(mouseWorldPosition, new Rectangle(7 * 16, 7 * 16, 4, 4), 0.3f);
 
-                //    Vector2 direction = -Vector2.Normalize(transform.Position - mouseWorldPosition);
+                    Vector2 direction = -Vector2.Normalize(transform.Position - mouseWorldPosition);
 
-                //    Vector2 offset = ((transform.Size.X / 2) + (transform.Size.Y / 2) / 2) * direction;
+                    Vector2 offset = ((transform.Size.X / 2) + (transform.Size.Y / 2) / 2) * direction;
 
-                //    spawnPosition += offset;
+                    spawnPosition += offset;
 
-                //    new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
-                //}
+                    new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
+                }
             });
+        }
+
+        private Vector2 ScreenToWorld(Vector2 mousePosition)
+        {
+            Debug.WriteLine("---------------------------");
+            Debug.WriteLine(mousePosition.ToString());
+            Debug.WriteLine(Globals.CameraPosition.ToString());
+
+            var scale = new Vector2(GameSettings.NativeSize.X / GameSettings.ScreenSize.X, GameSettings.NativeSize.Y / GameSettings.ScreenSize.Y);
+
+            Debug.WriteLine(Globals.CameraPosition + (_mousePosition * scale));
+
+            var cameraPosition = Globals.CameraPosition;
+
+            if (Globals.CameraPosition.X < 0)
+            {
+                cameraPosition.X = 0;
+            }
+
+            if (Globals.CameraPosition.Y < 0)
+            {
+                cameraPosition.Y = 0;
+            }
+
+            if (Globals.CameraPosition.X + GameSettings.NativeSize.X > Globals.CurrentLevel.Size.X)
+            {
+                cameraPosition.X = Globals.CurrentLevel.Size.X - GameSettings.NativeSize.X;
+            }
+
+            if (Globals.CameraPosition.Y + GameSettings.NativeSize.Y > Globals.CurrentLevel.Size.Y)
+            {
+                cameraPosition.Y = Globals.CurrentLevel.Size.Y - GameSettings.NativeSize.Y;
+            }
+
+            return cameraPosition + (_mousePosition * scale);
         }
 
         private bool KeyDown(Keys key)
@@ -142,13 +178,6 @@ namespace Template.Systems
         private bool MouseRightButtonHeld()
         {
             return _currentMouseState.RightButton == ButtonState.Pressed;
-        }
-
-        private Vector2 ScreenToWorld(Vector2 position)
-        {
-            var scale = new Vector2(GameSettings.NativeSize.X / GameSettings.ScreenSize.X, GameSettings.NativeSize.Y / GameSettings.ScreenSize.Y);
-
-            return Globals.CameraPosition + (_mousePosition * scale);
         }
 
         private float Vector2ToRotation(Vector2 direction)
