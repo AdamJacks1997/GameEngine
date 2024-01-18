@@ -1,12 +1,11 @@
 ﻿using GameEngine.Components;
-using GameEngine.Constants;
 using GameEngine.Enums;
 using GameEngine.Globals;
 using GameEngine.Handlers;
 using GameEngine.Models.ECS.Core;
+using GameEngine.Monogame;
 using GameEngine.Renderers;
 using GameEngine.Systems;
-using GameEngineTools;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -18,6 +17,10 @@ namespace Template.Systems
     {
         private List<Entity> _entities;
 
+        private int testInterval = 0;
+
+        private float _minimumDistance = GameSettings.TileSize * 2;
+
         private readonly List<Type> _componentTypes = new List<Type>()
         {
             typeof(BrainComponent),
@@ -25,6 +28,15 @@ namespace Template.Systems
 
         public void Update(GameTime gameTime)
         {
+            //if (testInterval < 4) // FOR TESTING
+            //{
+            //    testInterval++;
+
+            //    return;
+            //}
+
+            //testInterval = 0;
+
             _entities = EntityHandler.GetWithComponents(_componentTypes);
 
             var checkedEntities = new List<Entity>();
@@ -46,19 +58,107 @@ namespace Template.Systems
                 var targetTranform = targetEntity.GetComponent<TransformComponent>();
                 var targetVelocity = targetEntity.GetComponent<VelocityComponent>();
 
-                var targetFuturePosition = targetTranform.Position + (targetVelocity.DirectionVector * 10f);
 
-                var desired = Vector2.Normalize(targetFuturePosition - transform.Position);
 
-                float desiredDot = Vector2.Dot(desired, velocity.DirectionVector); // used to stop enemies going straight at the target
 
-                var steering = desired - velocity.DirectionVector * Math.Abs(desiredDot - 0.1f);
+                //var colliders = BoundaryGroups.MovableBoundaryHandler.BoundaryQuadtree.FindCollisions(collider.Bounds, 40);
 
-                Vector2 avoidanceForce = Vector2.Zero;
+                //colliders.AddRange(BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(collider.Bounds, 5));
 
-                var movableColliders = BoundaryGroups.MovableBoundaryHandler.BoundaryQuadtree.FindCollisions(collider.Bounds);
+                //Vector2 avoidance = Vector2.Zero;
+                //int colliderCount = 0;
 
-                movableColliders.ForEach(moveable =>
+                //colliders.ForEach(moveable =>
+                //{
+                //    if (checkedEntities.Contains(moveable.ParentEntity))
+                //    {
+                //        return;
+                //    }
+
+                //    if (moveable.ParentEntity == brain.Target)
+                //    {
+                //        return;
+                //    }
+
+                //    if (collider == moveable)
+                //    {
+                //        return;
+                //    }
+
+                //    Vector2 directionToObstacle = moveable.Bounds.Location.ToVector2() - transform.Position;
+
+                //    directionToObstacle = directionToObstacle.NormalizeWithZeroCheck();
+
+                //    //var distanceToObstacleMagnitude = directionToObstacle.Length();
+                //    var distanceToObstacle = Vector2.Distance(moveable.Bounds.Location.ToVector2(), transform.Position);
+
+                //    float weight = 1f;
+
+                //    if (distanceToObstacle <= GameSettings.TileSize * 1)
+                //    {
+                //        weight = -0.8f;
+                //    }
+                //    else
+                //    {
+                //        weight = 0.2f;
+                //    }
+
+                //    avoidance += directionToObstacle * weight;
+                //    colliderCount++;
+                //});
+
+                //var distanceToTarget = Vector2.Distance(targetTranform.Position, transform.Position);
+
+                //var directionToTarget = (targetTranform.Position - transform.Position);
+
+                //directionToTarget = directionToTarget.NormalizeWithZeroCheck();
+
+                ////float dot = MathF.Cos(Vector2.Dot(directionToTarget - (fl2 * Math.PI / 16);
+                ////float angle = MathF.Atan2(strafe[i].Y - displacement.Y, strafe[i].X - displacement.X);
+                ////float weight = 1.0f - MathF.Pow(MathF.Abs(dot + 0.25f), 2.0f);
+
+
+
+                ////Vector2 finalDirection = directionToTarget - velocity.DirectionVector;
+                //Vector2 finalDirection = directionToTarget + (avoidance / colliderCount);
+
+                ////velocity.DirectionVector += finalDirection;
+
+                ////velocity.DirectionVector = velocity.DirectionVector.NormalizeWithZeroCheck();
+
+                //velocity.DirectionVector = Vector2.Lerp(velocity.DirectionVector, finalDirection, 0.4f);
+
+                //velocity.DirectionVector = velocity.DirectionVector.NormalizeWithZeroCheck();
+
+                //var test = "";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                var colliders = BoundaryGroups.MovableBoundaryHandler.BoundaryQuadtree.FindCollisions(collider.Bounds, 40);
+
+                colliders.AddRange(BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(collider.Bounds, 5));
+
+                float[] dangers = new float[8];
+                float[] interests = new float[8];
+                float[] strafes = new float[8];
+
+                colliders.ForEach(moveable =>
                 {
                     if (checkedEntities.Contains(moveable.ParentEntity))
                     {
@@ -75,43 +175,93 @@ namespace Template.Systems
                         return;
                     }
 
-                    var toObstacle = moveable.Bounds.Location.ToVector2() - transform.Position;
+                    Vector2 directionToObstacle = moveable.Bounds.Location.ToVector2() - transform.Position;
 
-                    if (toObstacle == Vector2.Zero)
+                    directionToObstacle = directionToObstacle.NormalizeWithZeroCheck();
+
+                    //var distanceToObstacleMagnitude = directionToObstacle.Length();
+                    var distanceToObstacle = Vector2.Distance(moveable.Bounds.Location.ToVector2(), transform.Position);
+
+                    float weight = -0.2f;
+
+                    if (distanceToObstacle <= GameSettings.TileSize * 1)
                     {
-                        return; // Shit bug fix for something that should never happen
+                        weight = -0.8f;
                     }
 
-                    var toObstacleNormalized = Vector2.Normalize(toObstacle);
+                    for (int i = 0; i < CheckDirections.eightDirections.Count; i++)
+                    {
+                        float result = Vector2.Dot(directionToObstacle, CheckDirections.eightDirections[i]);
 
-                    float obstacleDot = Vector2.Dot(toObstacleNormalized, velocity.DirectionVector);
+                        float weightedResult = result * weight;
 
-                    avoidanceForce -= toObstacleNormalized * 0.05f * Math.Abs(obstacleDot - 0.5f);
+                        //override value only if it is higher than the current one stored in the danger array
+                        if (weightedResult > dangers[i])
+                        {
+                            dangers[i] = weightedResult;
+                        }
+                    }
                 });
 
-                if (avoidanceForce != Vector2.Zero)
+                var directionToTarget = targetTranform.Position - transform.Position;
+                var distanceToTarget = Vector2.Distance(targetTranform.Position, transform.Position);
+
+                directionToTarget = directionToTarget.NormalizeWithZeroCheck();
+
+                var displacement = directionToTarget;
+
+                if (distanceToTarget <= _minimumDistance)
                 {
-                    steering += Vector2.Normalize(avoidanceForce);
+                    displacement = directionToTarget * -1f; // if too close, set desired direction away from player
                 }
 
-                velocity.DirectionVector += steering;
+                for (int i = 0; i < interests.Length; i++)
+                {
+                    float dot = Vector2.Dot(displacement, CheckDirections.eightDirections[i]);
 
+                    //float weight = dot;
 
-                checkedEntities.Add(entity); // super inefficient but good for testing :D
+                    float weight = dot;
 
+                    if (distanceToTarget <= GameSettings.TileSize * 3)
+                    {
+                        //weight = 1 - MathF.Pow(MathF.Abs(dot + 0.25f), 2.0f);
+                        //weight = 0;
+                        weight = dot - 1;
+                    }
 
-                // ----------- Old chase stuff
+                    //weight = 1.0f - MathF.Pow(MathF.Abs(result + 0.5f), 2.0f); 
+                    //weight = result - 0.96f;
 
-                //var targetEntity = brain.Target;
+                    //float weightedResult = weight;
+                    //float weightedResult = result * weight;
 
-                //var targetTranform = targetEntity.GetComponent<TransformComponent>();
+                    // accept only directions at the less than 90 degrees to the target direction
+                    if (weight > 0)
+                    {
+                        interests[i] = weight;
+                    }
+                }
 
-                //velocity.DirectionVector = -Vector2.Normalize(transform.Position - targetTranform.Position);
+                for (int i = 0; i < 8; i++)
+                {
+                    interests[i] = Math.Clamp(interests[i] + dangers[i], 0, 1);
+                }
 
-                //if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
-                //{
-                //    velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier);
-                //}
+                Vector2 finalDirection = new Vector2();
+
+                for (int i = 0; i < 8; i++)
+                {
+                    finalDirection += CheckDirections.eightDirections[i] * interests[i];
+
+                    finalDirection = finalDirection.NormalizeWithZeroCheck();
+                }
+
+                finalDirection += velocity.DirectionVector;
+
+                velocity.DirectionVector = Vector2.Lerp(velocity.DirectionVector, finalDirection, 1f);
+
+                velocity.DirectionVector = velocity.DirectionVector.NormalizeWithZeroCheck();
             });
         }
 
@@ -124,8 +274,42 @@ namespace Template.Systems
                 var transform = entity.GetComponent<TransformComponent>();
                 var velocity = entity.GetComponent<VelocityComponent>();
 
-                Globals.SpriteBatch.DrawLine(transform.Position.X, transform.Position.Y, transform.Position.X + (velocity.DirectionVector.X * 100f), transform.Position.Y + (velocity.DirectionVector.Y * 100f), Color.Purple);
+                Globals.SpriteBatch.DrawLine(transform.MidPosition.X, transform.MidPosition.Y, transform.MidPosition.X + (velocity.DirectionVector.X * 20), transform.MidPosition.Y + (velocity.DirectionVector.Y * 20), Color.Purple);
+
+                //for (int i = 0; i < _interestTemps.Length; i++)
+                //{
+                //    Globals.SpriteBatch.DrawLine(transform.Position.X, transform.Position.Y, transform.Position.X + (CheckDirections.eightDirections[i].X * _interestTemps[i] * 20), transform.Position.Y + (CheckDirections.eightDirections[i].Y * _interestTemps[i] * 20), Color.Green);
+                //}
+                //for (int i = 0; i < _dangerTemps.Length; i++)
+                //{
+                //    Globals.SpriteBatch.DrawLine(transform.Position.X, transform.Position.Y, transform.Position.X + (CheckDirections.eightDirections[i].X * _dangerTemps[i] * 20), transform.Position.Y + (CheckDirections.eightDirections[i].Y * _dangerTemps[i] * 20), Color.Red);
+                //}
             });
+
+            Globals.SpriteBatch.DrawCircle(Globals.PlayerEntity.Transform.MidPosition, _minimumDistance, 60, Color.Red);
+
+            Globals.SpriteBatch.DrawCircle(Globals.PlayerEntity.Transform.MidPosition, GameSettings.TileSize * 3, 60, Color.Green);
+        }
+
+        private class CheckDirections
+        {
+            public static List<Vector2> eightDirections = new List<Vector2>{
+                Normalized(new Vector2(0,1)),
+                Normalized(new Vector2(1,1)),
+                Normalized(new Vector2(1,0)),
+                Normalized(new Vector2(1,-1)),
+                Normalized(new Vector2(0,-1)),
+                Normalized(new Vector2(-1,-1)),
+                Normalized(new Vector2(-1,0)),
+                Normalized(new Vector2(-1,1))
+            };
+
+            private static Vector2 Normalized(Vector2 vector)
+            {
+                vector.Normalize();
+
+                return vector;
+            }
         }
     }
 }

@@ -130,7 +130,7 @@ namespace Template.Systems
             {
                 var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
 
-                Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Green);
+                //Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Green);
             });
         }
     }

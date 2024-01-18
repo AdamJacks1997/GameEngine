@@ -10,6 +10,7 @@ using GameEngine.Components;
 using GameEngine.Globals;
 using Template.Entities;
 using System.Diagnostics;
+using GameEngine.Monogame;
 
 namespace Template.Systems
 {
@@ -76,16 +77,13 @@ namespace Template.Systems
                     velocity.DirectionVector.Y = 0;
                 }
 
-                if (velocity.DirectionVector != Vector2.Zero)
+                velocity.LastDirection = velocity.Direction;
+
+                velocity.DirectionVector = velocity.DirectionVector.NormalizeWithZeroCheck();
+
+                if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
                 {
-                    velocity.LastDirection = velocity.Direction;
-
-                    velocity.DirectionVector.Normalize();
-
-                    if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
-                    {
-                        velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier);
-                    }
+                    velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier);
                 }
 
                 if (MouseLeftButtonPressed())
@@ -104,7 +102,7 @@ namespace Template.Systems
 
                     spawnPosition += offset;
 
-                    new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
+                    //new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
                 }
             });
         }

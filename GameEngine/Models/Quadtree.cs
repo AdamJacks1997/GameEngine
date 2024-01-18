@@ -66,12 +66,15 @@ namespace GameEngine.Models
             return removed;
         }
 
-        public List<ColliderComponent> FindCollisions(Rectangle boundary)
+        public List<ColliderComponent> FindCollisions(Rectangle boundary, int sizeIncrease = 0)
         {
-            boundary.X -= 10;
-            boundary.Y -= 10;
-            boundary.Width += 20;
-            boundary.Height += 20;
+            if (sizeIncrease != 0)
+            {
+                boundary.X -= sizeIncrease;
+                boundary.Y -= sizeIncrease;
+                boundary.Width += sizeIncrease * 2;
+                boundary.Height += sizeIncrease * 2;
+            }
 
             var nodes = new Queue<Quadtree>();
             var collisions = new List<ColliderComponent>();

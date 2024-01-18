@@ -50,7 +50,7 @@ namespace Template.Entities
             brain.PathStartDistance = 15;
             brain.PathStopDistance = 1;
             brain.LineOfSightMaxDistance = 20;
-            brain.AttackDistance = 1;
+            brain.AttackDistance = 0;
 
             EntityHandler.Add(this);
         }

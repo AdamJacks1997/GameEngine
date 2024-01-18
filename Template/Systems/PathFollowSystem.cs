@@ -8,6 +8,7 @@ using Template.Components;
 using GameEngine.Components;
 using GameEngine.Globals;
 using GameEngine.Enums;
+using GameEngine.Monogame;
 
 namespace Template.Systems
 {
@@ -69,11 +70,11 @@ namespace Template.Systems
 
                         if (velocity.DirectionVector != Vector2.Zero)
                         {
-                            velocity.DirectionVector.Normalize();
+                            velocity.DirectionVector = velocity.DirectionVector.NormalizeWithZeroCheck();
 
                             if (velocity.DirectionVector.X != 0 && velocity.DirectionVector.Y != 0)
                             {
-                                velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier, GameSettings.DiagnalSpeedMultiplier);
+                                velocity.DirectionVector *= new Vector2(GameSettings.DiagnalSpeedMultiplier);
 
                                 var test = "";
                             }

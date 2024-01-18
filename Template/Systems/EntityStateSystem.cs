@@ -67,8 +67,9 @@ namespace Template.Systems
                 // RangeAttack -- Entity has line of sight AND IS RANGED
 
                 // Chase -- Entity has line of sight AND IS MELEE
-                if (hasLineOfSight && brain.EntityType == EntityTypeEnum.Melee && brain.AttackDistance < distanceFromEntityToTarget)
-                {
+                //if (hasLineOfSight && brain.EntityType == EntityTypeEnum.Melee && brain.AttackDistance < distanceFromEntityToTarget)
+                if (hasLineOfSight && brain.EntityType == EntityTypeEnum.Melee)
+                    {
                     brain.State = EntityStateEnum.Chase;
                     //velocity.DirectionVector = Vector2.Zero;
                 }
@@ -82,11 +83,11 @@ namespace Template.Systems
 
                 // Melee -- Entity is within melee range of Player AND IS MELEE
 
-                if (brain.AttackDistance >= distanceFromEntityToTarget)
-                {
-                    brain.State = EntityStateEnum.MeleeAttack;
-                    velocity.DirectionVector = Vector2.Zero;
-                }
+                //if (brain.AttackDistance >= distanceFromEntityToTarget)
+                //{
+                //    brain.State = EntityStateEnum.MeleeAttack;
+                //    velocity.DirectionVector = Vector2.Zero;
+                //}
             });
         }
 

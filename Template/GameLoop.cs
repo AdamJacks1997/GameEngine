@@ -88,7 +88,7 @@ namespace Template
 
             new MeleeEnemyEntity(new Vector2(400, 400));
 
-            new MeleeEnemyEntity(new Vector2(450, 400));
+            //new MeleeEnemyEntity(new Vector2(450, 400));
 
             //new MeleeAttackEntity(new Vector2(-1, 0));
             //new MeleeAttackEntity(new Vector2(1, 0));

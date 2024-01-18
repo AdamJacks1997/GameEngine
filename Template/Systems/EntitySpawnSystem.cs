@@ -36,11 +36,11 @@ namespace Template.Systems
 
                     if (Vector2.Distance(transform.GridPosition.ToVector2(), playerTransform.GridPosition.ToVector2()) > 25)
                     {
-                        var newEnemy = new MeleeEnemyEntity(transform.Position);
+                        //var newEnemy = new MeleeEnemyEntity(transform.Position);
 
-                        var newEnemyCollider = newEnemy.GetComponent<ColliderComponent>();
+                        //var newEnemyCollider = newEnemy.GetComponent<ColliderComponent>();
 
-                        BoundaryGroups.MovableBoundaryHandler.Add(newEnemyCollider);
+                        //BoundaryGroups.MovableBoundaryHandler.Add(newEnemyCollider);
                     }
 
                     spawn.SpawnCounter = 0;

@@ -62,7 +62,12 @@ namespace Template.Systems
             var distance = moveableVelocity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             //moveableTransform.Position.Round();
-            moveableTransform.Position = Vector2.Lerp(moveableTransform.Position, destination, distance);
+
+            var lerp = Vector2.Lerp(moveableTransform.Position, destination, distance);
+
+            moveableTransform.Position = lerp;
+
+            var test = "";
         }
 
         private void MoveWithCollisionCheck(TransformComponent moveableTransform, VelocityComponent moveableVelocity, ColliderComponent moveableCollider, GameTime gameTime)
@@ -163,16 +168,17 @@ namespace Template.Systems
 
                 BoundaryGroups.HitBoxBoundaryHandler.Remove(moveableHitBox);
 
-                BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
-                BoundaryGroups.MovableBoundaryHandler.Remove(hurtBox.ParentEntity.Collider);
-
                 EntityHandler.Remove(moveable);
-                EntityHandler.Remove(hurtBox.ParentEntity);
 
                 if (hurtBox.ParentEntity == Globals.PlayerEntity)
                 {
                     return;
                 }
+
+                BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
+                BoundaryGroups.MovableBoundaryHandler.Remove(hurtBox.ParentEntity.Collider);
+
+                EntityHandler.Remove(hurtBox.ParentEntity);
             });
         }
     }

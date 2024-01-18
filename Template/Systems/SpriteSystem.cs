@@ -32,7 +32,7 @@ namespace Template.Systems
 
                 var spritePosition = transform.Position + sprite.Offset.ToVector2();
 
-                if (entity.HasComponent<PlayerControllerComponent>())
+                if (entity.HasComponent<VelocityComponent>())
                 {
                     spritePosition.Y -= 1;
                 }
