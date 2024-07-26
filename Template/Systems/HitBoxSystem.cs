@@ -69,6 +69,11 @@ namespace Template.Systems
 
             _hurtBoxes.ForEach(hurtBox =>
             {
+                if (hitBox == null)
+                {
+                    return;
+                }
+
                 if (!hitBox.Bounds.Intersects(hurtBox.Bounds))
                 {
                     return;
@@ -88,6 +93,8 @@ namespace Template.Systems
                 _hurtBoxes.Remove(hitBox);
 
                 EntityHandler.Remove(hitBoxEntity);
+
+                hitBox = null;
 
                 //if (hurtBox.ParentEntity == Globals.PlayerEntity)
                 //{
