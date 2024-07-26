@@ -6,6 +6,8 @@ namespace GameEngine.Components
 {
     public class ColliderComponent : IComponent
     {
+        public Guid Id = Guid.NewGuid();
+
         public int Width;
 
         public int Height;

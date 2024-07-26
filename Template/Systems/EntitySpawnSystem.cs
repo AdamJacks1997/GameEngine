@@ -5,6 +5,7 @@ using GameEngine.Models.ECS.Core;
 using GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Template.Components;
 using Template.Entities;
 
@@ -15,6 +16,8 @@ namespace Template.Systems
         private List<Entity> _enemySpawners;
 
         private Entity _player;
+
+        private int _spawnCount;
 
         public void Update(GameTime gameTime)
         {
@@ -46,6 +49,8 @@ namespace Template.Systems
                     }
 
                     spawn.SpawnCounter = 0;
+
+                    Debug.WriteLine("Spawn Count: " + _spawnCount++);
                 }
             });
         }

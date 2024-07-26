@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using GameEngine.Components;
 using GameEngine.Globals;
 using Template.Components;
+using System.Diagnostics;
 
 namespace Template.Systems
 {
@@ -90,20 +91,13 @@ namespace Template.Systems
                 }
 
                 BoundaryGroups.HitBoxBoundaryHandler.Remove(hitBox);
-                _hurtBoxes.Remove(hitBox);
 
                 EntityHandler.Remove(hitBoxEntity);
 
                 hitBox = null;
 
-                //if (hurtBox.ParentEntity == Globals.PlayerEntity)
-                //{
-                //    return;
-                //}
-
-                BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
+                var isRemoved = BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
                 BoundaryGroups.MovableBoundaryHandler.Remove(hurtBox.ParentEntity.Collider); // this could cause an issue down the line if an entity with a hurtbox isn't movable
-                _hurtBoxes.Remove(hurtBox.ParentEntity.Collider); // Unsure if I can actually do this in a ForEach - Tired Covid Adam
 
                 EntityHandler.Remove(hurtBox.ParentEntity);
             });

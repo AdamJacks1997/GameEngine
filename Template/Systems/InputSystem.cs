@@ -109,13 +109,7 @@ namespace Template.Systems
 
         private Vector2 ScreenToWorld(Vector2 mousePosition)
         {
-            Debug.WriteLine("---------------------------");
-            Debug.WriteLine(mousePosition.ToString());
-            Debug.WriteLine(Globals.CameraPosition.ToString());
-
             var scale = new Vector2(GameSettings.NativeSize.X / GameSettings.ScreenSize.X, GameSettings.NativeSize.Y / GameSettings.ScreenSize.Y);
-
-            Debug.WriteLine(Globals.CameraPosition + (_mousePosition * scale));
 
             var cameraPosition = Globals.CameraPosition;
 

@@ -21,9 +21,9 @@ namespace GameEngine.Handlers
             BoundaryQuadtree.Insert(collider);
         }
 
-        public void Remove(ColliderComponent collider)
+        public bool Remove(ColliderComponent collider)
         {
-            BoundaryQuadtree.Remove(collider);
+            return BoundaryQuadtree.Remove(collider);
         }
 
         public void Update(List<ColliderComponent> colliders)

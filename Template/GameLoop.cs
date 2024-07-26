@@ -102,11 +102,6 @@ namespace Template
             //new MeleeAttackEntity(new Vector2(-1, 0));
             //new MeleeAttackEntity(new Vector2(1, 0));
 
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    new MeleeEnemyEntity(_textureHandler);
-            //}
-
             _systems.Initialize();
         }
 

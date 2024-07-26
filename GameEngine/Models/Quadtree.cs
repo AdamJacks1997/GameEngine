@@ -1,6 +1,8 @@
 ﻿using GameEngine.Components;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace GameEngine.Models
@@ -12,10 +14,10 @@ namespace GameEngine.Models
         private readonly int _capacity;
         private readonly int _maxDepth;
 
-        private Quadtree? _topLeft, _topRight, _bottomLeft, _bottomRight;
+        private Quadtree _topLeft, _topRight, _bottomLeft, _bottomRight;
 
         public Quadtree(Rectangle bounds)
-            : this(bounds, 32, 5)
+            : this(bounds, 32, 20)
         { }
 
         public Quadtree(Rectangle bounds, int bucketCapacity, int maxDepth)
@@ -30,38 +32,92 @@ namespace GameEngine.Models
 
         public int Level { get; init; }
 
-        public bool IsLeaf
-            => _topLeft == null || _topRight == null || _bottomLeft == null || _bottomRight == null;
+        public bool IsLeaf => _topLeft == null && _topRight == null && _bottomLeft == null && _bottomRight == null;
 
-        public void Insert(ColliderComponent collider)
+        //public void Insert(ColliderComponent collider)
+        //{
+        //    if (_elements.Count >= _capacity)
+        //    {
+        //        Split();
+        //    }
+
+        //    Quadtree containingChild = GetContainingChild(collider);
+
+        //    if (containingChild != null)
+        //    {
+        //        containingChild.Insert(collider);
+        //    }
+        //    else
+        //    {
+        //        _elements.Add(collider);
+        //    }
+        //}
+
+        public void Insert(ColliderComponent collider) // ChatGPT Version
         {
-            if (_elements.Count >= _capacity)
+            if (!IsLeaf)
+            {
+                Quadtree containingChild = GetContainingChild(collider);
+                if (containingChild != null)
+                {
+                    containingChild.Insert(collider);
+                    return;
+                }
+            }
+
+            _elements.Add(collider);
+
+            if (_elements.Count > _capacity && Level < _maxDepth)
             {
                 Split();
             }
-
-            Quadtree? containingChild = GetContainingChild(collider);
-
-            if (containingChild != null)
-            {
-                containingChild.Insert(collider);
-            }
-            else
-            {
-                _elements.Add(collider);
-            }
         }
-        public bool Remove(ColliderComponent collider)
-        {
-            Quadtree? containingChild = GetContainingChild(collider);
 
-            // If no child was returned, then this is the leaf node (or potentially non-leaf node, if the element's boundaries overlap
-            // multiple children) containing the element.
+        //public bool Remove(ColliderComponent collider)
+        //{
+        //    Quadtree containingChild = GetContainingChild(collider);
+
+        //    // If no child was returned, then this is the leaf node (or potentially non-leaf node, if the element's boundaries overlap
+        //    // multiple children) containing the element.
+        //    bool removed;
+
+        //    //removed = containingChild?.Remove(collider) ?? _elements.Remove(collider);
+
+        //    if (containingChild == null)
+        //    {
+        //        Debug.WriteLine("containingChild is null, attempting to remove from _elements.");
+        //        removed = _elements.Remove(collider);
+        //    }
+        //    else
+        //    {
+        //        // If containingChild is not null, attempt to remove from containingChild
+        //        Debug.WriteLine("containingChild is not null, attempting to remove from containingChild.");
+        //        removed = containingChild.Remove(collider);
+        //    }
+
+        //    // If the total descendant element count is less than the bucket capacity, we ensure the node is in a non-split state.
+        //    if (removed && CountElements() <= _capacity)
+        //    {
+        //        Merge();
+        //    }
+
+        //    return removed;
+        //}
+
+        public bool Remove(ColliderComponent collider) // ChatGPT Version
+        {
+            if (IsLeaf)
+            {
+                return _elements.Remove(collider);
+            }
+
+            Quadtree containingChild = GetContainingChild(collider);
             bool removed = containingChild?.Remove(collider) ?? _elements.Remove(collider);
 
-            // If the total descendant element count is less than the bucket capacity, we ensure the node is in a non-split state.
             if (removed && CountElements() <= _capacity)
+            {
                 Merge();
+            }
 
             return removed;
         }
@@ -86,7 +142,9 @@ namespace GameEngine.Models
                 var node = nodes.Dequeue();
 
                 if (!boundary.Intersects(node.Bounds))
+                {
                     continue;
+                }
 
                 collisions.AddRange(node._elements.Where(collider => collider.Bounds.Intersects(boundary)));
 
