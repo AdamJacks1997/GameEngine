@@ -14,7 +14,7 @@ namespace Template.Entities
             var weapon = AddComponent<WeaponComponent>();
             var transform = AddComponent<TransformComponent>();
             var sprite = AddComponent<SpriteComponent>();
-            var hitBox = AddComponent<HitBoxComponent>();
+            //var hitBox = AddComponent<HitBoxComponent>();
 
             weapon.ParentEntity = parentEntity;
 
@@ -26,9 +26,9 @@ namespace Template.Entities
             sprite.Source = new Rectangle(112, 128, GameSettings.TileSize, GameSettings.TileSize);
             sprite.Layer = 0.10045f;
 
-            hitBox.Width = transform.Size.X - 4;
-            hitBox.Height = transform.Size.Y - 2;
-            hitBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
+            //hitBox.Width = transform.Size.X - 4;
+            //hitBox.Height = transform.Size.Y - 2;
+            //hitBox.Offset = new Point(2, -(GameSettings.TileSize / 2) + 2);
 
             EntityHandler.Add(this);
         }

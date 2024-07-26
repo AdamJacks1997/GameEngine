@@ -16,39 +16,12 @@ namespace GameEngine.Handlers
             UpdateEntitiesByComponentType(entity);
         }
 
-        //public static void Remove(Entity entity)
-        //{
-        //    entity.ClearComponents();
-
-        //    _entitiesByComponentType.ToList().ForEach(entityList =>
-        //    {
-
-        //        if (entityList.Value.Contains(entity)) // TODO this is just for testing and should be removed
-        //        {
-        //            var test = "";
-        //        }
-
-        //        entityList.Value.Remove(entity);
-
-        //        if (entityList.Value.Contains(entity)) // TODO this is just for testing and should be removed
-        //        {
-        //            var test = "";
-        //        }
-        //    });
-
-        //    _entities.Remove(entity);
-
-        //    entity = null;
-        //}
-
-        public static void Remove(Entity entity) // ChatGPT generated this because I wasn't happy with my current Remove method, unsure if this works the same
+        public static void Remove(Entity entity)
         {
             entity.ClearComponents();
 
-            // Remove the entity from the _entities list
             _entities.Remove(entity);
 
-            // Iterate over the dictionary and remove the entity from each list
             foreach (var entityList in _entitiesByComponentType.Values)
             {
                 entityList.Remove(entity);

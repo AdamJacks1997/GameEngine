@@ -37,8 +37,8 @@ namespace Template.Systems
 
                 if (attack.LifeTime >= attack.LifeTimeLimit) 
                 {
+                    BoundaryGroups.HitBoxBoundaryHandler.Remove(entity.GetComponent<HitBoxComponent>());
                     EntityHandler.Remove(entity);
-                    BoundaryGroups.MovableBoundaryHandler.Remove(entity.GetComponent<HitBoxComponent>());
                 }
             });
         }

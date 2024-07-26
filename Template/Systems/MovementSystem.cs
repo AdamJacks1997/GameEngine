@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using GameEngine.Components;
 using GameEngine.Globals;
-using Template.Components;
 
 namespace Template.Systems
 {
@@ -14,7 +13,6 @@ namespace Template.Systems
     {
         private List<Entity> _moveables;
         private List<ColliderComponent> _tiles;
-        private List<ColliderComponent> _movableHurtBoxes;
 
         private readonly List<Type> _moveableComponentTypes = new List<Type>()
         {
@@ -24,7 +22,6 @@ namespace Template.Systems
 
         public void Update(GameTime gameTime)
         {
-            _moveables = new List<Entity>();
             _moveables = EntityHandler.GetWithComponents(_moveableComponentTypes);
 
             _moveables.ForEach(moveable =>
@@ -46,11 +43,6 @@ namespace Template.Systems
                 else
                 {
                     MoveWithoutCollisionCheck(moveableTransform, moveableVelocity, gameTime);
-                }
-
-                if (moveable.HasComponent<HitBoxComponent>())
-                {
-                    CheckAndResolveHitBoxCollisions(moveable);
                 }
             });
         }
@@ -135,67 +127,6 @@ namespace Template.Systems
             {
                 return (float)Math.Round(number);
             }
-        }
-
-        private void CheckAndResolveHitBoxCollisions(Entity moveable)
-        {
-            var moveableHitBox = moveable.GetComponent<HitBoxComponent>();
-
-            if (moveableHitBox.ParentEntity == null)
-            {
-                return;
-            }
-
-            _tiles = BoundaryGroups.TileBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
-            _movableHurtBoxes = BoundaryGroups.HurtBoxBoundaryHandler.BoundaryQuadtree.FindCollisions(moveableHitBox.Bounds);
-
-            _tiles.ForEach(collider =>
-            {
-                if (!moveableHitBox.Bounds.Intersects(collider.Bounds))
-                {
-                    return;
-                }
-
-                //BoundaryGroups.MovableBoundaryHandler.Remove(moveableHitBox);
-                BoundaryGroups.HitBoxBoundaryHandler.Remove(moveableHitBox); // Unsure if this is needed - Tired Covid Adam
-                //_movableHurtBoxes.Remove(moveableHitBox); // WHY WOULD I REMOVE A HITBOX FROM A HURTBOX LIST??! - Tired Covid Adam
-
-                EntityHandler.Remove(moveable);
-            });
-
-            _movableHurtBoxes.ForEach(hurtBox =>
-            {
-                if (!moveableHitBox.Bounds.Intersects(hurtBox.Bounds))
-                {
-                    return;
-                }
-
-                if (moveableHitBox.Bounds == hurtBox.Bounds)
-                {
-                    return;
-                }
-
-                if (hurtBox.ParentEntity == moveableHitBox.ParentEntity.GetComponent<AttackComponent>().Owner)
-                {
-                    return;
-                }
-
-                BoundaryGroups.HitBoxBoundaryHandler.Remove(moveableHitBox);
-                _movableHurtBoxes.Remove(moveableHitBox);
-
-                EntityHandler.Remove(moveable);
-
-                if (hurtBox.ParentEntity == Globals.PlayerEntity)
-                {
-                    return;
-                }
-
-                BoundaryGroups.HurtBoxBoundaryHandler.Remove(hurtBox);
-                BoundaryGroups.MovableBoundaryHandler.Remove(hurtBox.ParentEntity.Collider);
-                _movableHurtBoxes.Remove(hurtBox.ParentEntity.Collider); // Unsure if I can actually do this in a ForEach - Tired Covid Adam
-
-                EntityHandler.Remove(hurtBox.ParentEntity);
-            });
         }
     }
 }

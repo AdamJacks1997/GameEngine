@@ -84,6 +84,8 @@ namespace Template
 
                 .Add(new AttackSystem()) // currently only used to remove attack entities after their lifetime is over their specified time
                 .Add(new MovementSystem())
+                //.Add(new ColliderSystem())
+                .Add(new HitBoxSystem())
                 .Add(new EquippedEntitySystem())
 
                 //Render
