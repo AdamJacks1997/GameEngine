@@ -15,3 +15,4 @@ namespace GameEngine.Components
         public Rectangle Bounds => new Rectangle((int)Math.Round(ParentEntity.Transform.Position.X + Offset.X), (int)Math.Round(ParentEntity.Transform.Position.Y + Offset.Y), Width, Height);
     }
 }
+ 

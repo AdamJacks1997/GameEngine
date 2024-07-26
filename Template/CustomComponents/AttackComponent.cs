@@ -4,6 +4,8 @@ namespace Template.Components
 {
     public class AttackComponent : IComponent
     {
+        public Entity Owner;
+
         public int LifeTime = 0;
 
         public int LifeTimeLimit;

@@ -3,7 +3,6 @@ using GameEngine.Handlers;
 using GameEngine.Components;
 using GameEngine.Models.ECS.Core;
 using Template.Components;
-using System;
 using GameEngine.Globals;
 
 namespace Template.Entities
@@ -18,6 +17,7 @@ namespace Template.Entities
             var sprite = AddComponent<SpriteComponent>();
             var hurtBox = AddComponent<HurtBoxComponent>();
             var collider = AddComponent<ColliderComponent>();
+            var equippedEntity = AddComponent<EquippedEntityComponent>();
             AddComponent<PlayerControllerComponent>();
             AddComponent<CameraFollowComponent>();
 
@@ -38,6 +38,9 @@ namespace Template.Entities
             collider.Width = transform.Size.X;
             collider.Height = transform.Size.Y;
             collider.Offset = new Point(0, 0);
+
+            equippedEntity.Entity = new WeaponEntity(this);
+            equippedEntity.Offset = new Point(7, -1);
 
             EntityHandler.Add(this);
         }

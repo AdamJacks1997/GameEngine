@@ -39,7 +39,7 @@ namespace GameEngine.Models.ECS.Core
             return _components.ContainsKey(typeof(T));
         }
 
-        public void Destroy()
+        public void ClearComponents()
         {
             _components.Clear();
         }
@@ -57,6 +57,14 @@ namespace GameEngine.Models.ECS.Core
             get
             {
                 return GetComponent<ColliderComponent>();
+            }
+        }
+
+        public SpriteComponent Sprite
+        {
+            get
+            {
+                return GetComponent<SpriteComponent>();
             }
         }
     }

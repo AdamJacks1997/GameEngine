@@ -16,16 +16,43 @@ namespace GameEngine.Handlers
             UpdateEntitiesByComponentType(entity);
         }
 
-        public static void Remove(Entity entity)
+        //public static void Remove(Entity entity)
+        //{
+        //    entity.ClearComponents();
+
+        //    _entitiesByComponentType.ToList().ForEach(entityList =>
+        //    {
+
+        //        if (entityList.Value.Contains(entity)) // TODO this is just for testing and should be removed
+        //        {
+        //            var test = "";
+        //        }
+
+        //        entityList.Value.Remove(entity);
+
+        //        if (entityList.Value.Contains(entity)) // TODO this is just for testing and should be removed
+        //        {
+        //            var test = "";
+        //        }
+        //    });
+
+        //    _entities.Remove(entity);
+
+        //    entity = null;
+        //}
+
+        public static void Remove(Entity entity) // ChatGPT generated this because I wasn't happy with my current Remove method, unsure if this works the same
         {
-            entity.Destroy();
+            entity.ClearComponents();
 
-            _entitiesByComponentType.ToList().ForEach(entityList =>
-            {
-                entityList.Value.Remove(entity);
-            });
-
+            // Remove the entity from the _entities list
             _entities.Remove(entity);
+
+            // Iterate over the dictionary and remove the entity from each list
+            foreach (var entityList in _entitiesByComponentType.Values)
+            {
+                entityList.Remove(entity);
+            }
         }
 
         public static List<Entity> GetWithComponent<T>() where T : IComponent
@@ -65,6 +92,12 @@ namespace GameEngine.Handlers
             result.AddRange(entities);
 
             return result;
+        }
+
+        private static IComponent GetComponentFromEntity(Entity entity, Type componentType)
+        {
+            var method = entity.GetType().GetMethod("GetComponent").MakeGenericMethod(componentType);
+            return (IComponent)method.Invoke(entity, null);
         }
 
         private static void UpdateEntitiesByComponentType(Entity entity)

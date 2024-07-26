@@ -193,15 +193,15 @@ namespace Template.Systems
 
         public void Draw()
         {
-            _entities = EntityHandler.GetWithComponents(_componentTypes);
+            //_entities = EntityHandler.GetWithComponents(_componentTypes);
 
-            _entities.ForEach(entity =>
-            {
-                var transform = entity.GetComponent<TransformComponent>();
-                var velocity = entity.GetComponent<VelocityComponent>();
+            //_entities.ForEach(entity =>
+            //{
+            //    var transform = entity.GetComponent<TransformComponent>();
+            //    var velocity = entity.GetComponent<VelocityComponent>();
 
                 //Globals.SpriteBatch.DrawLine(transform.MidPosition.X, transform.MidPosition.Y, transform.MidPosition.X + (velocity.DirectionVector.X * 20), transform.MidPosition.Y + (velocity.DirectionVector.Y * 20), Color.Purple);
-            });
+            //});
 
             //Globals.SpriteBatch.DrawCircle(Globals.PlayerEntity.Transform.MidPosition, _minimumDistance, 60, Color.Red);
 

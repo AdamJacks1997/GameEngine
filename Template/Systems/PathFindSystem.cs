@@ -65,28 +65,28 @@ namespace Template.Systems
 
         public void Draw()
         {
-            _entities = EntityHandler.GetWithComponents(_componentTypes);
+            //_entities = EntityHandler.GetWithComponents(_componentTypes);
 
-            _entities.ForEach(entity =>
-            {
-                var pathController = entity.GetComponent<PathControllerComponent>();
+            //_entities.ForEach(entity =>
+            //{
+            //    var pathController = entity.GetComponent<PathControllerComponent>();
 
-                if (pathController.CurrentPath == null || pathController.CurrentPath?.Count < 1)
-                {
-                    return;
-                }
+            //    if (pathController.CurrentPath == null || pathController.CurrentPath?.Count < 1)
+            //    {
+            //        return;
+            //    }
 
-                pathController.CurrentPath.ForEach(path =>
-                {
-                    var pathRectangle = new Rectangle(path.X * GameSettings.TileSize, path.Y * GameSettings.TileSize, GameSettings.TileSize, GameSettings.TileSize);
+            //    pathController.CurrentPath.ForEach(path =>
+            //    {
+            //        var pathRectangle = new Rectangle(path.X * GameSettings.TileSize, path.Y * GameSettings.TileSize, GameSettings.TileSize, GameSettings.TileSize);
 
-                    Globals.SpriteBatch.DrawRectangle(pathRectangle, Color.Green);
-                });
+            //        Globals.SpriteBatch.DrawRectangle(pathRectangle, Color.Green);
+            //    });
 
-                var currentTargetTileRectangle = new Rectangle(pathController.CurrentPath[0].X * GameSettings.TileSize, pathController.CurrentPath[0].Y * GameSettings.TileSize, GameSettings.TileSize, GameSettings.TileSize);
+            //    var currentTargetTileRectangle = new Rectangle(pathController.CurrentPath[0].X * GameSettings.TileSize, pathController.CurrentPath[0].Y * GameSettings.TileSize, GameSettings.TileSize, GameSettings.TileSize);
 
-                Globals.SpriteBatch.DrawRectangle(currentTargetTileRectangle, Color.Red);
-            });
+            //    Globals.SpriteBatch.DrawRectangle(currentTargetTileRectangle, Color.Red);
+            //});
         }
     }
 }

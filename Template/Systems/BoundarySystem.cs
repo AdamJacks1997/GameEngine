@@ -5,9 +5,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using GameEngine.Components;
-using GameEngine.Renderers;
 using GameEngine.Globals;
-using Template.Components;
 
 namespace Template.Systems
 {
@@ -110,28 +108,28 @@ namespace Template.Systems
 
         public void Draw()
         {
-            var meleeEnemies = EntityHandler.GetWithComponent<BrainComponent>();
+            //var meleeEnemies = EntityHandler.GetWithComponent<BrainComponent>();
 
-            meleeEnemies.ForEach(meleeEnemy =>
-            {
-                var meleeEnemyCollider = meleeEnemy.GetComponent<ColliderComponent>();
+            //meleeEnemies.ForEach(meleeEnemy =>
+            //{
+            //    var meleeEnemyCollider = meleeEnemy.GetComponent<ColliderComponent>();
 
-                Globals.SpriteBatch.DrawRectangle(meleeEnemyCollider.Bounds, Color.Blue);
-            });
+            //    Globals.SpriteBatch.DrawRectangle(meleeEnemyCollider.Bounds, Color.Blue);
+            //});
 
-            _tileColliderEntities.ForEach(tileColliderEntity =>
-            {
-                var tileCollider = tileColliderEntity.GetComponent<ColliderComponent>();
+            //_tileColliderEntities.ForEach(tileColliderEntity =>
+            //{
+            //    var tileCollider = tileColliderEntity.GetComponent<ColliderComponent>();
 
-                Globals.SpriteBatch.DrawRectangle(tileCollider.Bounds, Color.Yellow);
-            });
+            //    Globals.SpriteBatch.DrawRectangle(tileCollider.Bounds, Color.Yellow);
+            //});
 
-            _hitBoxEntities.ForEach(hitBoxEntity =>
-            {
-                var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
+            //_hitBoxEntities.ForEach(hitBoxEntity =>
+            //{
+            //    var hitBox = hitBoxEntity.GetComponent<HitBoxComponent>();
 
-                //Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Green);
-            });
+            //    //Globals.SpriteBatch.DrawRectangle(hitBox.Bounds, Color.Green);
+            //});
         }
     }
 }

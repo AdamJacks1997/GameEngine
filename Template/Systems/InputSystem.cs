@@ -102,7 +102,7 @@ namespace Template.Systems
 
                     spawnPosition += offset;
 
-                    //new MeleeAttackEntity(spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
+                    new MeleeAttackEntity(entity, spawnPosition, direction, Vector2ToRotation(Vector2.Zero));
                 }
             });
         }

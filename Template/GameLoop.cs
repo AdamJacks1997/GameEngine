@@ -69,9 +69,10 @@ namespace Template
             _systems = new GameEngine.Systems.Systems();
 
             _systems
-                .Add(new SpriteSystem())
-                .Add(new AnimatedSpriteSystem())
+                //Input
                 .Add(new InputSystem())
+
+                //Update
                 .Add(new EntitySpawnSystem())
                 .Add(new BoundarySystem())
                 .Add(new EntityStateSystem())
@@ -79,9 +80,15 @@ namespace Template
                 .Add(new PathFindSystem())
                 .Add(new PathFollowSystem())
                 .Add(new ChaseSystem())
-                .Add(new MovableSpacingSystem())
+                //.Add(new MovableSpacingSystem())
+
+                .Add(new AttackSystem()) // currently only used to remove attack entities after their lifetime is over their specified time
                 .Add(new MovementSystem())
-                .Add(new AttackSystem())
+                .Add(new EquippedEntitySystem())
+
+                //Render
+                .Add(new SpriteSystem())
+                .Add(new AnimatedSpriteSystem())
                 .Add(new CameraFollowSystem());
 
             //Globals.PlayerEntity = new PlayerEntity();
