@@ -20,6 +20,7 @@ namespace Template.Entities
             var equippedEntity = AddComponent<EquippedEntityComponent>();
             AddComponent<PlayerControllerComponent>();
             AddComponent<CameraFollowComponent>();
+            AddComponent<FootComponent>();
 
             transform.Position = position;
             transform.Size = new Point(16, 16);

@@ -2,8 +2,8 @@
 
 namespace GameEngine.Systems
 {
-    public interface IUpdateSystem : ISystem
+    public interface IUpdateDuringCutSceneSystem : ISystem
     {
-        void Update(GameTime gameTime);
+        void UpdateDuringCutScene(GameTime gameTime);
     }
 }

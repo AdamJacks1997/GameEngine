@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Template.Handlers;
 using GameEngine.Globals;
 using System;
+using Template.Helpers;
 
 namespace Template
 {
@@ -42,6 +43,8 @@ namespace Template
 
             _nativeRenderTarget = new RenderTarget2D(GraphicsDevice, 640, 360);
 
+            Globals.CurrentLevelName = "Start";
+
             new DirectionConstants();
 
             base.Initialize();
@@ -54,17 +57,13 @@ namespace Template
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.SpriteBatch = _spriteBatch;
 
-            //_textureHandler = new TextureHandler(Content);
-
             TextureHandler.Load("Tiles", "TinyDungeon");
-
-            //_textureHandler.LoadGroup("StorkUp", "Entities/Stork/Up");
-            //_textureHandler.LoadGroup("StorkRight", "Entities/Stork/Right");
-            //_textureHandler.LoadGroup("StorkDown", "Entities/Stork/Down");
 
             _ldtkHandler = new LdtkHandler();
 
-            _ldtkHandler.LoadLevel(0);
+            _ldtkHandler.LoadLevel();
+
+            SceneHelper.LoadScenesByLevel(Globals.CurrentLevelName);
 
             _systems = new GameEngine.Systems.Systems();
 
@@ -84,6 +83,9 @@ namespace Template
 
                 .Add(new AttackSystem()) // currently only used to remove attack entities after their lifetime is over their specified time
                 .Add(new MovementSystem())
+                .Add(new SceneTriggerSystem())
+
+                .Add(new FootPrintSystem())
                 //.Add(new ColliderSystem())
                 .Add(new HitBoxSystem())
                 .Add(new EquippedEntitySystem())
@@ -93,14 +95,9 @@ namespace Template
                 .Add(new AnimatedSpriteSystem())
                 .Add(new CameraFollowSystem());
 
-            //Globals.PlayerEntity = new PlayerEntity();
-
             new MeleeEnemyEntity(new Vector2(400, 400));
 
             new MeleeEnemyEntity(new Vector2(450, 400));
-
-            //new MeleeAttackEntity(new Vector2(-1, 0));
-            //new MeleeAttackEntity(new Vector2(1, 0));
 
             _systems.Initialize();
         }
@@ -108,19 +105,23 @@ namespace Template
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
             _systems.Update(gameTime);
+
+            _systems.UpdateDuringCutScene(gameTime);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraFocusPosition.X;
-            var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraFocusPosition.Y;
+            var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraEntityPosition.X;
+            var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraEntityPosition.Y;
 
-            Globals.CameraPosition = new Vector2(Globals.CameraFocusPosition.X - (GameSettings.NativeSize.X / 2), Globals.CameraFocusPosition.Y - (GameSettings.NativeSize.Y / 2));
+            Globals.CameraPosition = new Vector2(Globals.CameraEntityPosition.X - (GameSettings.NativeSize.X / 2), Globals.CameraEntityPosition.Y - (GameSettings.NativeSize.Y / 2));
 
             cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
             cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);

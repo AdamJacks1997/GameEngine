@@ -42,7 +42,7 @@ namespace Template.Systems
                 //    new Vector2(0, 0), 1.0f, SpriteEffects.None, (spritePosition.Y / GameSettings.TileSize) / Globals.CurrentLevel.Size.Y + sprite.Layer);
 
                 Globals.SpriteBatch.Draw(sprite.Texture, spritePosition,
-                    sprite.Source, Color.White, sprite.Rotation,
+                    sprite.Source, sprite.Color, sprite.Rotation,
                     new Vector2(0, 0), 1.0f, SpriteEffects.None, ((spritePosition.Y / GameSettings.TileSize) / Globals.CurrentLevel.Size.Y) + sprite.Layer);
             });
         }

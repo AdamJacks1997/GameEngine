@@ -6,6 +6,9 @@ namespace GameEngine.Models.LDTK
 {
     public class Level
     {
+        [JsonProperty("identifier")]
+        public string Name { get; set; }
+
         [JsonProperty("pxWid")]
         private int _width { get; set; }
 

@@ -12,6 +12,8 @@ namespace GameEngine.Components
 
         public Rectangle Source;
 
+        public Color Color = Color.White;
+
         public float Layer;
 
         public float Rotation = 0;

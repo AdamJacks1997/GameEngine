@@ -12,16 +12,24 @@ namespace GameEngine.Globals
 
         public static SpriteBatch SpriteBatch { get; set; }
 
+        public static string CurrentLevelName { get; set; }
+
         public static Level CurrentLevel { get; set; }
 
         public static int[][] CurrentCollisions { get; set; }
 
         public static Matrix CameraMatrix { get; set; }
 
-        public static Vector2 CameraFocusPosition { get; set; }
+        public static Entity CameraEntity { get; set; }
+
+        public static Vector2 CameraEntityPosition { get; set; }
 
         public static Vector2 CameraPosition { get; set; }
 
         public static Entity PlayerEntity { get; set; }
+
+        public static bool CutSceneActive { get; set; }
+
+        //public static GenericCutScene CutSceneActive { get; set; }
     }
 }

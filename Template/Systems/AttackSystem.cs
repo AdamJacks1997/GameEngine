@@ -14,8 +14,6 @@ namespace Template.Systems
     {
         private List<Entity> _entities;
 
-        private Entity _player;
-
         private readonly List<Type> _componentTypes = new List<Type>()
         {
             typeof(AttackComponent),
@@ -24,10 +22,6 @@ namespace Template.Systems
         public void Update(GameTime gameTime)
         {
             _entities = EntityHandler.GetWithComponents(_componentTypes);
-
-            _player = Globals.PlayerEntity;
-
-            var playerTransform = _player.GetComponent<TransformComponent>();
 
             _entities.ForEach(entity =>
             {

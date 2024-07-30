@@ -58,8 +58,6 @@ namespace Template.Systems
             var lerp = Vector2.Lerp(moveableTransform.Position, destination, distance);
 
             moveableTransform.Position = lerp;
-
-            var test = "";
         }
 
         private void MoveWithCollisionCheck(TransformComponent moveableTransform, VelocityComponent moveableVelocity, ColliderComponent moveableCollider, GameTime gameTime)

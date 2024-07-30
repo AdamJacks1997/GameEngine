@@ -1,6 +1,7 @@
 ﻿using GameEngine.Globals;
 using GameEngine.Models.ECS.Core;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace GameEngine.Components
 {
@@ -13,5 +14,7 @@ namespace GameEngine.Components
         public Point GridPosition => new Point((int)((Position.X + (Size.X / 2)) / GameSettings.TileSize), (int)((Position.Y + (Size.Y / 2)) / GameSettings.TileSize));
 
         public Point Size;
+
+        public Rectangle Bounds => new Rectangle((int)Math.Round(ParentEntity.Transform.Position.X), (int)Math.Round(ParentEntity.Transform.Position.Y), Size.X, Size.Y);
     }
 }

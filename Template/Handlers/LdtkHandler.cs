@@ -1,5 +1,4 @@
-﻿using GameEngine.Constants;
-using GameEngine.Handlers;
+﻿
 using GameEngine.Models.LDTK;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -7,6 +6,7 @@ using System.IO;
 using System.Linq;
 using Template.Entities;
 using GameEngine.Globals;
+using System.Collections.Generic;
 
 namespace Template.Handlers
 {
@@ -14,6 +14,7 @@ namespace Template.Handlers
     {
         private readonly Map _map = new Map();
         private int[][] _collisions;
+        private Level _currentLevel;
 
         public LdtkHandler()
         {
@@ -22,35 +23,45 @@ namespace Template.Handlers
             _map = JsonConvert.DeserializeObject<Map>(mapDataJson);
         }
 
-        public void LoadLevel(int level)
+        public void LoadLevel()
         {
-            Level currentLevel = _map.Levels[level];
-            Globals.CurrentLevel = currentLevel;
+            _currentLevel = _map.Levels.SingleOrDefault(l => l.Name == Globals.CurrentLevelName);
+            Globals.CurrentLevel = _currentLevel;
 
-            var floor = currentLevel.LayerInstances.Single(li => li.Name == "Floor");
+            PopulateFloorTiles();
 
-            var walls = currentLevel.LayerInstances.Single(li => li.Name == "Walls");
+            PopulateWallTiles();
 
-            var entities = currentLevel.LayerInstances.Single(li => li.Name == "Entities");
+            PopulateCharacterEntities();
+
+            PopulateSceneEntities();
+        }
+
+        private void PopulateFloorTiles()
+        {
+            var floor = _currentLevel.LayerInstances.Single(li => li.Name == "Floor");
 
             floor.AutoLayerTiles.ForEach(tile =>
             {
                 new TileEntity(tile.Position, tile.Source, 0f);
             });
+        }
 
-            _collisions = new int[(int)currentLevel.Size.Y / GameSettings.TileSize][];
+        private void PopulateWallTiles()
+        {
+            var walls = _currentLevel.LayerInstances.Single(li => li.Name == "Walls");
 
-            for (int y = 0; y < currentLevel.Size.Y / GameSettings.TileSize; y++)
+            _collisions = new int[(int)_currentLevel.Size.Y / GameSettings.TileSize][];
+
+            for (int y = 0; y < _currentLevel.Size.Y / GameSettings.TileSize; y++)
             {
-                _collisions[y] = new int[(int)currentLevel.Size.X / GameSettings.TileSize];
+                _collisions[y] = new int[(int)_currentLevel.Size.X / GameSettings.TileSize];
 
-                for (int x = 0; x < currentLevel.Size.X / GameSettings.TileSize; x++)
+                for (int x = 0; x < _currentLevel.Size.X / GameSettings.TileSize; x++)
                 {
-                    _collisions[y][x] = walls.Collisions[y * (int)currentLevel.Size.X / GameSettings.TileSize + x];
+                    _collisions[y][x] = walls.Collisions[y * (int)_currentLevel.Size.X / GameSettings.TileSize + x];
                 }
             }
-
-            Globals.CurrentCollisions = _collisions;
 
             walls.AutoLayerTiles.ForEach(tile =>
             {
@@ -63,16 +74,53 @@ namespace Template.Handlers
                     new TileEntity(tile.Position, tile.Source, 0.1f);
                 }
             });
+            Globals.CurrentCollisions = _collisions;
+        }
+
+        private void PopulateCharacterEntities()
+        {
+            var entities = _currentLevel.LayerInstances.Single(li => li.Name == "Characters");
 
             entities.EntityInstances.ForEach(entity =>
             {
-                switch(entity.Identifier)
+                switch (entity.Identifier)
                 {
                     case "Player":
                         Globals.PlayerEntity = new PlayerEntity(entity.Position);
+                        Globals.CameraEntity = Globals.PlayerEntity;
                         break;
                     case "EnemySpawner":
                         new EnemySpawnerEntity(entity.Position);
+                        break;
+                }
+            });
+        }
+
+        private void PopulateSceneEntities()
+        {
+            var entities = _currentLevel.LayerInstances.Single(li => li.Name == "Scenes");
+
+            entities.EntityInstances.ForEach(entity =>
+            {
+                switch (entity.Identifier)
+                {
+                    case "TriggerArea":
+                        new SceneTriggerAreaEntity(
+                            entity.Position,
+                            new Point(entity.Width, entity.Height),
+                            entity.FieldInstances.Where(e => e.Identifier == "SceneName").Select(e => e.Value as string).FirstOrDefault());
+                        break;
+                    case "Camera":
+                        new CameraEntity(
+                            entity.FieldInstances.Where(e => e.Identifier == "SceneName").Select(e => e.Value as string).FirstOrDefault(),
+                            entity.Position);
+                        break;
+                    case "Character":
+                        new SceneCharacterEntity(
+                            entity.FieldInstances.Where(e => e.Identifier == "SceneName").Select(e => e.Value as string).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "CharacterName").Select(e => e.Value as string).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "Movements").Select(e => e.Value as List<Vector2>).FirstOrDefault(),
+                            entity.Position);
                         break;
                 }
             });

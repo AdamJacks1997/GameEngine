@@ -1,34 +1,35 @@
-﻿using GameEngine.Handlers;
-using GameEngine.Models.ECS.Core;
-using GameEngine.Systems;
+﻿using GameEngine.Systems;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using GameEngine.Components;
 using GameEngine.Globals;
 
 namespace Template.Systems
 {
-    public class CameraFollowSystem : IUpdateSystem
+    public class CameraFollowSystem : IUpdateSystem, IUpdateDuringCutSceneSystem
     {
-        private List<Entity> _entities;
-
-        private readonly List<Type> _componentTypes = new List<Type>()
-        {
-            typeof(TransformComponent),
-            typeof(CameraFollowComponent),
-        };
+        private float smoothTransitionSpeed = 0.5f;
+        private float smoothTransitionDistance = 0;
 
         public void Update(GameTime gameTime)
         {
-            _entities = EntityHandler.GetWithComponents(_componentTypes);
+            Globals.CameraEntityPosition = Globals.CameraEntity.Transform.Position;
+        }
 
-            _entities.ForEach(entity =>
+        public void UpdateDuringCutScene(GameTime gameTime)
+        {
+            //Globals.CameraEntityPosition = Globals.CameraEntity.Transform.Position;
+            // Increment the interpolation factor
+
+            if (Globals.CameraEntityPosition == Globals.CameraEntity.Transform.Position)
             {
-                var transform = entity.GetComponent<TransformComponent>();
+                return;
+            }
 
-                Globals.CameraFocusPosition = transform.Position;
-            });
+            smoothTransitionDistance += smoothTransitionSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Ensure t stays between 0 and 1
+            smoothTransitionDistance = MathHelper.Clamp(smoothTransitionDistance, 0f, 1f);
+
+            Globals.CameraEntityPosition = Vector2.Lerp(Globals.CameraEntityPosition, Globals.CameraEntity.Transform.Position, smoothTransitionDistance);
         }
     }
 }
