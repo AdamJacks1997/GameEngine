@@ -9,10 +9,11 @@ namespace GameEngine.Models.LDTK
         public string Identifier { get; set; }
 
         [JsonProperty("__type")]
-        [JsonConverter(typeof(JsonValueConverter))]
+        [JsonConverter(typeof(JsonTypeConverter))]
         public string Type { get; set; }
 
         [JsonProperty("__value")]
+        [JsonConverter(typeof(JsonFieldValueConverter))]
         public object Value { get; set; }
     }
 }

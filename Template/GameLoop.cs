@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Template.Handlers;
 using GameEngine.Globals;
 using System;
-using Template.Helpers;
 
 namespace Template
 {
@@ -62,8 +61,6 @@ namespace Template
             _ldtkHandler = new LdtkHandler();
 
             _ldtkHandler.LoadLevel();
-
-            SceneHelper.LoadScenesByLevel(Globals.CurrentLevelName);
 
             _systems = new GameEngine.Systems.Systems();
 

@@ -5,7 +5,7 @@ using GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Template.Components;
-using Template.Helpers;
+using Template.Handlers;
 
 namespace Template.Systems
 {
@@ -35,9 +35,7 @@ namespace Template.Systems
 
                     sceneTrigger.Used = true;
 
-                    var scene = SceneHelper.GetSceneByName(sceneTrigger.SceneName);
-
-                    scene.Play();
+                    CutSceneHandler.Play(sceneTrigger.SceneName);
                 }
             });
         }

@@ -111,15 +111,18 @@ namespace Template.Handlers
                             entity.FieldInstances.Where(e => e.Identifier == "SceneName").Select(e => e.Value as string).FirstOrDefault());
                         break;
                     case "Camera":
-                        new CameraEntity(
+                        new SceneCameraEntity(
                             entity.FieldInstances.Where(e => e.Identifier == "SceneName").Select(e => e.Value as string).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "EntityName").Select(e => e.Value as string).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "Moves").Select(e => e.Value as List<Vector2>).FirstOrDefault(),
                             entity.Position);
                         break;
                     case "Character":
                         new SceneCharacterEntity(
                             entity.FieldInstances.Where(e => e.Identifier == "SceneName").Select(e => e.Value as string).FirstOrDefault(),
-                            entity.FieldInstances.Where(e => e.Identifier == "CharacterName").Select(e => e.Value as string).FirstOrDefault(),
-                            entity.FieldInstances.Where(e => e.Identifier == "Movements").Select(e => e.Value as List<Vector2>).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "EntityName").Select(e => e.Value as string).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "Moves").Select(e => e.Value as List<Vector2>).FirstOrDefault(),
+                            entity.FieldInstances.Where(e => e.Identifier == "Chats").Select(e => e.Value as List<string>).FirstOrDefault(),
                             entity.Position);
                         break;
                 }

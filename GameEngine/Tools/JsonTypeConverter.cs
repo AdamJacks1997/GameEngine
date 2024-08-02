@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace GameEngine.Tools
 {
-    public class JsonValueConverter : JsonConverter
+    public class JsonTypeConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

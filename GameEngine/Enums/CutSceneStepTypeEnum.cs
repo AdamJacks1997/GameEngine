@@ -3,6 +3,6 @@
     public enum CutSceneStepTypeEnum
     {
         Move,
-        Text
+        Chat
     }
 }

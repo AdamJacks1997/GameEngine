@@ -1,0 +1,35 @@
+{
+  "Cameras": [
+    "Room"
+  ],
+  "Characters": [
+    "German"
+  ],
+  "Steps": [
+    {
+      "Type": "Move",
+      "EntityType": "Camera",
+      "EntityName": "Room"
+    },
+    {
+      "Type": "Move",
+      "EntityType": "Character",
+      "EntityName": "German"
+    },
+    {
+      "Type": "Chat",
+      "EntityType": "Character",
+      "EntityName": "German"
+    },
+    {
+      "Type": "Move",
+      "EntityType": "Character",
+      "EntityName": "German"
+    },
+    {
+      "Type": "Move",
+      "EntityType": "Camera",
+      "EntityName": "Player"
+    }
+  ]
+}

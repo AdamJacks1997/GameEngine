@@ -12,20 +12,20 @@ namespace Template.Entities
     {
         public SceneCharacterEntity(
             string sceneName,
-            string characterName,
-            List<Vector2> movements,
+            string entityName,
+            List<Vector2> moves,
+            List<string> chats,
             Vector2 position)
         {
             var scene = AddComponent<SceneComponent>();
-            var character = AddComponent<CharacterComponent>();
             var transform = AddComponent<TransformComponent>();
             var velocity = AddComponent<VelocityComponent>();
             var sprite = AddComponent<SpriteComponent>();
 
             scene.SceneName = sceneName;
-
-            character.Name = characterName;
-            character.Movements = movements;
+            scene.EntityName = entityName;
+            scene.Moves = moves;
+            scene.Chats = chats;
 
             transform.Position = position;
             transform.Size = new Point(16, 16);
