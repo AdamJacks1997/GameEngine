@@ -87,7 +87,6 @@ namespace Template.Handlers
                 {
                     case "Player":
                         Globals.PlayerEntity = new PlayerEntity(entity.Position);
-                        Globals.CameraEntity = Globals.PlayerEntity;
                         break;
                     case "EnemySpawner":
                         new EnemySpawnerEntity(entity.Position);

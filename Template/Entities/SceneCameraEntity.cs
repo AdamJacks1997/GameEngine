@@ -17,7 +17,7 @@ namespace Template.Entities
         {
             var scene = AddComponent<SceneComponent>();
             var transform = AddComponent<TransformComponent>();
-            AddComponent<CameraFollowComponent>();
+            //AddComponent<CameraFollowComponent>();
 
             scene.SceneName = sceneName;
             scene.EntityName = entityName;

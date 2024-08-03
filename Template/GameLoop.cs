@@ -62,6 +62,8 @@ namespace Template
 
             _ldtkHandler.LoadLevel();
 
+            Globals.CameraEntity = new CameraEntity(Globals.PlayerEntity.Transform.Position);
+
             _systems = new GameEngine.Systems.Systems();
 
             _systems
@@ -86,6 +88,9 @@ namespace Template
                 //.Add(new ColliderSystem())
                 .Add(new HitBoxSystem())
                 .Add(new EquippedEntitySystem())
+
+                //CutScenes
+                .Add(new SceneSystem())
 
                 //Render
                 .Add(new SpriteSystem())
@@ -115,10 +120,12 @@ namespace Template
 
         protected override void Draw(GameTime gameTime)
         {
-            var cameraX = (GameSettings.NativeSize.X / 2) - Globals.CameraEntityPosition.X;
-            var cameraY = (GameSettings.NativeSize.Y / 2) - Globals.CameraEntityPosition.Y;
+            var cameraPosition = Globals.CameraEntity.Transform.Position;
 
-            Globals.CameraPosition = new Vector2(Globals.CameraEntityPosition.X - (GameSettings.NativeSize.X / 2), Globals.CameraEntityPosition.Y - (GameSettings.NativeSize.Y / 2));
+            var cameraX = (GameSettings.NativeSize.X / 2) - cameraPosition.X;
+            var cameraY = (GameSettings.NativeSize.Y / 2) - cameraPosition.Y;
+
+            Globals.ActualCameraPosition = new Vector2(cameraPosition.X - (GameSettings.NativeSize.X / 2), cameraPosition.Y - (GameSettings.NativeSize.Y / 2));
 
             cameraX = MathHelper.Clamp(cameraX, -Globals.CurrentLevel.Size.X + GameSettings.NativeSize.X, 0);
             cameraY = MathHelper.Clamp(cameraY, -Globals.CurrentLevel.Size.Y + GameSettings.NativeSize.Y, 0);

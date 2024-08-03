@@ -19,7 +19,7 @@ namespace Template.Entities
             var collider = AddComponent<ColliderComponent>();
             var equippedEntity = AddComponent<EquippedEntityComponent>();
             AddComponent<PlayerControllerComponent>();
-            AddComponent<CameraFollowComponent>();
+            //AddComponent<CameraFollowComponent>();
             AddComponent<FootComponent>();
 
             transform.Position = position;

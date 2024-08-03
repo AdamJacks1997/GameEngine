@@ -10,6 +10,8 @@ using System.IO;
 using Newtonsoft.Json;
 using GameEngine.Enums;
 using GameEngine.Globals;
+using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Template.Handlers
 {
@@ -23,10 +25,15 @@ namespace Template.Handlers
         private static List<Entity> _cameraEntities;
         private static List<Entity> _characterEntities;
 
+        private static Entity _movingEntity;
+        private static Vector2 _movingGoal;
+
+        private static float _smoothTransitionSpeed = 0.5f;
+        private static float _smoothTransitionDistance = 0;
+
         private static readonly List<Type> _cameraComponentTypes = new List<Type>()
         {
             typeof(SceneComponent),
-            typeof(CameraFollowComponent),
         };
 
         private static readonly List<Type> _characterComponentTypes = new List<Type>()
@@ -46,13 +53,43 @@ namespace Template.Handlers
 
             _cutScene = PopulateSteps();
 
+            Globals.CutSceneActive = true;
+
             PlayCurrentStep();
-            NextStep();
+        }
+
+        public static bool IsWaitingForMoveToComplete()
+        {
+            var isWaiting = _movingEntity.Transform.Position != _movingGoal;
+
+            if (!isWaiting)
+            {
+                _smoothTransitionDistance = 0;
+            }
+
+            return isWaiting;
+        }
+
+        public static void Move(GameTime gameTime) // TODO: This will be handled in an ECS System
+        {
+            _smoothTransitionDistance += _smoothTransitionSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Ensure t stays between 0 and 1
+            _smoothTransitionDistance = MathHelper.Clamp(_smoothTransitionDistance, 0f, 1f);
+
+            _movingEntity.Transform.Position = Vector2.Lerp(_movingEntity.Transform.Position, _movingGoal, _smoothTransitionDistance);
         }
 
         public static void NextStep()
         {
             _currentStep++;
+
+            if (_cutScene.Steps.Count == _currentStep)
+            {
+                Globals.CutSceneActive = false;
+
+                return;
+            }
 
             PlayCurrentStep();
         }
@@ -74,11 +111,18 @@ namespace Template.Handlers
 
         private static void HandleCamera(CutSceneStep step)
         {
-            var camera = _cameraEntities.SingleOrDefault(e => e.GetComponent<SceneComponent>().EntityName == step.EntityName);
+            var camera = Globals.PlayerEntity;
+            
+            if (_cameraEntities.Any(e => e.GetComponent<SceneComponent>().EntityName == step.EntityName))
+            {
+                camera = _cameraEntities.SingleOrDefault(e => e.GetComponent<SceneComponent>().EntityName == step.EntityName);
+            }
+
             switch (step.Type)
             {
                 case CutSceneStepTypeEnum.Move:
-                    Globals.CameraEntity = camera;
+                    _movingEntity = Globals.CameraEntity;
+                    _movingGoal = camera.Transform.Position;
                     break;
             }
         }
@@ -91,10 +135,13 @@ namespace Template.Handlers
             switch (step.Type)
             {
                 case CutSceneStepTypeEnum.Move:
-                    character.Transform.Position = characterSceneComponent.Moves[0];
+                    _movingEntity = character;
+                    _movingGoal = characterSceneComponent.Moves[characterSceneComponent.CurrentMove];
+                    characterSceneComponent.CurrentMove++;
                     break;
                 case CutSceneStepTypeEnum.Chat:
-
+                    Debug.WriteLine(characterSceneComponent.Chats[characterSceneComponent.CurrentChat]);
+                    characterSceneComponent.CurrentChat++;
                     break;
             }
         }

@@ -49,8 +49,6 @@ namespace Template.Systems
                     }
 
                     spawn.SpawnCounter = 0;
-
-                    Debug.WriteLine("Spawn Count: " + _spawnCount++);
                 }
             });
         }

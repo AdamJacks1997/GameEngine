@@ -31,8 +31,6 @@ namespace Template.Systems
                         return;
                     }
 
-                    Globals.CutSceneActive = true;
-
                     sceneTrigger.Used = true;
 
                     CutSceneHandler.Play(sceneTrigger.SceneName);

@@ -22,9 +22,7 @@ namespace GameEngine.Globals
 
         public static Entity CameraEntity { get; set; }
 
-        public static Vector2 CameraEntityPosition { get; set; }
-
-        public static Vector2 CameraPosition { get; set; }
+        public static Vector2 ActualCameraPosition { get; set; }
 
         public static Entity PlayerEntity { get; set; }
 

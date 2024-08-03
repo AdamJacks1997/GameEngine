@@ -111,24 +111,24 @@ namespace Template.Systems
         {
             var scale = new Vector2(GameSettings.NativeSize.X / GameSettings.ScreenSize.X, GameSettings.NativeSize.Y / GameSettings.ScreenSize.Y);
 
-            var cameraPosition = Globals.CameraPosition;
+            var cameraPosition = Globals.ActualCameraPosition;
 
-            if (Globals.CameraPosition.X < 0)
+            if (Globals.ActualCameraPosition.X < 0)
             {
                 cameraPosition.X = 0;
             }
 
-            if (Globals.CameraPosition.Y < 0)
+            if (Globals.ActualCameraPosition.Y < 0)
             {
                 cameraPosition.Y = 0;
             }
 
-            if (Globals.CameraPosition.X + GameSettings.NativeSize.X > Globals.CurrentLevel.Size.X)
+            if (Globals.ActualCameraPosition.X + GameSettings.NativeSize.X > Globals.CurrentLevel.Size.X)
             {
                 cameraPosition.X = Globals.CurrentLevel.Size.X - GameSettings.NativeSize.X;
             }
 
-            if (Globals.CameraPosition.Y + GameSettings.NativeSize.Y > Globals.CurrentLevel.Size.Y)
+            if (Globals.ActualCameraPosition.Y + GameSettings.NativeSize.Y > Globals.CurrentLevel.Size.Y)
             {
                 cameraPosition.Y = Globals.CurrentLevel.Size.Y - GameSettings.NativeSize.Y;
             }
